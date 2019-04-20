@@ -96,25 +96,35 @@
 
 
 
-  <meta name="description" content="看完王垠的文章 &amp;lt;&amp;lt;如何掌握所有的程序语言&amp;gt;&amp;gt; 有所启发,记录如下.  透过现象看本质 重视语言特性,而不是语言(品牌).  任何一种语言,都是一堆语言特性的集合,就好比品牌电脑,肯定是由一堆通用组件,然后可能会加上自己的特色组件组成.我们更多关注的应该是语言特性.">
-<meta name="keywords" content="programlanguage">
+  <meta name="description" content="简短翻译https://arcentry.com/blog/scaling-webapps-for-newbs-and-non-techies/  针对新手和非技术人员的web应用扩展说明扩展目的 同时服务更多的客户 高可用(不能宕机) 服务任何地点的客户">
+<meta name="keywords" content="scale-out">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何掌握一门编程语言">
-<meta property="og:url" content="http://wsabc.top/2019/04/15/how-to-learn-a-program-language/index.html">
+<meta property="og:title" content="WEB应用扩展">
+<meta property="og:url" content="http://wsabc.top/2019/04/20/web-app-scale/index.html">
 <meta property="og:site_name" content="奔向自由之路">
-<meta property="og:description" content="看完王垠的文章 &amp;lt;&amp;lt;如何掌握所有的程序语言&amp;gt;&amp;gt; 有所启发,记录如下.  透过现象看本质 重视语言特性,而不是语言(品牌).  任何一种语言,都是一堆语言特性的集合,就好比品牌电脑,肯定是由一堆通用组件,然后可能会加上自己的特色组件组成.我们更多关注的应该是语言特性.">
+<meta property="og:description" content="简短翻译https://arcentry.com/blog/scaling-webapps-for-newbs-and-non-techies/  针对新手和非技术人员的web应用扩展说明扩展目的 同时服务更多的客户 高可用(不能宕机) 服务任何地点的客户">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-04-15T12:46:56.444Z">
+<meta property="og:image" content="http://wsabc.top/images/01-single-server-db.png">
+<meta property="og:image" content="http://wsabc.top/images/02-reverse-proxy.png">
+<meta property="og:image" content="http://wsabc.top/images/03-load-balancer.png">
+<meta property="og:image" content="http://wsabc.top/images/04-database-scal.png">
+<meta property="og:image" content="http://wsabc.top/images/05-microservices.png">
+<meta property="og:image" content="http://wsabc.top/images/06-cdn.png">
+<meta property="og:image" content="http://wsabc.top/images/07-message-queue.png">
+<meta property="og:image" content="http://wsabc.top/images/08-sharding.png">
+<meta property="og:image" content="http://wsabc.top/images/09-dns.png">
+<meta property="og:updated_time" content="2019-04-20T06:26:12.722Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何掌握一门编程语言">
-<meta name="twitter:description" content="看完王垠的文章 &amp;lt;&amp;lt;如何掌握所有的程序语言&amp;gt;&amp;gt; 有所启发,记录如下.  透过现象看本质 重视语言特性,而不是语言(品牌).  任何一种语言,都是一堆语言特性的集合,就好比品牌电脑,肯定是由一堆通用组件,然后可能会加上自己的特色组件组成.我们更多关注的应该是语言特性.">
+<meta name="twitter:title" content="WEB应用扩展">
+<meta name="twitter:description" content="简短翻译https://arcentry.com/blog/scaling-webapps-for-newbs-and-non-techies/  针对新手和非技术人员的web应用扩展说明扩展目的 同时服务更多的客户 高可用(不能宕机) 服务任何地点的客户">
+<meta name="twitter:image" content="http://wsabc.top/images/01-single-server-db.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://wsabc.top/2019/04/15/how-to-learn-a-program-language/">
+  <link rel="canonical" href="http://wsabc.top/2019/04/20/web-app-scale/">
 
 
 
@@ -124,7 +134,7 @@
   };
 </script>
 
-  <title>如何掌握一门编程语言 | 奔向自由之路</title>
+  <title>WEB应用扩展 | 奔向自由之路</title>
   
 
 
@@ -323,7 +333,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/04/15/how-to-learn-a-program-language/">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/04/20/web-app-scale/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wsabc">
@@ -340,7 +350,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">如何掌握一门编程语言
+          <h1 class="post-title" itemprop="name headline">WEB应用扩展
 
               
             
@@ -366,7 +376,7 @@
                 
               
 
-              <time title="创建时间：2019-04-15 20:45:23 / 修改时间：20:46:56" itemprop="dateCreated datePublished" datetime="2019-04-15T20:45:23+08:00">2019-04-15</time>
+              <time title="创建时间：2019-04-20 14:11:12 / 修改时间：14:26:12" itemprop="dateCreated datePublished" datetime="2019-04-20T14:11:12+08:00">2019-04-20</time>
             
 
             
@@ -388,7 +398,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/program/" itemprop="url" rel="index"><span itemprop="name">program</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/web-app/" itemprop="url" rel="index"><span itemprop="name">web-app</span></a></span>
 
                 
                 
@@ -424,42 +434,97 @@
 
       
         <blockquote>
-<p>看完王垠的文章 <a href="http://www.yinwang.org/blog-cn/2017/07/06/master-pl" target="_blank" rel="noopener">&lt;&lt;如何掌握所有的程序语言&gt;&gt;</a> 有所启发,记录如下.</p>
+<p>简短翻译<a href="https://arcentry.com/blog/scaling-webapps-for-newbs-and-non-techies/" target="_blank" rel="noopener">https://arcentry.com/blog/scaling-webapps-for-newbs-and-non-techies/</a></p>
 </blockquote>
-<h4 id="透过现象看本质"><a href="#透过现象看本质" class="headerlink" title="透过现象看本质"></a>透过现象看本质</h4><blockquote>
-<p>重视语言特性,而不是语言(品牌).</p>
-</blockquote>
-<p>任何一种语言,都是一堆语言特性的集合,就好比品牌电脑,肯定是由一堆通用组件,然后可能会加上自己的特色组件组成.我们更多关注的应该是语言特性.<br><a id="more"></a></p>
-<ul>
-<li>变量定义</li>
-<li>算术运算</li>
-<li>控制结构</li>
-<li>函数定义, 函数调用</li>
-<li>递归</li>
-<li>静态类型系统</li>
-<li>类型推导</li>
-<li>lambda函数</li>
-<li>面向对象</li>
-<li>垃圾回收</li>
-<li>指针算术</li>
-<li>goto 语句</li>
+<h3 id="针对新手和非技术人员的web应用扩展说明"><a href="#针对新手和非技术人员的web应用扩展说明" class="headerlink" title="针对新手和非技术人员的web应用扩展说明"></a>针对新手和非技术人员的web应用扩展说明</h3><h4 id="扩展目的"><a href="#扩展目的" class="headerlink" title="扩展目的"></a>扩展目的</h4><ul>
+<li>同时服务更多的客户</li>
+<li>高可用(不能宕机)</li>
+<li>服务任何地点的客户</li>
 </ul>
-<p><strong>如果用不好现在的语言,不要指望换一种语言就能让你写出优雅的代码.</strong></p>
-<h4 id="学习从解决问题开始"><a href="#学习从解决问题开始" class="headerlink" title="学习从解决问题开始"></a>学习从解决问题开始</h4><p>常见的学习语言的方式都是从一本语言说明书开始.这样容易失去关注点,在次要特性上投入较多的注意力.较好的方式是带着问题入手,在解决问题的过程中熟悉语言的主要特性.</p>
-<blockquote>
-<p>在这个过程中, 随着需求的出现, 他可能会问这样的问题:</p>
-<ul>
-<li>这个语言的“变量定义”是什么语法, 需要“声明类型”吗, 还是可以用“类型推导”?</li>
-<li>它的“类型”是什么语法? 是否支持“泛型”? 泛型的 “variance” 如何表达?</li>
-<li>这个语言的“函数”是什么语法, “函数调用”是什么语法, 可否使用“缺省参数”?</li>
-<li>……</li>
+<a id="more"></a>
+<h4 id="扩展手段"><a href="#扩展手段" class="headerlink" title="扩展手段"></a>扩展手段</h4><ul>
+<li>垂直扩展(scaling up)：使用更好的硬件运行原来的系统</li>
+<li>水平扩展(scaling out)：同时在多套环境上运行原来的系统</li>
 </ul>
-</blockquote>
-<h4 id="分清主要矛盾和次要矛盾"><a href="#分清主要矛盾和次要矛盾" class="headerlink" title="分清主要矛盾和次要矛盾"></a>分清主要矛盾和次要矛盾</h4><p>主要矛盾很少,次要矛盾很多.如果关注点在次要矛盾上,那将是无穷无尽的烦恼,也不要奢望能解决所有的次要矛盾.</p>
-<p>先解决行不行,再看好不好.</p>
-<h4 id="绝知此事要躬行"><a href="#绝知此事要躬行" class="headerlink" title="绝知此事要躬行"></a>绝知此事要躬行</h4><blockquote>
-<p>完全理解一种“语言特性”最好的方法就是自己亲自实现它.</p>
-</blockquote>
+<p>垂直扩展现在几乎不被采用，因为：</p>
+<ol>
+<li>计算机越强大越贵</li>
+<li>一台计算机的速度就算再快，也是有限制的</li>
+<li>多核CPU意味着即使一台计算机也可以有效地并行计算</li>
+</ol>
+<h4 id="水平扩展技术的演化"><a href="#水平扩展技术的演化" class="headerlink" title="水平扩展技术的演化"></a>水平扩展技术的演化</h4><ol>
+<li><p><strong>单个服务器+单个数据库</strong></p>
+<p><img src="/images/01-single-server-db.png" alt="01-single-server-db"></p>
+<p>缺点：这种方式如果想满足更高需求的话就要进行垂直扩展—使用更强的计算机。</p>
+</li>
+<li><p><strong>添加反向代理</strong></p>
+</li>
+</ol>
+<p><img src="/images/02-reverse-proxy.png" alt="02-reverse-proxy"></p>
+<p>“反向代理”可以理解为旅馆里的前台。我们需要一个中间人友好地接待(或拒绝)客户，而不是让客户自己直接去面临各种可能(走错地方，或手续不全，或房子没准备好，等等)。</p>
+<p>反向代理的职责：</p>
+<ul>
+<li>健康检查：确保服务器正常运行</li>
+<li>分流：正确引流到相应服务器</li>
+<li>认证：确保请求被允许访问服务器</li>
+<li>隔离(防火墙)：确保用户只能访问其被允许访问的资源</li>
+</ul>
+<ol start="3">
+<li><strong>引入负载均衡</strong></li>
+</ol>
+<p><img src="/images/03-load-balancer.png" alt="03-load-balancer"></p>
+<p>负载均衡器可以类比管道系统里的三通(一个地方进水，平均分流到两个出口)。很多反向代理都具有负载均衡的能力。</p>
+<ol start="4">
+<li><strong>数据库扩容</strong></li>
+</ol>
+<p><img src="/images/04-database-scal.png" alt="04-database-scal"></p>
+<p>前端接受请求多了，后面数据库的支持能力就尤为重要了。数据库不能简单水平扩展，需要保持一致性。</p>
+<p>常见的做法是读写分离(或叫做主从设置)：一部分只负责写数据库，一部分只负责读。通常认为数据库的读请求比写请求要多得多。</p>
+<ul>
+<li>好处：保证了一致性，读库的同步也不会干扰写库</li>
+<li>坏处：只有一个写库，能力有限，只能满足中小业务</li>
+</ul>
+<ol start="5">
+<li><strong>微服务</strong></li>
+</ol>
+<p><img src="/images/05-microservices.png" alt="05-microservices"></p>
+<p>All-in-one的服务器有较低的复杂度，但是对于扩展不利：</p>
+<ul>
+<li>服务的不同部分利用程度不同，可能会东风压倒(拖死)西风，导致整个不可用</li>
+<li>开发人员增多，工作在同一个服务上容易互相掣肘，进度上也容易形成不利依赖(某功能开发完毕，要上线但是其他的功能正在进行中)</li>
+</ul>
+<p>解决方案：微服务—将整个服务分解成独立业务的，互相连接的微型服务。</p>
+<ul>
+<li>每个服务可以独立扩展，按需扩展</li>
+<li>开发人员职责独立</li>
+<li>每个服务使用自己的资源(如数据库，这也缓解了数据库的压力)</li>
+</ul>
+<ol start="6">
+<li><strong>缓存和CDN</strong></li>
+</ol>
+<p><img src="/images/06-cdn.png" alt="06-cdn"></p>
+<p>web应用中有大量的静态资源(图片，css，js)可能都是一成不变的。通过CDN，可以通过离客户最近的缓存来服务他们，而不用把数据再从服务器分发到世界各地。</p>
+<ol start="7">
+<li><strong>消息队列</strong></li>
+</ol>
+<p><img src="/images/07-message-queue.png" alt="07-message-queue"></p>
+<p>消息队列可以理解为公园入口的排队。再强大的系统也不可能一次处理完所有的请求。</p>
+<ul>
+<li>任务和处理器解耦</li>
+<li>按需扩展</li>
+</ul>
+<ol start="8">
+<li><strong>切片</strong></li>
+</ol>
+<p><img src="/images/08-sharding.png" alt="08-sharding"></p>
+<p>切片可以有很多策略：比如按照地址分，按照使用频率分，等等。</p>
+<p>切片思想也不只用于服务器，也可以用于数据库，甚至整个架构里的任何部分。</p>
+<ol start="9">
+<li><strong>DNS</strong></li>
+</ol>
+<p><img src="/images/09-dns.png" alt="09-dns"></p>
+<p>单一的负载均衡即使是最强的机器，也有硬件限制。</p>
+<p>DNS允许将一个域名映射到多个IP，从而指向不同的负载均衡器(Load-balancing the load-balancer)。</p>
 
       
     </div>
@@ -483,7 +548,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/programlanguage/" rel="tag"># programlanguage</a>
+            <a href="/tags/scale-out/" rel="tag"># scale-out</a>
           
         </div>
       
@@ -496,8 +561,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/17/stock-price-calc/" rel="next" title="股票成本计算器">
-                <i class="fa fa-chevron-left"></i> 股票成本计算器
+              <a href="/2019/04/15/program-tips/" rel="next" title="编程技巧">
+                <i class="fa fa-chevron-left"></i> 编程技巧
               </a>
             
           </div>
@@ -506,8 +571,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/15/program-tips/" rel="prev" title="编程技巧">
-                编程技巧 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/20/how-to-take-thread-dumps/" rel="prev" title="JavaThreadDump">
+                JavaThreadDump <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -693,7 +758,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#透过现象看本质"><span class="nav-number">1.</span> <span class="nav-text">透过现象看本质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#学习从解决问题开始"><span class="nav-number">2.</span> <span class="nav-text">学习从解决问题开始</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分清主要矛盾和次要矛盾"><span class="nav-number">3.</span> <span class="nav-text">分清主要矛盾和次要矛盾</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绝知此事要躬行"><span class="nav-number">4.</span> <span class="nav-text">绝知此事要躬行</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#针对新手和非技术人员的web应用扩展说明"><span class="nav-number">1.</span> <span class="nav-text">针对新手和非技术人员的web应用扩展说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展目的"><span class="nav-number">1.1.</span> <span class="nav-text">扩展目的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展手段"><span class="nav-number">1.2.</span> <span class="nav-text">扩展手段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#水平扩展技术的演化"><span class="nav-number">1.3.</span> <span class="nav-text">水平扩展技术的演化</span></a></li></ol></li></ol></div>
             
 
           </div>
