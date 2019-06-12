@@ -104,20 +104,20 @@
 <meta property="og:site_name" content="奔向自由之路">
 <meta property="og:description" content="简短翻译https://arcentry.com/blog/scaling-webapps-for-newbs-and-non-techies/  针对新手和非技术人员的web应用扩展说明扩展目的 同时服务更多的客户 高可用(不能宕机) 服务任何地点的客户">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://wsabc.top/images/01-single-server-db.png">
-<meta property="og:image" content="http://wsabc.top/images/02-reverse-proxy.png">
-<meta property="og:image" content="http://wsabc.top/images/03-load-balancer.png">
-<meta property="og:image" content="http://wsabc.top/images/04-database-scal.png">
-<meta property="og:image" content="http://wsabc.top/images/05-microservices.png">
-<meta property="og:image" content="http://wsabc.top/images/06-cdn.png">
-<meta property="og:image" content="http://wsabc.top/images/07-message-queue.png">
-<meta property="og:image" content="http://wsabc.top/images/08-sharding.png">
-<meta property="og:image" content="http://wsabc.top/images/09-dns.png">
-<meta property="og:updated_time" content="2019-04-20T06:26:12.722Z">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-01-single-server-db.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-02-reverse-proxy.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-03-load-balancer.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-04-database-scal.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-05-microservices.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-06-cdn.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-07-message-queue.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-08-sharding.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/web-09-dns.png">
+<meta property="og:updated_time" content="2019-06-12T14:50:54.962Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WEB应用扩展">
 <meta name="twitter:description" content="简短翻译https://arcentry.com/blog/scaling-webapps-for-newbs-and-non-techies/  针对新手和非技术人员的web应用扩展说明扩展目的 同时服务更多的客户 高可用(不能宕机) 服务任何地点的客户">
-<meta name="twitter:image" content="http://wsabc.top/images/01-single-server-db.png">
+<meta name="twitter:image" content="https://github.com/wsabc/images/raw/master/web-01-single-server-db.png">
 
 
 
@@ -229,6 +229,8 @@
     
 
     
+      
+    
 
     <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
@@ -246,8 +248,10 @@
     
 
     
+      
+    
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">12</span></a>
 
   </li>
         
@@ -263,8 +267,10 @@
     
 
     
+      
+    
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">10</span></a>
 
   </li>
         
@@ -280,8 +286,10 @@
     
 
     
+      
+    
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">13</span></a>
 
   </li>
 
@@ -376,12 +384,24 @@
                 
               
 
-              <time title="创建时间：2019-04-20 14:11:12 / 修改时间：14:26:12" itemprop="dateCreated datePublished" datetime="2019-04-20T14:11:12+08:00">2019-04-20</time>
+              <time title="创建时间：2019-04-20 14:11:12" itemprop="dateCreated datePublished" datetime="2019-04-20T14:11:12+08:00">2019-04-20</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-12 22:50:54" itemprop="dateModified" datetime="2019-06-12T22:50:54+08:00">2019-06-12</time>
               
             
           </span>
@@ -414,6 +434,13 @@
           
           
 
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
           
 
           
@@ -454,13 +481,13 @@
 </ol>
 <h4 id="水平扩展技术的演化"><a href="#水平扩展技术的演化" class="headerlink" title="水平扩展技术的演化"></a>水平扩展技术的演化</h4><ol>
 <li><p><strong>单个服务器+单个数据库</strong></p>
-<p><img src="/images/01-single-server-db.png" alt="01-single-server-db"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-01-single-server-db.png" alt="01-single-server-db"></p>
 <p>缺点：这种方式如果想满足更高需求的话就要进行垂直扩展—使用更强的计算机。</p>
 </li>
 <li><p><strong>添加反向代理</strong></p>
 </li>
 </ol>
-<p><img src="/images/02-reverse-proxy.png" alt="02-reverse-proxy"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-02-reverse-proxy.png" alt="02-reverse-proxy"></p>
 <p>“反向代理”可以理解为旅馆里的前台。我们需要一个中间人友好地接待(或拒绝)客户，而不是让客户自己直接去面临各种可能(走错地方，或手续不全，或房子没准备好，等等)。</p>
 <p>反向代理的职责：</p>
 <ul>
@@ -472,12 +499,12 @@
 <ol start="3">
 <li><strong>引入负载均衡</strong></li>
 </ol>
-<p><img src="/images/03-load-balancer.png" alt="03-load-balancer"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-03-load-balancer.png" alt="03-load-balancer"></p>
 <p>负载均衡器可以类比管道系统里的三通(一个地方进水，平均分流到两个出口)。很多反向代理都具有负载均衡的能力。</p>
 <ol start="4">
 <li><strong>数据库扩容</strong></li>
 </ol>
-<p><img src="/images/04-database-scal.png" alt="04-database-scal"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-04-database-scal.png" alt="04-database-scal"></p>
 <p>前端接受请求多了，后面数据库的支持能力就尤为重要了。数据库不能简单水平扩展，需要保持一致性。</p>
 <p>常见的做法是读写分离(或叫做主从设置)：一部分只负责写数据库，一部分只负责读。通常认为数据库的读请求比写请求要多得多。</p>
 <ul>
@@ -487,7 +514,7 @@
 <ol start="5">
 <li><strong>微服务</strong></li>
 </ol>
-<p><img src="/images/05-microservices.png" alt="05-microservices"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-05-microservices.png" alt="05-microservices"></p>
 <p>All-in-one的服务器有较低的复杂度，但是对于扩展不利：</p>
 <ul>
 <li>服务的不同部分利用程度不同，可能会东风压倒(拖死)西风，导致整个不可用</li>
@@ -502,12 +529,12 @@
 <ol start="6">
 <li><strong>缓存和CDN</strong></li>
 </ol>
-<p><img src="/images/06-cdn.png" alt="06-cdn"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-06-cdn.png" alt="06-cdn"></p>
 <p>web应用中有大量的静态资源(图片，css，js)可能都是一成不变的。通过CDN，可以通过离客户最近的缓存来服务他们，而不用把数据再从服务器分发到世界各地。</p>
 <ol start="7">
 <li><strong>消息队列</strong></li>
 </ol>
-<p><img src="/images/07-message-queue.png" alt="07-message-queue"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-07-message-queue.png" alt="07-message-queue"></p>
 <p>消息队列可以理解为公园入口的排队。再强大的系统也不可能一次处理完所有的请求。</p>
 <ul>
 <li>任务和处理器解耦</li>
@@ -516,13 +543,13 @@
 <ol start="8">
 <li><strong>切片</strong></li>
 </ol>
-<p><img src="/images/08-sharding.png" alt="08-sharding"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-08-sharding.png" alt="08-sharding"></p>
 <p>切片可以有很多策略：比如按照地址分，按照使用频率分，等等。</p>
 <p>切片思想也不只用于服务器，也可以用于数据库，甚至整个架构里的任何部分。</p>
 <ol start="9">
 <li><strong>DNS</strong></li>
 </ol>
-<p><img src="/images/09-dns.png" alt="09-dns"></p>
+<p><img src="https://github.com/wsabc/images/raw/master/web-09-dns.png" alt="09-dns"></p>
 <p>单一的负载均衡即使是最强的机器，也有硬件限制。</p>
 <p>DNS允许将一个域名映射到多个IP，从而指向不同的负载均衡器(Load-balancing the load-balancer)。</p>
 
@@ -645,7 +672,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -676,7 +703,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -707,7 +736,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -798,6 +833,32 @@
 
 
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
 
 
 

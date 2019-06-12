@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="关系型数据库常见厂商: Oracle, MySQL, PostgreSQL, SQL Server等. 常见连接方式:ODBC, OLE DB, ADO, ADO.NET, JDBC.  ODBC: Open Database Connectivity, 微软推出, 只针对关系型数据库. OLE DB: Object Linking and Embedding Database, 微软推出,基于C">
+<meta name="keywords" content="db">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关系型数据库">
+<meta property="og:url" content="http://wsabc.top/2019/06/12/rdb/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="关系型数据库常见厂商: Oracle, MySQL, PostgreSQL, SQL Server等. 常见连接方式:ODBC, OLE DB, ADO, ADO.NET, JDBC.  ODBC: Open Database Connectivity, 微软推出, 只针对关系型数据库. OLE DB: Object Linking and Embedding Database, 微软推出,基于C">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/db-arch.jpeg">
+<meta property="og:updated_time" content="2019-06-12T15:37:48.077Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关系型数据库">
+<meta name="twitter:description" content="关系型数据库常见厂商: Oracle, MySQL, PostgreSQL, SQL Server等. 常见连接方式:ODBC, OLE DB, ADO, ADO.NET, JDBC.  ODBC: Open Database Connectivity, 微软推出, 只针对关系型数据库. OLE DB: Object Linking and Embedding Database, 微软推出,基于C">
+<meta name="twitter:image" content="https://github.com/wsabc/images/raw/master/db-arch.jpeg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/06/12/rdb/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关系型数据库 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">12</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">10</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">13</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/06/12/rdb/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关系型数据库
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-12 23:33:09 / 修改时间：23:37:48" itemprop="dateCreated datePublished" datetime="2019-06-12T23:33:09+08:00">2019-06-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="关系型数据库"><a href="#关系型数据库" class="headerlink" title="关系型数据库"></a>关系型数据库</h4><p>常见厂商: Oracle, MySQL, PostgreSQL, SQL Server等.</p>
+<p>常见连接方式:ODBC, OLE DB, ADO, ADO.NET, JDBC.</p>
+<ul>
+<li>ODBC: Open Database Connectivity, 微软推出, 只针对关系型数据库.</li>
+<li>OLE DB: Object Linking and Embedding Database, 微软推出,基于COM思想提供统一的数据访问接口,包括RDB, 邮件, 目录服务等.</li>
+<li>ADO: ActiveX Data Objects, 微软推出,基于COM.</li>
+<li>ADO.NET: 从ADO发展过来,使用.NET而不是ActiveX技术,可以离线工作,同时有ORM的功能.</li>
+<li>JDBC: Java Database Connectivity, Java推出,包括两层接口:应用程序层(面向应用开发)和驱动程序层(面向具体厂商驱动).</li>
+</ul>
+<a id="more"></a>
+<h5 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h5><p>JDBC URL: 协议名(总是jdbc) + 子协议名(由驱动程序决定) + 数据源名</p>
+<ul>
+<li>Oracle: jdbc:oracle:thin:@10.100.10.1:1521:dsname</li>
+<li>MySQL: jdbc:mysql://10.100.10.1:3306/dsname</li>
+<li>PostgreSQL: jdbc:postgresql://10.100.10.1:5432/dsname</li>
+</ul>
+<p>一般使用TCP/IP协议连接.</p>
+<h5 id="数据库连接"><a href="#数据库连接" class="headerlink" title="数据库连接"></a>数据库连接</h5><p>一般来说,数据库连接就是一个TCP/IP连接.为什么说数据库连接是昂贵的资源呢?</p>
+<ol>
+<li>建立/销毁连接需要时间: 建立(三次握手),销毁(四次挥手),估计一次握手时间相当于一次ping的时间,毫秒级.</li>
+<li>TCP之上,各厂商自己的协议交互需要时间.如MySQL,建立连接Server发送握手信息,Client发送用户信息,数据库还会进行一些连接变量设置如字符集,是否自动提交事务等.经测试总计(TCP握手+MySQL握手)可能需要200ms左右.</li>
+<li>单个进程的最大文件打开数量有限.TCP是虚拟连接,理论上一个客户端可以和整个IPV4网络里的地址建立连接.但是实际上由于服务端的内存限制,全局文件描述符的数量限制,TCP连接不能无限建立.</li>
+<li>考虑网络状况,数据库服务性能等.</li>
+</ol>
+<p>综上,如果10万个db请求的话,10万个连接耗时=100000*200/1000/3600=5.55小时.所以有一定访问量的情况下,不要频繁建立数据库连接.</p>
+<h5 id="连接池"><a href="#连接池" class="headerlink" title="连接池"></a>连接池</h5><p>数据库连接池的目的,就是减少频繁连接的开销, 减少JVM垃圾;平缓流量峰值(防止压垮数据库)等.</p>
+<p>常见的连接池有: C3P0, DBCP, Tomcat Jdbc Pool, BoneCP, Druid, HikariCP等.</p>
+<p>C3P0, DBCP都是单线程,需要锁住整个池,并发低,性能不好.TomcatJP,BoneCP,Druid,HirariCP都是多线程异步控制.SpringBoot2已经采用HirariCP作为默认连接池.</p>
+<h6 id="如何计算连接池大小"><a href="#如何计算连接池大小" class="headerlink" title="如何计算连接池大小?"></a>如何计算连接池大小?</h6><ol>
+<li><p>影响因素: 第一CPU, 第二磁盘IO, 第三网络IO</p>
+<blockquote>
+<p>a. CPU,如果线程数超过CPU核数,频繁分片切换上下文,只会比顺序执行要慢.</p>
+<p>b. 磁盘IO,因为物理特性有寻址损耗和旋转损耗,在这段阻塞的时间里,CPU是空闲的,所以IO密集型的业务,线程数可以大一点.注意如果是SSD,不需要寻址,不需要旋转,此时应该接近CPU核数.</p>
+<p>c. 网络IO,随着带宽增大,阻塞减少.可以忽略网络IO的影响</p>
+</blockquote>
+</li>
+<li><p>计算公式: PostgreSQL提供, 连接数=CPU核心数 * 2 + 有效磁盘数. (不针对SSD,效果未知).</p>
+<blockquote>
+<p>常规做法: 小连接池 + 业务等待队列; 长事务(不适用与上面公式)和短事务分成两个池.</p>
+</blockquote>
+</li>
+</ol>
+<h6 id="连接有效性测试-以Tomcat-Jdbc-Pool为例"><a href="#连接有效性测试-以Tomcat-Jdbc-Pool为例" class="headerlink" title="连接有效性测试(以Tomcat Jdbc Pool为例)"></a>连接有效性测试(以Tomcat Jdbc Pool为例)</h6><ol>
+<li>testOnBrorrow, testOnReturn, testWhileIdle都会关注validationInterval.超过这个时间限制才会测试.</li>
+<li>testOnBrorrow/Return都是在使用路径上测试,会增加延迟.testWhileIdle对于DB密集型的应用来说有点浪费.综合考虑还是设置testOnBrorrow(不是每次都测试).</li>
+<li>不设置测试条件,会导致连接失效,无法恢复.maxAge参数在归还连接的时候回进行检查,超过这个时间就会关闭连接,目的是为了防止连接上附上了占用内存的资源.同时也可以防止因为连接失效不能自动恢复的问题.但是这个值设置需要考虑:过短会导致频繁断连,连接池失去效果.</li>
+</ol>
+<h5 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h5><p>第一版SQL-86, SQL-99变动最大一版, 较新的SQL-2016引入JSON.</p>
+<p>通用优化准则:</p>
+<ol>
+<li>避免全表扫描(注意各种操作可能带来的索引失效如对null值进行判断,%前置模糊匹配, 算术运算, !=操作符等)</li>
+<li>Select必须指明字段</li>
+<li>IN字段不能太长</li>
+<li>注意排序字段的索引,没有用到就少排序</li>
+<li>少用or(使用union替代)</li>
+<li>联合索引遵循最左匹配法则(常用的字段放在索引最左边,离散度高的也优先,宽度小的优先)</li>
+<li>注意驱动表(主表)的选择</li>
+</ol>
+<h6 id="PostgreSQL优化思路"><a href="#PostgreSQL优化思路" class="headerlink" title="PostgreSQL优化思路"></a>PostgreSQL优化思路</h6><ol>
+<li>数据库的主要影响因素还是硬件, 考虑内存,CPU和硬盘升级.</li>
+<li>数据库的默认配置是一种兼容性设置,本质上是一个最佳猜测,需要根据实际调整.可用工具pgtune.</li>
+<li>更新PostgreSQL算法数据.运行analyze命令更新统计信息(比如更新表结构和增加索引后需要运行analyze).</li>
+<li>查看执行计划:运行explain analyze查看SQL的预测计划,并通过pev工具进行可视化理解.</li>
+<li>日志分析:使用retrace分析日志,了解细节如log_statement,logging_connection等.</li>
+</ol>
+<h5 id="ORM"><a href="#ORM" class="headerlink" title="ORM"></a>ORM</h5><p>主要集中在Hibernate和MyBatis(半ORM)之间选择,考虑因素包括项目大小,业务复杂度,是否已有DB,原生SQL是否过多,数据库厂商无关性,开发速度等.</p>
+<h6 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h6><p>延迟加载就是在加载某个实体时,对于集合属性或者关联实体不立刻从数据库抓取,而是在访问发生时在搜索.可以降低内存开销,减少db交互次数.</p>
+<p>延迟加载的原理就是使用代理模式(javassist或者CGLIB)代理目标对象,当调用目标方法时,通过代理(持有Session和SQL)向数据库查询,然后返回.</p>
+<h6 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h6><ol>
+<li><p>一级缓存: 一般作用域限制在Session内.通过Session接口操作时都会从缓存内先查找,没命中则从db中检索,然后再加入缓存.Session关闭时,缓存也将清除.</p>
+<blockquote>
+<p>a. 缓存时间短, 作用范围小, 短时间内多次操作db(同一个session)效果明显.</p>
+<p>b. 提交事务时, 会比较缓存和DB是否一致,不同才会更新到DB.</p>
+<p>c. 一级缓存一般由框架维护,手动干预可以使用flush, evict, clear方法.</p>
+</blockquote>
+</li>
+<li><p>二级缓存: 一般框架也提供,Hibernate有默认实现.是基于应用程序级别的缓存,跨越多个Session.可以使用外置缓存如Ehcache.一般不重要的,不经常修改的,但是经常使用的数据可以放在二级缓存里.</p>
+</li>
+</ol>
+<h6 id="Hibernate调优Tips"><a href="#Hibernate调优Tips" class="headerlink" title="Hibernate调优Tips"></a>Hibernate调优Tips</h6><ol>
+<li><p>确定是否是数据库依赖(data-bound)型应用.通过监控应用,看看是否数据库读写占用大量资源.工具:visualVM.</p>
+</li>
+<li><p>确定基准baseline,制定合理预期.</p>
+</li>
+<li><p>收集SQL日志和调试日志(执行时间等),可以发现慢查询,频繁查询,主键生成时间等指标.工具log4jdbc.</p>
+</li>
+<li><p>速效方案</p>
+<blockquote>
+<p>a. 提前生成主键.Hibernate4默认开启HiLoId生成器,默认50个.注意调整主键生成策略.</p>
+<p>b.使用批处理.注意同时使用batch_size,order_inserts,order_updates.</p>
+<p>c. 减少dirty-check.使用readOnly.</p>
+<p>d. 使用二级缓存.</p>
+</blockquote>
+</li>
+</ol>
+<h6 id="典型问题"><a href="#典型问题" class="headerlink" title="典型问题"></a>典型问题</h6><ol>
+<li><p>Hibernate中没有调用save或者saveOrUpdate,但是属性被保存了.</p>
+<blockquote>
+<p>Hibernate中实体会在瞬时态(Transient),持久态(Persistent),脱管态(Detached)中转换.瞬时态没有id,db中没有对应的记录;持久态和Session关联,db中有对应的记录;持久态在session关闭之后就变成脱管态了.持久态实体都在Hibernate的缓存管理之中,任何修改在transaction结束时都会提交到db.</p>
+</blockquote>
+</li>
+<li><p>“could not initialize proxy - no Session”.</p>
+<blockquote>
+<p>延迟加载时所在的session已经关闭了.解决办法就是开启open-in-view模式(SpringBoot对于web应用默认开启了).还有一些场景就是在新开的线程里面运行查询,此时需要手动获取.</p>
+</blockquote>
+</li>
+<li><p>N + 1</p>
+<blockquote>
+<p>解决方法主要看:是否使用延迟加载;是否使用外连接;是否使用命名查询.</p>
+</blockquote>
+</li>
+</ol>
+<h5 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h5><p>ACID:原子性,一致性,隔离性,持久性(<strong>Durability</strong>).</p>
+<p>事务并发(隔离性):脏读是某一事务读取了另一个事务未提交的脏数据;而不可重复读则是读取了前一事务提交的数据.幻读和不可重复读都是读取了另一条已经提交的事务,所不同的是不可重复读查询的都是同一个数据项,而幻读针对的是一批数据整体(比如数据的个数).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">隔离级别</th>
+<th style="text-align:center">效果</th>
+<th style="text-align:center">性能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Serializable</td>
+<td style="text-align:center">可以防止脏读,不可重复读,幻读</td>
+<td style="text-align:center">低,锁表</td>
+</tr>
+<tr>
+<td style="text-align:center">Repeatabled Read</td>
+<td style="text-align:center">可以防止脏读,不可重复读</td>
+<td style="text-align:center">MySQL默认</td>
+</tr>
+<tr>
+<td style="text-align:center">Read Commited</td>
+<td style="text-align:center">可以防止脏读</td>
+<td style="text-align:center">Oracle,Pg默认</td>
+</tr>
+<tr>
+<td style="text-align:center">Read Uncommited</td>
+<td style="text-align:center">最低级别,任何情况都能发生</td>
+</tr>
+</tbody>
+</table>
+<p>悲观锁: 假定会发生并发冲突,屏蔽一切可能违反数据完整性的操作.如表锁,行级锁,读锁,写锁.</p>
+<p>乐观锁: 假设不会发生并发冲突,只在提交操作时检查是否违反数据完整性.乐观锁不能解决脏读.适宜于多读场景.</p>
+<h5 id="DB架构"><a href="#DB架构" class="headerlink" title="DB架构"></a>DB架构</h5><p>单库: 所有东西都在一个库里.一开始都这么玩.</p>
+<p>分片: 水平切分,解决<strong>数据量大</strong>的问题.有些数据库支持自动分片.注意可控性,失控的话影响业务.</p>
+<p>数据路由: 分片之后需要对数据库请求进行路由.常见3种方式:</p>
+<ol>
+<li>按照范围路由.比如1亿以内的一个节点,1-2亿的另一个节点.扩展性好,容易增加分片,但是请求负载不均衡,可能会导致流量压在某个分片上.</li>
+<li>按照hash路由.比如取模.简单,数据分布均衡,请求负载也均衡,但是不易扩展,增加分片之后要考虑数据迁移成本.</li>
+<li>路由服务.实现路由规则和业务解耦,一般由中间件提供实现.解决上述两个方式的高耦合问题.</li>
+</ol>
+<p>分组和复制: 解决读性能问题,保证读高可用.大部分业务都是读多写少.通常使用读写分离,通过扩充读库的来保证读的高可用,同时提高读的性能.</p>
+<p>常见的互联网数据库架构都是这种分片+分组的组合.</p>
+<h6 id="读高可用-—-冗余读库"><a href="#读高可用-—-冗余读库" class="headerlink" title="读高可用 — 冗余读库"></a>读高可用 — 冗余读库</h6><p>一个主库负责写,两个从库负责读.其中一个从库失败了,有另一个顶上.</p>
+<p>选择了AP,就要考虑C的问题.读库冗余会发生<strong>数据一致性问题</strong>.一般都是一主两从或者一主三从.写库仍然是单点,但是考虑到99%的业务都是读,而且写高可用方案代价大,根据28原则,大多数公司都是只用读高可用方案.</p>
+<p>注意: 从库越多,同步越慢,不一致性越高.</p>
+<h6 id="写高可用-—-冗余写库"><a href="#写高可用-—-冗余写库" class="headerlink" title="写高可用 — 冗余写库"></a>写高可用 — 冗余写库</h6><p>双主同步,主从再同步.需要注意主库主键策略,防止主键冲突:一般方法是1. 采用不同步长自增,这样同步以后正好互补;2. 不适用自增策略,使用分布式id,由业务保证.</p>
+<p>读写分离就会导致数据一致性问题,读的不一定是最新的.可用的方法有通过中间件记录每个key上发生的写请求,在数据库同步的时间窗口内如果这个key上出现了读请求,则强制路由到写库上,以此来保证一致性.</p>
+<h6 id="58案例"><a href="#58案例" class="headerlink" title="58案例"></a>58案例</h6><p>一主一从,主负责读写,从负责备份.没有数据一致性问题,但是DB资源利用率只有50%,不能通过增加读库的方式来扩充读性能.</p>
+<p>通过Cache来增加读性能.为了保证DB和Cache一致性,1.实行双淘汰机制,首先在写库之前淘汰以此,然后在同步时间窗口之内发起一个异步清理,再淘汰一次.2. 为所有item设置过期时间,让脏数据只存活一定时间.</p>
+<p>扩容: TBD</p>
+<p><img src="https://github.com/wsabc/images/raw/master/db-arch.jpeg" alt="DB架构"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/db/" rel="tag"># db</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/23/blue-green-deploy/" rel="next" title="蓝绿发布">
+                <i class="fa fa-chevron-left"></i> 蓝绿发布
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#关系型数据库"><span class="nav-number">1.</span> <span class="nav-text">关系型数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#JDBC"><span class="nav-number">1.1.</span> <span class="nav-text">JDBC</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据库连接"><span class="nav-number">1.2.</span> <span class="nav-text">数据库连接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#连接池"><span class="nav-number">1.3.</span> <span class="nav-text">连接池</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#如何计算连接池大小"><span class="nav-number">1.3.1.</span> <span class="nav-text">如何计算连接池大小?</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接有效性测试-以Tomcat-Jdbc-Pool为例"><span class="nav-number">1.3.2.</span> <span class="nav-text">连接有效性测试(以Tomcat Jdbc Pool为例)</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SQL"><span class="nav-number">1.4.</span> <span class="nav-text">SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#PostgreSQL优化思路"><span class="nav-number">1.4.1.</span> <span class="nav-text">PostgreSQL优化思路</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ORM"><span class="nav-number">1.5.</span> <span class="nav-text">ORM</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#延迟加载"><span class="nav-number">1.5.1.</span> <span class="nav-text">延迟加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#缓存"><span class="nav-number">1.5.2.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Hibernate调优Tips"><span class="nav-number">1.5.3.</span> <span class="nav-text">Hibernate调优Tips</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#典型问题"><span class="nav-number">1.5.4.</span> <span class="nav-text">典型问题</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#事务"><span class="nav-number">1.6.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DB架构"><span class="nav-number">1.7.</span> <span class="nav-text">DB架构</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#读高可用-—-冗余读库"><span class="nav-number">1.7.1.</span> <span class="nav-text">读高可用 — 冗余读库</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#写高可用-—-冗余写库"><span class="nav-number">1.7.2.</span> <span class="nav-text">写高可用 — 冗余写库</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#58案例"><span class="nav-number">1.7.3.</span> <span class="nav-text">58案例</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
