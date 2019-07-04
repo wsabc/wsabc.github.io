@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="常见工具AWK和SED的小贴士. 备忘. 示例来自酷壳. AWK示例格式化输出, 过滤, 匹配字符串, 拆分文件, 统计, 脚本等. 1awk &apos;&amp;#123;print $1, $4&amp;#125;&apos; netstat.txt # 打印第一列和第四列, &apos;&amp;#123;...&amp;#125;&apos;是awk语句格式, $0是一行">
+<meta name="keywords" content="awk, sed">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWK-SED">
+<meta property="og:url" content="http://wsabc.top/2019/07/04/awk-sed/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="常见工具AWK和SED的小贴士. 备忘. 示例来自酷壳. AWK示例格式化输出, 过滤, 匹配字符串, 拆分文件, 统计, 脚本等. 1awk &apos;&amp;#123;print $1, $4&amp;#125;&apos; netstat.txt # 打印第一列和第四列, &apos;&amp;#123;...&amp;#125;&apos;是awk语句格式, $0是一行">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-04T14:49:13.120Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AWK-SED">
+<meta name="twitter:description" content="常见工具AWK和SED的小贴士. 备忘. 示例来自酷壳. AWK示例格式化输出, 过滤, 匹配字符串, 拆分文件, 统计, 脚本等. 1awk &apos;&amp;#123;print $1, $4&amp;#125;&apos; netstat.txt # 打印第一列和第四列, &apos;&amp;#123;...&amp;#125;&apos;是awk语句格式, $0是一行">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/07/04/awk-sed/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>AWK-SED | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">15</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">13</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">16</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/07/04/awk-sed/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AWK-SED
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-04 22:48:05 / 修改时间：22:49:13" itemprop="dateCreated datePublished" datetime="2019-07-04T22:48:05+08:00">2019-07-04</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/tool/" itemprop="url" rel="index"><span itemprop="name">tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>常见工具AWK和SED的小贴士. 备忘. 示例来自<a href="https://coolshell.cn/" target="_blank" rel="noopener">酷壳</a>.</p>
+<h3 id="AWK示例"><a href="#AWK示例" class="headerlink" title="AWK示例"></a>AWK示例</h3><p>格式化输出, 过滤, 匹配字符串, 拆分文件, 统计, 脚本等.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk '&#123;print $1, $4&#125;' netstat.txt # 打印第一列和第四列, '&#123;...&#125;'是awk语句格式, $0是一行</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk '&#123;printf "%-8s %-15s\n",$1,$2&#125;' netstat.txt # 格式化输出</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk '$3==0 &amp;&amp; $6=="LISTEN" || NR==1 ' netstat.txt # 输出第一行并且过滤第三列和第六列. 注意比较运算符 ==, !=, &gt;, &gt;=, &lt;, &lt;=</span><br></pre></td></tr></table></figure>
+<p>内建变量</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\$0</td>
+<td>当前记录(这个变量中存放着整个行的内容)</td>
+</tr>
+<tr>
+<td>\$1 - \$n</td>
+<td>当前记录的第n个字段,字段间由FS分隔</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>输入字段分隔符,默认是空格或Tab</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>当前记录中的字段个数,就是有多少列</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>已经读出的记录数,就是行号,从1开始,如果有多个文件话,这个值也是不断累加中</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td>当前记录数,与NR不同的是,这个值会是各个文件自己的行号</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>输入的记录分隔符, 默认为换行符</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出字段分隔符,默认也是空格</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出的记录分隔符,默认为换行符</td>
+</tr>
+<tr>
+<td>FILENAME</td>
+<td>当前输入文件的名字</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk  'BEGIN&#123;FS=":"&#125; &#123;print $1,$3,$6&#125;' /etc/passwd # 指定字段分隔符</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk '$6 ~ /WAIT/ || NR==1 &#123;print NR,$4,$5,$6&#125;' OFS="\t" netstat.txt # ~表示模式开启, //中是模式, 类似正则表达式匹配</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk 'NR!=1&#123;if($6 ~ /TIME|ESTABLISHED/) print &gt; "1.txt";</span><br><span class="line">else if($6 ~ /LISTEN/) print &gt; "2.txt";</span><br><span class="line">else print &gt; "3.txt" &#125;' netstat.txt # 拆分文件</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk 'NR!=1&#123;a[$6]++;&#125; END &#123;for (i in a) print i ", " a[i];&#125;' netstat.txt # 统计第六列个数</span><br></pre></td></tr></table></figure>
+<p>AWK脚本: </p>
+<ul>
+<li>BEGIN{ 这里面放的是执行前的语句 }</li>
+<li>END {这里面放的是处理完所有的行后要执行的语句 }</li>
+<li>{这里面放的是处理每一行时要执行的语句}</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/awk -f</span><br><span class="line"><span class="meta">#</span>运行前</span><br><span class="line">BEGIN &#123;</span><br><span class="line">    math = 0</span><br><span class="line">    english = 0</span><br><span class="line">    computer = 0</span><br><span class="line"> </span><br><span class="line">    printf "NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL\n"</span><br><span class="line">    printf "---------------------------------------------\n"</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#</span>运行中</span><br><span class="line">&#123;</span><br><span class="line">    math+=$3</span><br><span class="line">    english+=$4</span><br><span class="line">    computer+=$5</span><br><span class="line">    printf "%-6s %-6s %4d %8d %8d %8d\n", $1, $2, $3,$4,$5, $3+$4+$5</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#</span>运行后</span><br><span class="line">END &#123;</span><br><span class="line">    printf "---------------------------------------------\n"</span><br><span class="line">    printf "  TOTAL:%10d %8d %8d \n", math, english, computer</span><br><span class="line">    printf "AVERAGE:%10.2f %8.2f %8.2f\n", math/NR, english/NR, computer/NR</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="SED示例"><a href="#SED示例" class="headerlink" title="SED示例"></a>SED示例</h3><p>SED全称Stream Editor,用程序的方式来编辑文本,基本上是玩正则表达式.注意Mac上的sed和Linux上的不一样.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install gnu-sed</span><br><span class="line">echo 'PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"' &gt;&gt; ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+<h4 id="替换命令s"><a href="#替换命令s" class="headerlink" title="替换命令s"></a>替换命令s</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed "s/my/wang's/g" test.txt # s表示替换, /my/wangs/表示将my替换成wang's, /g表示替换一行上的所有匹配. 注意:单引号'内无法使用\'来转义,但是双引号"内可以使用\"来转义</span><br></pre></td></tr></table></figure>
+<p>通常sed不会对文件修改,而是将修改后的结果输出,可以使用重定向保存修改,或者使用-i参数直接修改文件.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i "s/my/wang's/g" test.txt</span><br></pre></td></tr></table></figure>
+<p>替换命令中常见的正则有: ^开头, $结束, &lt;词首, &gt;词尾等.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed "3s/my/your/g" test.txt # 替换第三行, "3,6s/my/your/g"则是第三到第六行的.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed "s/s/S/1" test.txt # 替换每一行的第一个s, "s/s/S/3g"则是替换每一行的第三个开始的s.</span><br></pre></td></tr></table></figure>
+<h4 id="多个匹配"><a href="#多个匹配" class="headerlink" title="多个匹配"></a>多个匹配</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed '1,3s/my/your/g; 3,$s/This/That/g' test.txt # 两个模式,中间用;分隔, 类似sed -e参数.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed 's/my/[&amp;]/g' test.txt # &amp;指代匹配的变量,也就是my.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed 's/This is my \([^,&amp;]*\),.*is \(.*\)/\1:\2/g' test.txt # 圆括号分组, 反向引用是\1, \2类似.</span><br></pre></td></tr></table></figure>
+<h4 id="sed-命令"><a href="#sed-命令" class="headerlink" title="sed 命令"></a>sed 命令</h4><ol>
+<li>N: 把下一行的内容纳入当前缓冲区做匹配.</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed 'N;s/my/your/' test.txt</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>a,i: 添加行,a = append; i = insert.</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sed '1 i This is my cat' test.txt # 第一行前插入This is my cat.</span><br><span class="line">sed "/fish/a This is my cat" test.txt # 匹配到/fish/后就追加一行.</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>c: 替换匹配行.</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed '/fish/c This is my cat' test.txt # 匹配到/fish/就替换这一行.</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>d: 删除匹配行.</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed '/fish/d' test.txt # 匹配到/fish/就删除此行.</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>p: 打印,类似grep.</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sed '/fish/p' test.txt # 匹配到fish并输出,sed处理时会把处理的信息输出,会看到两遍.</span><br><span class="line">sed -n '/fish/p' test.txt # 只输出匹配行.</span><br></pre></td></tr></table></figure>
+<h4 id="Pattern-Space"><a href="#Pattern-Space" class="headerlink" title="Pattern Space"></a>Pattern Space</h4><p>Pattern Space就是模式的缓冲区,文本的每一行放进缓冲区后,应用sed命令处理,处理完结的结果再放入缓冲区.如果没有-n参数的话,这个缓冲区就被打印出来.</p>
+<h4 id="Address"><a href="#Address" class="headerlink" title="Address"></a>Address</h4><p>[address[,address]][!][cmd] 命令格式, address可以是一个数字,也可以是一个模式,还可以使用相对位置.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed '/dog/,+3s/^/# /g' test.txt # +3表示后面连续3行.</span><br></pre></td></tr></table></figure>
+<h4 id="命令打包"><a href="#命令打包" class="headerlink" title="命令打包"></a>命令打包</h4><p>命令可以用分号打包,也可以用大括号括起来嵌套.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed '3,6 &#123;/This/&#123;/fish/d&#125;&#125;' test.txt # 对3行到第6行,匹配/This/成功后,再匹配/fish/,成功后执行d命令.</span><br></pre></td></tr></table></figure>
+<h4 id="Hold-Space"><a href="#Hold-Space" class="headerlink" title="Hold Space"></a>Hold Space</h4><p>g: 将hold space中的内容拷贝到pattern space中,原来pattern space里的内容清除<br>G: 将hold space中的内容append到pattern space\n后<br>h:  将pattern space中的内容拷贝到hold space中,原来的hold space里的内容被清除<br>H: 将pattern space中的内容append到hold space\n后<br>x: 交换pattern space和hold space的内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed '1!G;h;$!d' test.txt # 反序输出一个文件.</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/awk-sed/" rel="tag"># awk, sed</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/04/spring-boot-ms-practice/" rel="next" title="SpringBoot微服务实践">
+                <i class="fa fa-chevron-left"></i> SpringBoot微服务实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/04/distribution-system-development/" rel="prev" title="分布式系统开发">
+                分布式系统开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#AWK示例"><span class="nav-number">1.</span> <span class="nav-text">AWK示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SED示例"><span class="nav-number">2.</span> <span class="nav-text">SED示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#替换命令s"><span class="nav-number">2.1.</span> <span class="nav-text">替换命令s</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多个匹配"><span class="nav-number">2.2.</span> <span class="nav-text">多个匹配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sed-命令"><span class="nav-number">2.3.</span> <span class="nav-text">sed 命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pattern-Space"><span class="nav-number">2.4.</span> <span class="nav-text">Pattern Space</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Address"><span class="nav-number">2.5.</span> <span class="nav-text">Address</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令打包"><span class="nav-number">2.6.</span> <span class="nav-text">命令打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hold-Space"><span class="nav-number">2.7.</span> <span class="nav-text">Hold Space</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
