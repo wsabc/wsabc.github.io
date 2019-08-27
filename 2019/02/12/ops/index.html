@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="运维是一个综合性岗位,涉及网络,系统,安全,应用架构,存储,开发等多个技术领域.常见的划分角度有:  按照领域划分: 基础设施运维, 系统运维, 数据运维, 应用运维, 云平台运维, 容器运维.  按照技术面划分: 安全运维, 性能运维, 数据运维, 集成运维.  按照流程划分: 构建/持续集成,发布; 安装,部署/升级/迁移/合并/扩展; 配置/初始化/配置升级; 备份/恢复/传输; 日志,监控">
+<meta name="keywords" content="ops">
+<meta property="og:type" content="article">
+<meta property="og:title" content="运维">
+<meta property="og:url" content="http://wsabc.top/2019/02/12/ops/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="运维是一个综合性岗位,涉及网络,系统,安全,应用架构,存储,开发等多个技术领域.常见的划分角度有:  按照领域划分: 基础设施运维, 系统运维, 数据运维, 应用运维, 云平台运维, 容器运维.  按照技术面划分: 安全运维, 性能运维, 数据运维, 集成运维.  按照流程划分: 构建/持续集成,发布; 安装,部署/升级/迁移/合并/扩展; 配置/初始化/配置升级; 备份/恢复/传输; 日志,监控">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-27T14:04:59.108Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="运维">
+<meta name="twitter:description" content="运维是一个综合性岗位,涉及网络,系统,安全,应用架构,存储,开发等多个技术领域.常见的划分角度有:  按照领域划分: 基础设施运维, 系统运维, 数据运维, 应用运维, 云平台运维, 容器运维.  按照技术面划分: 安全运维, 性能运维, 数据运维, 集成运维.  按照流程划分: 构建/持续集成,发布; 安装,部署/升级/迁移/合并/扩展; 配置/初始化/配置升级; 备份/恢复/传输; 日志,监控">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/02/12/ops/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>运维 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">18</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">16</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">20</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/02/12/ops/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">运维
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-12 21:58:52" itemprop="dateCreated datePublished" datetime="2019-02-12T21:58:52+08:00">2019-02-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-27 22:04:59" itemprop="dateModified" datetime="2019-08-27T22:04:59+08:00">2019-08-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/ops/" itemprop="url" rel="index"><span itemprop="name">ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>运维是一个综合性岗位,涉及网络,系统,安全,应用架构,存储,开发等多个技术领域.常见的划分角度有:</p>
+<ol>
+<li><p>按照领域划分: 基础设施运维, 系统运维, 数据运维, 应用运维, 云平台运维, 容器运维.</p>
+</li>
+<li><p>按照技术面划分: 安全运维, 性能运维, 数据运维, 集成运维.</p>
+</li>
+<li>按照流程划分: 构建/持续集成,发布; 安装,部署/升级/迁移/合并/扩展; 配置/初始化/配置升级; 备份/恢复/传输; 日志,监控,预警; 诊断排查,优化.<a id="more"></a>
+</li>
+</ol>
+<h4 id="基本的运维技能"><a href="#基本的运维技能" class="headerlink" title="基本的运维技能"></a>基本的运维技能</h4><ol>
+<li>Linux基础知识: shell, yum/rpm安装, 系统服务.</li>
+<li>软件服务: HTTP服务器, FTP, DNS等.</li>
+<li>系统管理: 进程, 内存, 磁盘, 权限等.</li>
+<li>监控: Zabbix, Nagios等.</li>
+<li>云计算/虚拟化</li>
+<li>脚本编程: Python, Shell, Perl等.</li>
+</ol>
+<h4 id="Web运维"><a href="#Web运维" class="headerlink" title="Web运维"></a>Web运维</h4><ol>
+<li>Web基础: Tomcat, Nginx, TCP/HTTP</li>
+<li>数据库: MySQL, PostgreSQL, Oracle, Redis, MongoDB, 主从复制, 读写分离</li>
+<li>安全: DDos, Iptables, web shell等</li>
+<li>集群: LVS, KeepAlived, Nginx负载均衡</li>
+<li>存储: OSS, NFS</li>
+<li>持续集成: git, jenkins, docker</li>
+<li>云平台: 阿里云, 腾讯云</li>
+</ol>
+<h4 id="设计运维友好的系统"><a href="#设计运维友好的系统" class="headerlink" title="设计运维友好的系统"></a>设计运维友好的系统</h4><p>在运维工作中,自动化程度是一个很重要的指标.运维友好(operations friendly)则是尽量减少人工干预,如果一个系统很少需要人工干预,能够自动检测并恢复服务,只有极少数复杂故障才需要人员介入,那这个系统就是运维友好的.</p>
+<ol>
+<li><strong>预期失败</strong>: 任何一个组件在任何一个时间都可能失败,也可能会影响跟它相关联的系统.要预见并能处理.</li>
+<li><strong>保持简单</strong>: 复杂容易产生更多问题,简单容易做正确.</li>
+<li><strong>尽量自动化</strong>: 人会犯错,但是程序可以量化并被相信.</li>
+</ol>
+<p>根据上面三个基本原则,可以在具体实践中逐步细化.</p>
+<ul>
+<li>注意系统的冗余和故障恢复.列出可能的故障组合,确保在不影响业务的前提下能继续运作.</li>
+<li>升级软件注意避免重大用户体验的改变.</li>
+<li>服务健康状况快速检查.</li>
+<li>能产生具体的性能数据,健康数据,以及改动的审计日志.</li>
+<li>实现降级和限流.</li>
+</ul>
+<h5 id="常见性能指标"><a href="#常见性能指标" class="headerlink" title="常见性能指标"></a>常见性能指标</h5><ul>
+<li>响应时间RT: 系统对请求做出响应的时间.一般来说指整个系统所有功能的平均响应时间或所有功能的最大响应时间.与用户的感觉密切相关.RT快慢也因为具体的场景不同标准也不同(游戏要求快,编译要求不高等).</li>
+<li>吞吐量Throughput:系统在单位时间内处理请求的数量.</li>
+<li>并发数: 系统可以承载的正常使用系统功能的请求数量.并发数并不准确,比如并发用户数有时分注册用户数,有时是在线用户数,有时是同时发请求用户数.</li>
+<li>每秒查询数量QPS: QPS=并发数/RT.类似的还有TPS(每秒事务数), HPS(每秒HTTP请求数).这些都是吞吐量的量化指标.</li>
+<li>PV(PageView):页面浏览量,一个页面用户每一次访问记录1次,用户对同一页面的多次刷新,累计次数.</li>
+<li>UV(UniqueVistor):独立访客数,统计1天内某站点的访问用户数(以cookie为依据),一台电脑终端为一个访客.类似的还有RV(RepeatVistors)重复访问者数量.</li>
+<li>独立IP数:指1天内多少个独立的IP浏览了某页面.同一个路由器上的用户被认为是一个IP.</li>
+</ul>
+<h5 id="常见监控手段"><a href="#常见监控手段" class="headerlink" title="常见监控手段"></a>常见监控手段</h5><ul>
+<li>SNMP: 简单网络管理协议, 涉及三个参与者:被管理者(Devices),管理者(NMS),代理(Agent).管理者通过UDP协议和代理交互,实现读(GET),写(SET)和通报(Trap).占用161和162端口.每个管理对象都有自己的OID,自己状态和统计信息都在MIB(管理信息库)中.使用SNMP4J类库.</li>
+<li>SpringBoot Actuator:对SpringBoot应用的监控和管理.常用的有/health,/metric,/trace等接入点.</li>
+</ul>
+<h4 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h4><ul>
+<li>AWK:文本处理工具.</li>
+<li>SED: 文本流编辑器.</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ops/" rel="tag"># ops</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/25/tools/" rel="next" title="工具列表">
+                <i class="fa fa-chevron-left"></i> 工具列表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/27/canary-release/" rel="prev" title="灰度发布CanaryRelease">
+                灰度发布CanaryRelease <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本的运维技能"><span class="nav-number">1.</span> <span class="nav-text">基本的运维技能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Web运维"><span class="nav-number">2.</span> <span class="nav-text">Web运维</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设计运维友好的系统"><span class="nav-number">3.</span> <span class="nav-text">设计运维友好的系统</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见性能指标"><span class="nav-number">3.1.</span> <span class="nav-text">常见性能指标</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常见监控手段"><span class="nav-number">3.2.</span> <span class="nav-text">常见监控手段</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工具"><span class="nav-number">4.</span> <span class="nav-text">工具</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="灰度发布,也叫金丝雀发布,是指使服务平滑过渡的一种发布方式.在灰度发布之上可以进行A/B测试,如果用户对B没有什么反对意见,那么就逐步扩大范围(这个过程也叫灰度放量),把所有的用户都迁移到B上来. 灰度发布能及早获得用户反馈,完善产品功能,同时可以加强与用户的互动,降低产品所影响的用户范围. 核心概念 前提是新功能的引入. 可以应用在系统的某个部分上,比如UI,或者后端某个子服务.总之是系统流程中">
+<meta name="keywords" content="canary-release">
+<meta property="og:type" content="article">
+<meta property="og:title" content="灰度发布CanaryRelease">
+<meta property="og:url" content="http://wsabc.top/2019/02/27/canary-release/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="灰度发布,也叫金丝雀发布,是指使服务平滑过渡的一种发布方式.在灰度发布之上可以进行A/B测试,如果用户对B没有什么反对意见,那么就逐步扩大范围(这个过程也叫灰度放量),把所有的用户都迁移到B上来. 灰度发布能及早获得用户反馈,完善产品功能,同时可以加强与用户的互动,降低产品所影响的用户范围. 核心概念 前提是新功能的引入. 可以应用在系统的某个部分上,比如UI,或者后端某个子服务.总之是系统流程中">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-27T14:06:29.397Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="灰度发布CanaryRelease">
+<meta name="twitter:description" content="灰度发布,也叫金丝雀发布,是指使服务平滑过渡的一种发布方式.在灰度发布之上可以进行A/B测试,如果用户对B没有什么反对意见,那么就逐步扩大范围(这个过程也叫灰度放量),把所有的用户都迁移到B上来. 灰度发布能及早获得用户反馈,完善产品功能,同时可以加强与用户的互动,降低产品所影响的用户范围. 核心概念 前提是新功能的引入. 可以应用在系统的某个部分上,比如UI,或者后端某个子服务.总之是系统流程中">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/02/27/canary-release/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>灰度发布CanaryRelease | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">18</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">16</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">20</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/02/27/canary-release/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">灰度发布CanaryRelease
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-27 22:00:01" itemprop="dateCreated datePublished" datetime="2019-02-27T22:00:01+08:00">2019-02-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-27 22:06:29" itemprop="dateModified" datetime="2019-08-27T22:06:29+08:00">2019-08-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/canary-release/" itemprop="url" rel="index"><span itemprop="name">canary-release</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>灰度发布,也叫金丝雀发布,是指使服务平滑过渡的一种发布方式.在灰度发布之上可以进行A/B测试,如果用户对B没有什么反对意见,那么就逐步扩大范围(这个过程也叫灰度放量),把所有的用户都迁移到B上来.</p>
+<p>灰度发布能及早获得用户反馈,完善产品功能,同时可以加强与用户的互动,降低产品所影响的用户范围.</p>
+<h4 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h4><ol>
+<li>前提是新功能的引入.</li>
+<li>可以应用在系统的某个部分上,比如UI,或者后端某个子服务.总之是系统流程中的某个环节.</li>
+<li>一开始是少量用户介入,也可能用户没有感知.</li>
+<li>灰度发布的核心是如何快速的切换,灰度发布不会减少错误,但是可以减少停机时间.<a id="more"></a>
+</li>
+</ol>
+<h4 id="真的需要灰度发布吗"><a href="#真的需要灰度发布吗" class="headerlink" title="真的需要灰度发布吗?"></a>真的需要灰度发布吗?</h4><ol>
+<li>增加代码噪音,需要引入相关代码.</li>
+<li>灰度期内需要监控各方面指标.</li>
+<li>变化是否用户高度可见?是否影响用户使用?不在关键路径上的系统,可以不需要灰度,比如管理系统.</li>
+<li>相对于系统本身来说实现灰度发布的难度,性价比如何.</li>
+</ol>
+<h4 id="常规实现"><a href="#常规实现" class="headerlink" title="常规实现"></a>常规实现</h4><ol>
+<li>2个负载均衡器,95%在老版本,5%在灰度版本.</li>
+<li>AWS云服务,如Route53,或者ASG.</li>
+<li>K8S(Kubernetis).</li>
+<li>F5.</li>
+<li>ServiceMesh,落地方案Istio</li>
+</ol>
+<p>上述方案的核心都是分流,流量控制.无论怎么分流,都需要APP端积极配合.</p>
+<h4 id="蓝绿发布-A-B-Testing"><a href="#蓝绿发布-A-B-Testing" class="headerlink" title="蓝绿发布,A/B Testing"></a>蓝绿发布,A/B Testing</h4><ol>
+<li><p>跟BGD目的相同,都是为了快速失败,原理也相同.但是粒度不同,BGD是全量切换,灰度可以增强切换.技术挑战也类似,比如数据库升级(推荐实现并行改变模式,即三个阶段:a新旧服务并存expand,b旧服务向新服务迁移migrate,c只保留新服务contract).</p>
+</li>
+<li><p>和ABT目的不同,ABT是为了使用A和B来验证假设,时间长.灰度快速切换,可以在其上做ABT.</p>
+</li>
+</ol>
+<h4 id="具体案例"><a href="#具体案例" class="headerlink" title="具体案例"></a>具体案例</h4><p>目的: 某后台服务使用恢复发布实现发布新功能时不停机升级.</p>
+<p>分流因子: 依据不同HTTP header分流,常见的有version, clientIp, id, agent等.</p>
+<p>方案: nginx+lua+redis, 同时提供一套UI用于指定分流规则和灰度环境.</p>
+<p>影响: 对现有部署结构有一定的调整,还需要增加灰度服务器的高可用.灰度升级期间有短暂的服务不可用.</p>
+<p>缺点: 占用资源多;DB迁移数据量大会导致暂停服务时间长,而且迁移脚本复杂,难于测试;对于回滚支持不好,只能继续fix继续灰度.</p>
+<h4 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h4><ol>
+<li><p>架构改造,使用微服务构造分布式系统,并识别出来容易发生改变的模块.</p>
+</li>
+<li><p>数据库升级,先做Schema的升级以支持新需求(无业务改变),再做APP升级.</p>
+</li>
+<li><p>一旦回滚如何保留灰度期间的新增数据?</p>
+<blockquote>
+<ul>
+<li>假设新特性都是新增字段.</li>
+<li>插入一条数据时,写基本字段和新增字段.</li>
+<li><p>更新一条数据时,更新需要更新的字段;删除也一样.</p>
+</li>
+<li><p>如果新特性是对老字段的修改,建议新增字段来处理,新旧共存一段时间,逐步替换.</p>
+</li>
+<li>插入的时候,写老字段和新字段;更新的时候,新老要保持一致;</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/canary-release/" rel="tag"># canary-release</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/12/ops/" rel="next" title="运维">
+                <i class="fa fa-chevron-left"></i> 运维
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/07/great-wisdom/" rel="prev" title="有启发的句子">
+                有启发的句子 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#核心概念"><span class="nav-number">1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#真的需要灰度发布吗"><span class="nav-number">2.</span> <span class="nav-text">真的需要灰度发布吗?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常规实现"><span class="nav-number">3.</span> <span class="nav-text">常规实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#蓝绿发布-A-B-Testing"><span class="nav-number">4.</span> <span class="nav-text">蓝绿发布,A/B Testing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体案例"><span class="nav-number">5.</span> <span class="nav-text">具体案例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#改进"><span class="nav-number">6.</span> <span class="nav-text">改进</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
