@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="JVM是什么Java虚拟机是一台由规范来定义的抽象计算机,其规范定义了每个JVM都必须实现的特性,允许特定的实现使用不同的技术.当运行一个Java程序的同时,也就在运行一个JVM实例. JVM就是为了负责运行Java程序而生.启动Java程序JVM也就开始了,退出程序JVM就结束了.每个Java程序都运行在自己的JVM中. JVM的内部体系结构主要包含: 类装载子系统, 运行时数据区(方法区, 堆">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM知识点">
+<meta property="og:url" content="http://wsabc.top/2019/08/18/inside-jvm/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="JVM是什么Java虚拟机是一台由规范来定义的抽象计算机,其规范定义了每个JVM都必须实现的特性,允许特定的实现使用不同的技术.当运行一个Java程序的同时,也就在运行一个JVM实例. JVM就是为了负责运行Java程序而生.启动Java程序JVM也就开始了,退出程序JVM就结束了.每个Java程序都运行在自己的JVM中. JVM的内部体系结构主要包含: 类装载子系统, 运行时数据区(方法区, 堆">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/JVM.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/gc-mark-compact.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/gc-size-generation.png">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/gc-process.png">
+<meta property="og:updated_time" content="2019-09-12T14:08:15.693Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM知识点">
+<meta name="twitter:description" content="JVM是什么Java虚拟机是一台由规范来定义的抽象计算机,其规范定义了每个JVM都必须实现的特性,允许特定的实现使用不同的技术.当运行一个Java程序的同时,也就在运行一个JVM实例. JVM就是为了负责运行Java程序而生.启动Java程序JVM也就开始了,退出程序JVM就结束了.每个Java程序都运行在自己的JVM中. JVM的内部体系结构主要包含: 类装载子系统, 运行时数据区(方法区, 堆">
+<meta name="twitter:image" content="https://github.com/wsabc/images/raw/master/JVM.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/08/18/inside-jvm/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>JVM知识点 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">22</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">29</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/18/inside-jvm/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JVM知识点
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-18 22:00:35" itemprop="dateCreated datePublished" datetime="2019-08-18T22:00:35+08:00">2019-08-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:08:15" itemprop="dateModified" datetime="2019-09-12T22:08:15+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="JVM是什么"><a href="#JVM是什么" class="headerlink" title="JVM是什么"></a>JVM是什么</h3><p>Java虚拟机是一台由规范来定义的抽象计算机,其规范定义了每个JVM都必须实现的特性,允许特定的实现使用不同的技术.当运行一个Java程序的同时,也就在运行一个JVM实例.</p>
+<p>JVM就是为了负责运行Java程序而生.启动Java程序JVM也就开始了,退出程序JVM就结束了.每个Java程序都运行在自己的JVM中.</p>
+<p>JVM的内部体系结构主要包含: 类装载子系统, 运行时数据区(方法区, 堆, Java栈, 程序计数器, 本地方法栈), 执行引擎,JIT编译器,垃圾收集器,本地方法接口.</p>
+<p>Java通过使用JVM屏蔽了与具体平台相关的信息,使得Java具备了一次编写,多处运行的特性.<br><a id="more"></a></p>
+<h3 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h3><p>JVM中有两种类装载器:启动类装载器和用户自定义类装载器.每个JVM都必须实现一个启动类装载器.</p>
+<p>类装载器请求另一个类装载器来装载类型的过程称为双亲委派模式.除了启动类装载器之外,其余的装载器都需要有自己的父装载器.当一个类收到了类加载请求时,自己不会首先加载,而是委派给父加载器进行加载,每个层次的加载器都是这样.所以最终每个加载请求都会经过启动类加载器.只有当父类加载返回不能加载时子加载器才会进行加载.</p>
+<ul>
+<li><p>好处1: 由于每个类加载都会经过最顶层的启动类加载器,比如<code>java.lang.Object</code>这样的类在各个类加载器下都是同一个类(只有当两个类是由同一个类加载器加载的才有意义,这两个类才相等).</p>
+</li>
+<li><p>好处2: 如果没有双亲委派模型,由各个类加载器自行加载的话,当用户自己编写了一个<code>java.lang.Object</code>类,那样系统中就会出现多个<code>Object</code>,这样Java程序中最基本的行为都无法保证,程序会变的非常混乱.</p>
+</li>
+</ul>
+<h3 id="JVM运行时数据区"><a href="#JVM运行时数据区" class="headerlink" title="JVM运行时数据区"></a>JVM运行时数据区</h3><p><img src="https://github.com/wsabc/images/raw/master/JVM.png" alt="JVM"></p>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><ul>
+<li>存储类型信息.如类的全限定名,直接超类,接口还是类,修饰符,直接接口列表,常量池,字段,方法,静态变量,classloader引用,class引用等.</li>
+<li>类加载器加载类的时候,需要同步访问方法区信息.</li>
+<li>方法区大小不固定,不必是连续内存.这块区域也被称为永久代,可利用参数<code>-XX:PermSize</code>和<code>-XX:MaxPermSize</code>控制初始化方法区和最大方法区大小.</li>
+<li>方法区可以被垃圾回收(FullGC),对于不再被引用的类,JVM会卸载这个类(GC).</li>
+<li>JDK1.8移除了方法区,使用元数据区Metaspace代替.大小根据使用情况动态调整,但是也不能无限扩展,使用<code>-XX:MaxMetaspaceSize</code>来控制最大内存.</li>
+</ul>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ul>
+<li>运行时创建的类实例或数组都放在堆中.需要考虑线程同步.</li>
+<li>堆大小不固定,也不必是连续空间.可利用参数<code>-Xms</code>和<code>-Xmx</code>进行堆内存大小控制.</li>
+<li>堆内存释放由垃圾回收器负责.由于大多数垃圾回收器都采用分代回收算法,所以堆内存也分为新生代,老年代,可以方便垃圾的准确回收.</li>
+<li>堆内常见设计是由句柄池和对象池组成.</li>
+</ul>
+<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ul>
+<li>线程私有, 在线程启动时创建, 大小是一个字长, 存储的下一条指令的地址.</li>
+</ul>
+<h4 id="Java栈"><a href="#Java栈" class="headerlink" title="Java栈"></a>Java栈</h4><ul>
+<li>线程私有, 线程启动时JVM分配一个栈, 以栈帧为单位保存线程运行状态.</li>
+<li>每当线程调用一个java方法时产生一个栈帧, 并入栈. 栈帧记录了参数, 局部变量, 中间结果等. 方法执行无论正常结束还是异常中止, 都会出栈.</li>
+<li>注意<code>StackOverflowError</code>(比如无限循环调用,或者栈帧大小超限)和<code>OutOfMemoryError</code>(无法创建新线程)区别.</li>
+</ul>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><ul>
+<li>本地方法通过本地方法接口来访问JVM的运行时数据区.本地方法和JVM有相同的能力.</li>
+<li>任何本地方法接口都会使用某种本地方法栈.调用本地方法时,不再入栈, 直接动态链接并调用指定的本地方法.</li>
+</ul>
+<h3 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h3><p>虚拟机必须为每个被装载的类型维护一个常量池(运行时常量池),即JVM创建类或者接口时将构造其运行时常量池.常量池是从方法区中分配空间的.如果运行时常量池的构造需要的内存比Java虚拟机的方法区域中可用的内存多,则Java虚拟机会抛出OutOfMemoryError.</p>
+<p>常量池是该类型中所用常量的一个有序集合(表示的是类文件中的constant_pool),包括编译期已知的直接常量(string, integer和floating)以及运行时决定的对其他类型,字段和方法的符号引用,类似于传统语言的符号表.池中的数据通过索引来访问.许多数字常量以及对象,字段和方法都是通过当前类的运行时常量池访问的.通过idc, idc_w, idc2_w, bipush, sipush, iconst_i, fcost_f, dconst_d指令访问.</p>
+<p>new一个对象的时候,jvm会检查常量池里是否有已经实例化的引用.</p>
+<h4 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h4><ol>
+<li>字符串字面量是一个指向String类的实例的引用.Java规定相同的字符串字面量必须指向同一个引用.</li>
+<li>如果String#intern方法在某个字符串(1)上执行,那如果这个字符串作为一个字面量(2)出现,那(2)将会和(1)拥有相同的引用.</li>
+<li>String#intern方法影响String常量池.池里有就返回池里的引用,没有就入池,返回堆里的引用.字符串字面量和<code>string-valued constant expressions</code>都会自动intern.</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="string">"a"</span> + <span class="string">"b"</span> + <span class="string">"c"</span>).intern() == <span class="string">"abc"</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<h3 id="堆外内存"><a href="#堆外内存" class="headerlink" title="堆外内存"></a>堆外内存</h3><p>堆外内存(off-heap memory)就是把对象内存分配在JVM的堆内存(on-heap memory)以外,这些内存直接受操作系统管理(而不是虚拟机),好处:</p>
+<ol>
+<li>这样做的结果就是能够在一定程度上减少垃圾回收对应用程序造成的影响.</li>
+<li>减少虚拟机间的复制(避免堆内内存和堆外内存来回复制交换,这种操作也叫零拷贝),进程之间可以共享.</li>
+</ol>
+<p>日常开发中主要接触到的是java.nio.DirectByteBuffer在创建的时候分配堆外内存.具体流程:</p>
+<ol>
+<li><code>Bits.reserveMemory(size, cap)</code>申请内存,会受到<code>-XX:MaxDirectMemorySize</code>大小限制,超出限制会调用<code>System.gc</code>来清理,然后当前线程再尝试申请,睡眠等待,循环数次之后无法获得就OOM.</li>
+<li>使用<code>unsafe.allocateMemory(size)</code>分配内存.</li>
+<li>使用<code>unsafe.setMemory(base, size, (byte) 0)</code>将这段内存全部清零.</li>
+<li>最后创建一个Cleaner,并把代表清理动作的Deallocator类绑定,将来调用Unsafe调free去释放内存.</li>
+</ol>
+<p>常见的使用堆外内存的框架有:</p>
+<ul>
+<li>Netty堆外内存通过DirectByteBuffer实现管理,它会首先申请16M的直接内存块大小,放入DirectByteBuffer,由PoolChunk映射这16MB的内存块,通过PoolChunk的分配来完成该直接内存块使用与释放. 每当用户申请小块内存时,都从这16M的内存中分配,当该部分内存使用完后,会释放到PoolChunk内存池中,而不是彻底释放.</li>
+<li>本地缓存框架中也有大量应用,如Ehcache3.0, Ignite等.</li>
+</ul>
+<p>堆外内存使用注意点:</p>
+<ol>
+<li>常规GC不能回收堆外内存,它是借助于老年代产生的FullGC顺便进行回收.同时也可以显式调用<code>System.gc()</code>方法进行回收. 如果使用<code>-XX:+DisableExplicitGC</code> 参数了则gc方法变成空函数,没有实际作用.</li>
+<li>平衡堆内内存和堆外内存的使用占比,防止堆外内存溢出.</li>
+</ol>
+<h3 id="JVM参数"><a href="#JVM参数" class="headerlink" title="JVM参数"></a>JVM参数</h3><p>JVM提供2种工作模式,server和client.Server模式默认提供一个更大的堆空间和一个并行GC,并且运行时可以更大程度优化代码.Client模式保守一些,可以占用更少的内存和缩短JVM的启动时间.从JDK5开始,JVM会根据机器硬件条件判断使用哪种模式.不过还是推荐明确指定JVM模式.</p>
+<p>通过<code>-version</code>或者<code>-showversion</code>参数可以查询当前Java是哪个版本,JVM是什么版本,是哪种类型的VM,处在哪个模式(解释,编译和混合)下.</p>
+<p>参考 <a href="https://www.oracle.com/technetwork/articles/java/vmoptions-jsp-140102.html" target="_blank" rel="noopener">JDK7和早期的JVM参数说明</a> 以及 <a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html" target="_blank" rel="noopener">JDK8-Linux JVM参数说明</a>. JVM参数分3类: 标准参数, 非标参数-X, 高级参数-XX</p>
+<ul>
+<li>标准参数: 所有的JVM实现都支持的参数.如-version.</li>
+<li>非标准参数: 不是所有JVM都支持,后续版本随时变化(无通知),多用于HotSpot常规参数.以-X开始.</li>
+<li>高级参数: 不是所有JVM都支持, 不稳定, 后续版本随时变化(无通知), 多用于HotSpot调优.以-XX开始.</li>
+</ul>
+<p>参数格式: 有些不需要参数;有些是布尔型参数用+(开启)/-(禁用)识别;有些需要参数,参数以空格,冒号,等号连接,也可能直接连接在选项后面.具体参照每个option说明.</p>
+<p>参数大致分类: 行为参数; 性能参数; 垃圾回收参数; 调试参数等.</p>
+<p>使用<code>-XX:+PrintFlagsFinal</code>可以打印出所有的参数(包含初始值和修改过的);使用<code>-XX:+PrintFlagsInitial</code>可以打印出所有初始值;使用<code>-XX:+PrintCommandLineFlags</code>可以打印所有修改过的值.建议启动JVM时总是加上<code>-showversion -XX:+PrintCommandLineFlags</code>.</p>
+<h4 id="常见参数说明"><a href="#常见参数说明" class="headerlink" title="常见参数说明"></a>常见参数说明</h4><ul>
+<li><code>-agentlib:libname</code>加载指定的native库;类似的还有<code>-agentpath:pathname</code>.</li>
+<li><code>-Dproperty=value</code>设置系统属性.</li>
+<li><code>-javaagent:jarpath</code>加载指定的java agent.用于instrumenting Java applications.参考aspectj.</li>
+<li><code>-verbose:gc</code>显示每一次GC事件的信息.</li>
+<li><code>-Xloggc:filename</code>重定向gc日志输出到filename.输出内容类似<code>-verbose:gc</code>.例:-Xloggc:garbage-collection.log</li>
+<li><code>-Xmnsize</code>设置年轻代堆内存的初始值和最大值,单位bytes,可以用k,m,g等单位.年轻代用来保存new对象,太小导致minorGC频繁发生;太大就只有fullGC才能回收导致耗时长.Oracle推荐设置为整个堆的3/4.可以分解成<code>-XX:NewSize</code>和<code>-XX:MaxNewSize</code>两个命令.</li>
+<li><code>-Xmssize</code>初始堆内存大小,必须是1024的倍数,至少是1MB.如果没设置,则大小是老年代和年轻代的总和.</li>
+<li><code>-Xmxsize</code>最大堆内存,必须是1024的倍数,至少是2MB.通常Xms和Xmx设置成一样.与<code>-XX:MaxHeapSize</code>相同.</li>
+<li><code>-Xsssize</code>线程栈大小,默认值跟平台相关,linux64默认1M.与<code>-XX:ThreadStackSize</code>相等.</li>
+<li><code>-XX:ErrorFile=filename</code>重定向JVM的错误日志,默认输出在当前工作目录.格式是hs_err_pid.log.</li>
+<li><code>-XX:MaxDirectMemorySize=size</code>指定nio堆外内存的最大值.默认是jvm自动选择大小.</li>
+<li><code>-XX:NativeMemoryTracking=mode</code>指定JVM内存使用跟踪模式,有off,summary和detail三种模式.</li>
+<li><code>-XX:-UseBiasedLocking</code>关闭偏向锁.</li>
+<li><code>-XX:+DisableExplicitGC</code>禁用<code>System.gc</code>.</li>
+<li><code>-XX:+HeapDumpOnOutOfMemoryError</code>发生内存溢出时dump堆内存到当前目录.可用<code>-XX:HeapDumpPath=path</code>指定路径.</li>
+<li><code>-XX:NewRatio=ratio</code>指定新生代和老年代的比列,默认是2.</li>
+<li><code>-XX:SurvivorRatio=ratio</code>指定eden和survivor比例,默认是8.</li>
+<li><code>-XX:InitialCodeCacheSize和-XX:ReservedCodeCacheSize</code>设置代码缓存大小,用来存储JIT编译器生成的本地代码.如果满了会导致JIT编译器被停用,JVM切换到interpreted-only模式,运行速度会降低一个数量级.</li>
+<li><code>-XX:+UseCodeCacheFlushing</code>当代码缓存被填满时让JVM放弃一些编译代码,可以避免当代码缓存被填满的时候JVM切换到interpreted-only模式.</li>
+<li>还有很多GC相关的,如<strong>XX:MaxHeapFreeRatio</strong>,<strong>XX:MaxMetaspaceSize</strong>,<strong>-XX:+UseG1GC</strong>,<strong>-XX:+UseParallelGC</strong>,<strong>-XX:+UseSerialGC</strong>等.</li>
+</ul>
+<h3 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h3><p>官方资料 <a href="https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html" target="_blank" rel="noopener">Java Garbage Collection Basics</a></p>
+<p>Who: JVM负责发起<br>When: 不确定,可以显式调用,大多数由JVM决定(如某一代的堆空间满了)<br>Where: 堆空间,主要在年轻代<br>What: 自动分配和释放内存<br>Why: 程序员从内存管理任务脱离出来;内存影响JVM性能(关键组件是Heap,JIT编译器和GC.JIT很少需要调优,但是Heap是存储对象数据的地方,需要调优和回收)<br>How: 主要关注各代的大小和选择合适的收集器</p>
+<p>评价调优的两个指标</p>
+<ol>
+<li>响应能力(单一事件).关注响应能力的应用,不允许有长的暂停时间.</li>
+<li>吞吐量(一定时间内).关注吞吐量的应用,不在乎单个事件的响应时间,只关心一定时间内(通常比暂停时间久得多)的指标,因此长的暂停时间是可以接受的.</li>
+<li>这两个指标可以分别通过<code>-XX:MaxGCPauseMillis</code>和<code>-XX:GCTimeRatio</code>来设置.</li>
+</ol>
+<p>自动垃圾回收: 在堆空间内找出无用的对象,释放他们的内存,这一过程就是垃圾回收.这个过程是由垃圾收集器处理的,无需程序员接入.所以称为自动垃圾回收.</p>
+<p>无用的对象,或者没有引用指向的对象,不再被程序的任何地方引用,这些对象就是回收的标的.</p>
+<p><strong>怎么识别需要回收的对象(标记清除)</strong></p>
+<ol>
+<li>标记.扫描所有对象,标记哪些被引用,哪些没有被引用.耗时多.</li>
+<li>正常删除. 将所有没被引用的对象删除.内存分配器持有所有空闲空间的地址,可以分配.</li>
+<li>压缩. 将遗留的对象移动到一起,内存分配器拥有整块空闲空间的开始地址,可以更快分配.耗时多.</li>
+</ol>
+<p><img src="https://github.com/wsabc/images/raw/master/gc-mark-compact.png" alt="标记整理算法"></p>
+<p><strong>为什么要分代回收</strong></p>
+<p>事实: 大多数对象的生命都很短. 基于这个事实,将堆空间分为: Young代, Old/Tenured代, Permanent代.</p>
+<ul>
+<li>Young: 分配所有new对象,并在这里老化.满了就会引发MinorGC.GC速度快.GC的时候会”StoptheWorld”.一些存活的对象到达一定年纪后就会移到Old代.</li>
+<li>Old: 存储长时间存活的对象.这里发生的GC是MajorGC,速度慢,因为涉及的都是存活的对象.关注响应能力的应用,应该尽量减少MajorGC的次数.MajorGC也是会”StoptheWorld”,但是暂停的时间和使用的收集器有关.</li>
+<li>Permanent: 存储JVM需要的元数据,如应用程序的类,方法定义等,还有JavaSE的类库涉及的方法区数据.FullGC的时候会影响到Permanent代.</li>
+</ul>
+<p>Stop the World Event: MinorGC和MajorGC都是这种类型的事件.所有的应用程序线程都被挂起直到GC完成.</p>
+<p><img src="https://github.com/wsabc/images/raw/master/gc-size-generation.png" alt="各代尺寸参数"></p>
+<p><strong>分代回收过程</strong></p>
+<p><img src="https://github.com/wsabc/images/raw/master/gc-process.png" alt="回收过程"></p>
+<p>从回收过程可以看到,新生代的大小很重要.如果新生代小,GC多,并且新生对象很快就晋升到老年代,老年代较难被回收.如果新生代大,则复制多,耗时久.<br>同理,Eden和Survior大小也要合理配置,如果Eden大Survivor小,导致一部分对象很快就会升级到老年代;反过来,Eden小Survivor大,就会增加GC次数.</p>
+<p>可以使用<code>-XX:+PrintTenuringDistribution</code>来查看GC时Survivor中的对象年龄分布.根据年龄分布调整<code>-XX:InitialTenuringThreshold, -XX:MaxTenuringThreshold和-XX:TargetSurvivorRatio</code>.</p>
+<p><strong>垃圾回收算法</strong></p>
+<ol>
+<li><p>标记-清除算法.标记活动对象,清除没有标记(非活动)的对象.</p>
+<blockquote>
+<p>优点: 简单易理解,与保守式GC(ConservativeGC–不能识别指针和非指针的GC)兼容.<br>缺点: 导致碎片化,可能会因为碎片太小而不能分配内存;同时因为碎片太多,需要找到合适大小的碎片,耗时,因此分配速度低下.</p>
+</blockquote>
+</li>
+<li><p>复制算法.将一个空间(From)里的活动对象复制到另一个空间(TO)里,原来的空间整个清理掉.Young代都是这种回收算法.</p>
+<blockquote>
+<p>优点: 吞吐量大(耗时=标记时间+移动时间),因为没有空闲空间是一整块,所以分配效率高,也没有碎片,与缓存兼容.<br>缺点: 堆使用效率低下,因为只用使用其中一部分.改善做法是Eden和Survior.因为移动对象需要重写指针,与保守GC不兼容,同时还需要递归复制子对象.</p>
+</blockquote>
+</li>
+<li><p>标记-整理算法.上述两种算法2合1,标记,然后清除,然后压缩整理.</p>
+<blockquote>
+<p>优点: 堆利用率高,没有碎片,分配效率高.<br>缺点: 整理阶段耗时多.</p>
+</blockquote>
+</li>
+<li><p>分代回收.给对象引入年龄的概念,优先回收容易成为垃圾的对象,提高垃圾回收效率.这个是垃圾回收的一种机制,其实在各代还是使用上述3种算法种的一种.</p>
+</li>
+</ol>
+<p><strong>利用工具观察GC</strong></p>
+<p>使用自带工具jvisualvm可以观察GC.需要安装Visual GC插件.在VisualGC选项卡可以观察到各代的回收情况.</p>
+<p><strong>如何选择回收器</strong></p>
+<p>通用的Heap相关的参数有: <code>-Xms -Xmx -Xmn -XX:PermSize -XX:MaxPermSize</code>等.</p>
+<p>常见的垃圾收集器有SerialGC, ParallelGC, Concurrent Mark Sweep GC, Garbage First GC.HotSpot VM里多个GC有部分共享的代码,有一个分代式GC框架,Serial/Serial Old/ParNew/CMS都在这个框架内;在该框架内的young collector和old collector可以任意搭配使用,所谓的“mix-and-match”.ParallelScavenge与G1则不在这个框架内,而是各自采用了自己特别的框架.</p>
+<table>
+<thead>
+<tr>
+<th>搭配(mix-and-match)</th>
+<th>新生代(Young)</th>
+<th>老年代(Old)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>Serial</td>
+<td>Serial</td>
+</tr>
+<tr>
+<td></td>
+<td>ParNew</td>
+<td>CMS</td>
+</tr>
+<tr>
+<td></td>
+<td>Parallel Scavenge</td>
+<td>Parallel Old</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Serial-GC-单线程独占式垃圾收集器"><a href="#Serial-GC-单线程独占式垃圾收集器" class="headerlink" title="Serial GC(单线程独占式垃圾收集器)"></a>Serial GC(单线程独占式垃圾收集器)</h4><p>JDK 5, 6 client模式下默认的GC.MinorGC和MajorGC都是串行完成的.使用标记压缩算法.FullGC最慢大约几秒钟.<br>适用于对响应能力要求不高的应用;或者同一个机器上运行多个JVM(多于处理器核数)的场景;还有就是嵌入式环境(内存少,内核少).</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx12m -Xms3m -Xmn1m -XX:PermSize=20m -XX:MaxPermSize=20m -XX:+UseSerialGC -jar c:\javademos\Java2demo.jar</span><br></pre></td></tr></table></figure>
+<h4 id="Parallel-GC-吞吐量收集器"><a href="#Parallel-GC-吞吐量收集器" class="headerlink" title="Parallel GC(吞吐量收集器)"></a>Parallel GC(吞吐量收集器)</h4><p>ParallelGC(Parallel Scavenge)使用多线程来收集年轻代.默认线程数是cpu核数.受<code>-XX:ParallelGCThreads=</code>参数影响.<br>在单CPU上即使要求使用ParallelGC,系统仍会使用默认GC;在双核CPU上ParallelGC会和默认GC同时执行.</p>
+<p>适用于对响应能力要求不高(允许长时间暂停),但是吞吐量大的应用.比如报表应用.因此ParallelGC也叫吞吐量收集器.</p>
+<p>ParNew是Serial的多线程版本,使用多条线程进行Server版本的垃圾回收.除此之外,其他功能与Serial基本一致.<br>ParNew也是唯一可以与CMS收集器配合的新生代垃圾回收器.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseParallelGC # 年轻代多线程, 老年代单线程; 同时老年代还有单线程压缩.</span><br><span class="line">-XX:+UseParallelOldGC # 年轻代和老年代都是多线程收集; 同时老年代是多线程压缩.这里的Old是指老年代,而不是"旧方法"的意思.</span><br></pre></td></tr></table></figure>
+<p><strong>注意在<a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html" target="_blank" rel="noopener">JDK8 VM Options</a>中和上述论断不一致.</strong></p>
+<h4 id="CMS收集器"><a href="#CMS收集器" class="headerlink" title="CMS收集器"></a>CMS收集器</h4><p>CMS收集器使用多线程收集老年代,和应用线程同时工作以降低暂停时间.通常CMS不做复制/压缩工作(这样会耗时多).年轻代的收集策略和ParallelGC一样.<br>适用于对于响应能力要求高的应用(要求低暂停时间),如UI,Web应用等.</p>
+<p><code>-XX:UseParNewGC</code>当使用CMS收集器时,该标志激活年轻代使用多线程并行执行垃圾回收.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx12m -Xms3m -Xmn1m -XX:PermSize=20m -XX:MaxPermSize=20m -XX:+UseConcMarkSweepGC -XX:ConcGCThreads=2 -jar c:\javademos\Java2demo.jar</span><br></pre></td></tr></table></figure>
+<h4 id="G1收集器-第一时间处理垃圾最多的区块"><a href="#G1收集器-第一时间处理垃圾最多的区块" class="headerlink" title="G1收集器(第一时间处理垃圾最多的区块)"></a>G1收集器(第一时间处理垃圾最多的区块)</h4><p>JDK7开始提供, CMS收集器的替代者. 并行,压缩,低暂停时间.<br>适用于多核,大内存(堆空间6G以上),暂停时间小于0.5s.</p>
+<p>G1将堆空间划分成了互相独立的区块,每块区域既有可能属于O区(old),也有可能是Y区(young),且每类区域空间可以是不连续的(对比CMS的O区和Y区都必须是连续的).这种将O区划分成多块的理念源于:当并发后台线程寻找可回收的对象时,有些区块包含可回收的对象要比其他区块多很多.虽然在清理这些区块时G1仍然需要暂停应用线程,但可以用相对较少的时间优先回收包含垃圾最多区块.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx12m -Xms3m -XX:+UseG1GC -jar c:\javademos\Java2demo.jar</span><br></pre></td></tr></table></figure>
+<h4 id="日志分析"><a href="#日志分析" class="headerlink" title="日志分析"></a>日志分析</h4><p>GC日志是一个很重要的工具,它准确记录了每一次的GC的执行时间和执行结果,通过分析GC日志可以优化堆设置和GC设置,或者改进应用程序的对象分配模式.</p>
+<p><strong>开启GC日志</strong></p>
+<p>GC日志默认输出到终端(标准输出),可以通过<code>-Xloggc</code>重定向到某个文件.这个命令隐式设置了<code>-XX:+PrintGC</code>和<code>-XX:+PrintGCTimeStamps</code>,但是仍然推荐显式设置.</p>
+<p><code>-XX:+PrintGCTimeStamps</code>和<code>-XX:+PrintGCDateStamps</code>会将GC发生的日期和时间也加入到GC日志中,推荐同时使用这两个参数,便于关联不同日志里的GC事件.</p>
+<p>GC日志需要的开销非常有限,建议开启,但是不一定在启动JVM的同时就指定GC日志参数.可以通过<code>jinfo</code>等工具来运行时设置这些参数.</p>
+<blockquote>
+<p>HotSpot JVM有一类特别的参数叫做可管理的参数,可以在运行时修改他们的值.本节讨论的所有参数以及以<code>PrintGC</code>开头的参数都是可管理的参数.</p>
+</blockquote>
+<p>推荐的一个开启GC日志的命令组合是: <code>-Xloggc:/var/gclogs/gc.log -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps</code>. 输出如下:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[2014-01-03T12:08:38.102-0100: [GC 66048K-&gt;53077K(251392K), 0.0959470 secs]</span><br></pre></td></tr></table></figure>
+<p><strong>简单GC日志模式 -XX:+PrintGC(-verbose:gc)</strong></p>
+<p>为每一次新生代的GC和每一次FullGC打印一行信息.没有足够信息.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[GC 246656K-&gt;243120K(376320K), 0.0929090 secs]</span><br><span class="line">[Full GC 243120K-&gt;241951K(629760K), 1.5589690 secs]</span><br><span class="line"><span class="meta">#</span> 类型 GC之前的已用堆空间 -&gt; GC之后的已用堆空间(GC发生时的堆空间容量), GC持续时间</span><br></pre></td></tr></table></figure>
+<p><strong>详细GC日志模式 -XX:PrintGCDetails</strong></p>
+<p>日志格式和GC算法有关,记录了每一次GC的详细信息. 以Throughput垃圾收集器的日志为例:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[GC[PSYoungGen: 142816K-&gt;10752K(142848K)] 246648K-&gt;243136K(375296K), 0.0935090 secs]</span><br><span class="line">[Times: user=0.55 sys=0.10, real=0.09 secs]</span><br><span class="line"><span class="meta">#</span> 观察日志可以发现:</span><br><span class="line"><span class="meta">#</span> 1. GC发生在新生代, 新生代满了, 用了142816K/142848K, GC之后新生代几乎清空10752K.</span><br><span class="line"><span class="meta">#</span> 2. 堆空间前后持平246648K/243136K, 可以判定GC是把部分对象从新生代移到了老年代.</span><br><span class="line"><span class="meta">#</span> 3. 时间部分显示CPU时间(user+sys)远远超过real, 说明GC是多线程运行.这样CPU时间就是所有GC线程CPU时间总和.</span><br></pre></td></tr></table></figure>
+<p>类似的FullGC的日志如下:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[Full GC</span><br><span class="line">	[PSYoungGen: 10752K-&gt;9707K(142848K)]</span><br><span class="line">	[ParOldGen: 232384K-&gt;232244K(485888K)] 243136K-&gt;241951K(628736K)</span><br><span class="line">	[PSPermGen: 3162K-&gt;3161K(21504K)], 1.5265450 secs</span><br><span class="line">]</span><br><span class="line">[Times: user=10,96 sys=0,06, real=1,53 secs]</span><br></pre></td></tr></table></figure>
+<p>对于不同generation的详细日志分析, 可以找到GC的原因和结果.</p>
+<p>常见的原因:</p>
+<ol>
+<li>如果某个generation的日志显示在GC之前,堆空间几乎被占满,那么很有可能就是这个generation触发了GC.</li>
+<li>对于Throughput垃圾收集器,在某一个generation被过度使用之前,GC ergonomics也会决定要启动GC.</li>
+<li>Full GC也可以通过显式的请求而触发,可以是通过应用程序,或者是一个外部的JVM接口.这样触发的GC日志是以”Full GC(System)”开头的,而不是”Full GC”.</li>
+</ol>
+<p><strong>不同的垃圾收集器,日志也会不同</strong></p>
+<ul>
+<li>对于Serial垃圾收集器,详细的GC日志和Throughput垃圾收集器是非常相似的,唯一的区别是不同的generation日志可能使用了不同的GC算法.</li>
+<li>对于CMS垃圾收集器,年轻代的详细日志也和Throughput垃圾收集器非常相似,但是老年代的日志不同.</li>
+</ul>
+<p>更多FAQ参考<a href="https://www.oracle.com/technetwork/java/faq-140837.html" target="_blank" rel="noopener">Oracle垃圾回收FAQ</a>.</p>
+<h4 id="术语纠偏"><a href="#术语纠偏" class="headerlink" title="术语纠偏"></a>术语纠偏</h4><p>针对HotSpot VM的实现,它里面的GC其实准确分类只有两大种:</p>
+<ol>
+<li>Partial GC:并不收集整个GC堆的模式.<blockquote>
+<p>Young GC: 只收集young gen的GC.<br>Old GC: 只收集old gen的GC.只有CMS的concurrent collection是这个模式.<br>Mixed GC: 收集整个young gen以及部分old gen的GC.只有G1有这个模式.</p>
+</blockquote>
+</li>
+<li>Full GC: 收集整个堆,包括young gen,old gen,perm gen(如果存在的话)等所有部分的模式.</li>
+</ol>
+<p>Major GC通常是跟Full GC是等价的,收集整个GC堆.但因为HotSpot VM发展了这么多年,外界对各种名词的解读已经完全混乱了,当有人说”major GC”的时候一定要问清楚是上面的Full GC还是old GC.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jvm/" rel="tag"># jvm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/14/java-objects/" rel="next" title="Java对象">
+                <i class="fa fa-chevron-left"></i> Java对象
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/25/tcp-protocol/" rel="prev" title="TCP协议">
+                TCP协议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM是什么"><span class="nav-number">1.</span> <span class="nav-text">JVM是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载机制"><span class="nav-number">2.</span> <span class="nav-text">类加载机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM运行时数据区"><span class="nav-number">3.</span> <span class="nav-text">JVM运行时数据区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">3.1.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">3.2.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器"><span class="nav-number">3.3.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java栈"><span class="nav-number">3.4.</span> <span class="nav-text">Java栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">3.5.</span> <span class="nav-text">本地方法栈</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常量池"><span class="nav-number">4.</span> <span class="nav-text">常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串常量池"><span class="nav-number">4.1.</span> <span class="nav-text">字符串常量池</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆外内存"><span class="nav-number">5.</span> <span class="nav-text">堆外内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM参数"><span class="nav-number">6.</span> <span class="nav-text">JVM参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见参数说明"><span class="nav-number">6.1.</span> <span class="nav-text">常见参数说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收"><span class="nav-number">7.</span> <span class="nav-text">垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Serial-GC-单线程独占式垃圾收集器"><span class="nav-number">7.1.</span> <span class="nav-text">Serial GC(单线程独占式垃圾收集器)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parallel-GC-吞吐量收集器"><span class="nav-number">7.2.</span> <span class="nav-text">Parallel GC(吞吐量收集器)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMS收集器"><span class="nav-number">7.3.</span> <span class="nav-text">CMS收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1收集器-第一时间处理垃圾最多的区块"><span class="nav-number">7.4.</span> <span class="nav-text">G1收集器(第一时间处理垃圾最多的区块)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志分析"><span class="nav-number">7.5.</span> <span class="nav-text">日志分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#术语纠偏"><span class="nav-number">7.6.</span> <span class="nav-text">术语纠偏</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="OOM(OutOfMemoryError)分析OOM是JVM常见的严重错误之一.这里记录分析OOM的思路.首先应该能看到类似下面的日志: 1Exception in thread &quot;biz-worker&quot; java.lang.OutOfMemoryError: Java heap space  查看堆内存设置  检查下列参数的设置值.观察是否设置合理(偏小).  -Xms (或者-XX:Initi">
+<meta name="keywords" content="oom">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOM分析">
+<meta property="og:url" content="http://wsabc.top/2019/08/12/oom-analysis/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="OOM(OutOfMemoryError)分析OOM是JVM常见的严重错误之一.这里记录分析OOM的思路.首先应该能看到类似下面的日志: 1Exception in thread &quot;biz-worker&quot; java.lang.OutOfMemoryError: Java heap space  查看堆内存设置  检查下列参数的设置值.观察是否设置合理(偏小).  -Xms (或者-XX:Initi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-12T14:07:09.189Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OOM分析">
+<meta name="twitter:description" content="OOM(OutOfMemoryError)分析OOM是JVM常见的严重错误之一.这里记录分析OOM的思路.首先应该能看到类似下面的日志: 1Exception in thread &quot;biz-worker&quot; java.lang.OutOfMemoryError: Java heap space  查看堆内存设置  检查下列参数的设置值.观察是否设置合理(偏小).  -Xms (或者-XX:Initi">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/08/12/oom-analysis/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>OOM分析 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">22</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">29</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/12/oom-analysis/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OOM分析
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-12 22:00:35" itemprop="dateCreated datePublished" datetime="2019-08-12T22:00:35+08:00">2019-08-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:07:09" itemprop="dateModified" datetime="2019-09-12T22:07:09+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/production/" itemprop="url" rel="index"><span itemprop="name">production</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="OOM-OutOfMemoryError-分析"><a href="#OOM-OutOfMemoryError-分析" class="headerlink" title="OOM(OutOfMemoryError)分析"></a>OOM(OutOfMemoryError)分析</h3><p>OOM是JVM常见的严重错误之一.这里记录分析OOM的思路.首先应该能看到类似下面的日志:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread <span class="string">"biz-worker"</span> java.lang.OutOfMemoryError: Java heap space</span><br></pre></td></tr></table></figure>
+<ol>
+<li>查看堆内存设置</li>
+</ol>
+<p>检查下列参数的设置值.观察是否设置合理(偏小).</p>
+<ul>
+<li><code>-Xms</code> (或者<code>-XX:InitialHeapSize</code>)</li>
+<li><code>-Xmx</code> (或者<code>-XX:MaxHeapSize</code>)</li>
+<li><code>-Xmn</code> (或者<code>-XX:NewSize</code>, <code>-XX:MaxNewSize</code>)</li>
+</ul>
+<p>注意:永久代大小(<code>-XX:MaxPermSize</code>)并不会被包括在使用参数<code>-XX:MaxHeapSize</code>设置的堆内存大小中.<br><a id="more"></a></p>
+<ol start="2">
+<li>获取堆内存快照</li>
+</ol>
+<p>通常来说,分析堆内存快照(Heap Dump)是一个很好的定位手段.一定要有Heap Dump,因为如果JVM已经崩溃了,或者下一次错误需要运行几个小时甚至几天才能出现,尤其是在生产环境上,那就悲剧了.</p>
+<p>指定参数<code>-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/heapdump.hprof</code>来捕获内存快照.内存快照可能会比较大,要保证有可写入的磁盘空间.</p>
+<p>默认情况下,HeapDumpOnOutOfMemoryError会将堆内存快照保存在JVM的启动目录下名为java_pidPID.hprof的文件里.</p>
+<blockquote>
+<p>如果JVM还在运行,可以使用jmap命令导出内存快照.一般dump出来的内存都有几个G大小(具体参照堆大小设置),如果大小异样,可以考虑先把core dump拿到,然后用jmap转成heap dump再行分析.具体参考<a href="https://docs.oracle.com/javase/7/docs/technotes/tools/share/jmap.html" target="_blank" rel="noopener">jmap用法</a>.<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> jmap -dump:live,format=b,file=/tmp/heap.hprof &lt;java-pid&gt;</span><br><span class="line"><span class="meta">&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<ol start="3">
+<li>分析Heap Dump</li>
+</ol>
+<p>使用<a href="https://www.eclipse.org/mat/" target="_blank" rel="noopener">Eclipse MAT</a>, 或者jvisualvm等都可以分析快照.主要目的就是找出快照中占用内存最大的对象,观察是否有异常.</p>
+<p>类似的工具有很多,Jprofiler也可以.</p>
+<ol start="4">
+<li>分析GC日志</li>
+</ol>
+<p>指定GC日志输出位置和格式,<code>-Xloggc:/var/gclogs/gc.log -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps</code>,默认在标准输出里.</p>
+<p>查看GC日志是否正常:是否有异常日志?是否参数配置有问题?是否对象分配有问题等等.</p>
+<p><strong>常见的CMS异常日志</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">106.641</span>: [GC <span class="number">106.641</span>: [ParNew (promotion failed): <span class="number">14784</span>K-&gt;<span class="number">14784</span>K(<span class="number">14784</span>K), <span class="number">0.0370328</span> secs]</span><br><span class="line"><span class="number">106.678</span>: [CMS106.715: [CMS-concurrent-mark: <span class="number">0.065</span>/<span class="number">0.103</span> secs] [Times: user=<span class="number">0.17</span> sys=<span class="number">0.00</span>, real=<span class="number">0.11</span> secs]</span><br><span class="line">(concurrent mode failure): <span class="number">41568</span>K-&gt;<span class="number">27787</span>K(<span class="number">49152</span>K), <span class="number">0.2128504</span> secs] <span class="number">52402</span>K-&gt;<span class="number">27787</span>K(<span class="number">63936</span>K), [CMS Perm : <span class="number">2086</span>K-&gt;<span class="number">2086</span>K(<span class="number">12288</span>K)], <span class="number">0.2499776</span> secs] [Times: user=<span class="number">0.28</span> sys=<span class="number">0.00</span>, real=<span class="number">0.25</span> secs]</span><br></pre></td></tr></table></figure>
+<p>promotion failed是在进行Minor GC时,Survivor放不下,对象只能放入老年代,而此时老年代也放不下造成的.多数是由于老年带有足够的空闲空间,但是由于碎片较多,这时如果新生代要转移到老年带的对象比较大,就会出错.所以,必须尽可能提早触发老年代的CMS回收来避免这个问题.</p>
+<blockquote>
+<p>解决这个问题的办法就是可以让CMS在进行一定次数的Full GC(标记清除)的时候进行一次标记整理算法,CMS提供了以下参数来控制:<br><code>-XX:UseCMSCompactAtFullCollection -XX:CMSFullGCBeforeCompaction=5</code></p>
+</blockquote>
+<p>concurrent mode failure是在执行CMS GC的过程中同时业务线程将对象放入老年代,而此时老年代空间不足,这时CMS还没有机会回收老年带产生的,或者在做Minor GC的时候,Survivor放不下,需要放入老年代,而老年代也放不下而产生的.</p>
+<blockquote>
+<p>解决这个问题的通用方法是调低触发CMS GC执行的阀值,CMS GC触发主要由CMSInitiatingOccupancyFraction值决定,默认情况是当老年代已用空间为68%时即触发CMS GC,在出现concurrent mode failure的情况下,可考虑调小这个值,提前触发CMS GC以保证老年代有足够的空间.</p>
+</blockquote>
+<p>常见的GC日志可视化分析工具有<a href="https://github.com/jewes/gchisto" target="_blank" rel="noopener">gchisto</a>等.</p>
+<ol start="5">
+<li>增加预警功能</li>
+</ol>
+<p>使用<code>-XX:OnOutOfMemoryError</code>参数指定OOM发生时采取的操作,如执行某些shell文件.可以在脚本里发送通知,或者做一些清理工作.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/heapdump.hprof -XX:OnOutOfMemoryError ="sh ~/cleanup.sh" MyApp</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>例子</li>
+</ol>
+<ul>
+<li>循环不断分配内存就会导致OOM.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">10</span>) ;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            list.add(<span class="string">"1"</span>) ;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Jdk8中循环创建类会导致<code>Caused by: java.lang.OutOfMemoryError: Metaspace</code>.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            Enhancer  enhancer = <span class="keyword">new</span> Enhancer() ;</span><br><span class="line">            enhancer.setSuperclass(HeapOOM.class);</span><br><span class="line">            enhancer.setUseCache(<span class="keyword">false</span>) ;</span><br><span class="line">            enhancer.setCallback(<span class="keyword">new</span> MethodInterceptor() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> methodProxy.invoke(o,objects) ;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            enhancer.create() ;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/oom/" rel="tag"># oom</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/04/java-volatile/" rel="next" title="Volatile总结">
+                <i class="fa fa-chevron-left"></i> Volatile总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/14/java-objects/" rel="prev" title="Java对象">
+                Java对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OOM-OutOfMemoryError-分析"><span class="nav-number">1.</span> <span class="nav-text">OOM(OutOfMemoryError)分析</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="HTTP是最常见的应用层协议,也是WEB开发不可避免的要熟悉的知识. HTTP简介HTTP(超文本传输协议)是在网络上传输HTML的协议,用于浏览器和服务器之间的通信,由请求和响应组成,是一个标准的CS模型.同时HTTP是一个无状态协议. HTTP协议通常承载于TCP协议之上,有时也承载于TLS或SSL协议层之上,这个时候HTTP就成了我们常说的HTTPS. HTTP最广泛使用的版本是1.1;目前">
+<meta name="keywords" content="http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP协议">
+<meta property="og:url" content="http://wsabc.top/2019/08/26/http-protocol/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="HTTP是最常见的应用层协议,也是WEB开发不可避免的要熟悉的知识. HTTP简介HTTP(超文本传输协议)是在网络上传输HTML的协议,用于浏览器和服务器之间的通信,由请求和响应组成,是一个标准的CS模型.同时HTTP是一个无状态协议. HTTP协议通常承载于TCP协议之上,有时也承载于TLS或SSL协议层之上,这个时候HTTP就成了我们常说的HTTPS. HTTP最广泛使用的版本是1.1;目前">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-12T14:00:06.484Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP协议">
+<meta name="twitter:description" content="HTTP是最常见的应用层协议,也是WEB开发不可避免的要熟悉的知识. HTTP简介HTTP(超文本传输协议)是在网络上传输HTML的协议,用于浏览器和服务器之间的通信,由请求和响应组成,是一个标准的CS模型.同时HTTP是一个无状态协议. HTTP协议通常承载于TCP协议之上,有时也承载于TLS或SSL协议层之上,这个时候HTTP就成了我们常说的HTTPS. HTTP最广泛使用的版本是1.1;目前">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/08/26/http-protocol/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HTTP协议 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">22</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">29</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/26/http-protocol/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HTTP协议
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-26 22:00:35" itemprop="dateCreated datePublished" datetime="2019-08-26T22:00:35+08:00">2019-08-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:00:06" itemprop="dateModified" datetime="2019-09-12T22:00:06+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/http/" itemprop="url" rel="index"><span itemprop="name">http</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>HTTP是最常见的应用层协议,也是WEB开发不可避免的要熟悉的知识.</p>
+<h3 id="HTTP简介"><a href="#HTTP简介" class="headerlink" title="HTTP简介"></a>HTTP简介</h3><p>HTTP(超文本传输协议)是在网络上传输HTML的协议,用于浏览器和服务器之间的通信,由请求和响应组成,是一个标准的CS模型.同时HTTP是一个无状态协议.</p>
+<p>HTTP协议通常承载于TCP协议之上,有时也承载于TLS或SSL协议层之上,这个时候HTTP就成了我们常说的HTTPS.</p>
+<p>HTTP最广泛使用的版本是1.1;目前最新的版本是2.0.之前还有0.9,1.0.</p>
+<p>HTTP 1.1相对于1.0最主要的变化是支持长连接(Persistent Connection:建立一次 TCP 连接就能进行多次 HTTP 通信)和请求的流水线(Pipelining:在同一条长连接上连续发出请求,而不用等待响应返回,这样可以减少延迟)处理.在一个TCP连接上可以传送多个HTTP请求和响应.减少了建立和关闭连接的消耗和延迟.在HTTP1.1中默认开启Connection:keep-alive.</p>
+<p>HTTP2.0多路复用(多个请求可同时在一个连接上并行执行)相对于HTTP1.x的管道流水线(若干个请求排队串行化处理)来说,性能更好.<br><a id="more"></a></p>
+<h3 id="HTTP报文"><a href="#HTTP报文" class="headerlink" title="HTTP报文"></a>HTTP报文</h3><h4 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GET /docs/test.html HTTP/1.1 # Request Line</span><br><span class="line">Host: www.baidu.com          # Request Headers</span><br><span class="line">Content-Length: 15</span><br><span class="line">                             # blank line separates header and body</span><br><span class="line">bookid=3&amp;author=Lee          # body</span><br></pre></td></tr></table></figure>
+<h4 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK              # Status Line</span><br><span class="line">Server: Apache               # Response Headers</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Content-Length: 50</span><br><span class="line">                             # blank line separates header and body</span><br><span class="line">&lt;h1&gt;This is Test&lt;/h1&gt;        # body</span><br></pre></td></tr></table></figure>
+<h4 id="HTTP-方法"><a href="#HTTP-方法" class="headerlink" title="HTTP 方法"></a>HTTP 方法</h4><ul>
+<li><p>CONNECT: 浏览器需要先通过HTTP明文形式向代理服务器发送一个CONNECT请求告诉它目标站点地址及端口号.当代理服务器收到这个请求后,会在对应的端口上与目标站点建立一个TCP连接,连接建立成功后返回一个HTTP 200状态码告诉浏览器与该站点的加密通道已建成.接下来代理服务器仅仅是来回传输浏览器与该服务器之间的加密数据包,代理服务器并不需要解析这些内容以保证HTTPS的安全性.因此只有当浏览器配置为使用代理服务器时才会用到CONNECT方法.</p>
+</li>
+<li><p>HEAD: 获取报文首部,和GET类似,但是不包含BODY.主要用于确认 URL 的有效性以及资源更新的日期时间等.</p>
+</li>
+<li><p>OPTIONS: 查询指定URL支持的方法</p>
+</li>
+<li><p>GET: 获取资源</p>
+</li>
+<li><p>POST: 传输数据,创建资源</p>
+</li>
+<li><p>PUT: 传输数据,更新整个资源</p>
+</li>
+<li><p>PATCH: 传输数据,更新资源部分属性</p>
+</li>
+<li><p>DELETE: 删除资源</p>
+</li>
+<li><p>TRACE: 服务器会将通信路径返回给客户端,通常不会使用 TRACE,它容易受到 XST 攻击(Cross-Site Tracing,跨站追踪).</p>
+</li>
+</ul>
+<h4 id="HTTP-状态码"><a href="#HTTP-状态码" class="headerlink" title="HTTP 状态码"></a>HTTP 状态码</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">状态码</th>
+<th style="text-align:center">类别</th>
+<th style="text-align:center">典型状态码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1XX</td>
+<td style="text-align:center">Informational(信息性状态码)</td>
+<td style="text-align:center"><strong>100 Continue</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">2XX</td>
+<td style="text-align:center">Success(成功状态码)</td>
+<td style="text-align:center"><strong>200, 201, 204, 206 Partial Content</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">3XX</td>
+<td style="text-align:center">Redirection(重定向状态码)</td>
+<td style="text-align:center"><strong>301, 302, 304, 307</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">4XX</td>
+<td style="text-align:center">Client Error(客户端错误状态码)</td>
+<td style="text-align:center"><strong>400, 401, 403, 404</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">5XX</td>
+<td style="text-align:center">Server Error(服务器错误状态码)</td>
+<td style="text-align:center"><strong>500, 503</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="常见HTTP-Header"><a href="#常见HTTP-Header" class="headerlink" title="常见HTTP Header"></a>常见HTTP Header</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">Header名字</th>
+<th style="text-align:center">位置</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Connection</td>
+<td style="text-align:center">通用</td>
+<td style="text-align:center">控制不再转发给代理的首部字段,管理持久连接</td>
+</tr>
+<tr>
+<td style="text-align:center">Transfer-Encoding</td>
+<td style="text-align:center">通用</td>
+<td style="text-align:center">指定报文主体的传输编码方式</td>
+</tr>
+<tr>
+<td style="text-align:center">Authorization</td>
+<td style="text-align:center">请求</td>
+<td style="text-align:center">Web 认证信息</td>
+</tr>
+<tr>
+<td style="text-align:center">User-Agent</td>
+<td style="text-align:center">请求</td>
+<td style="text-align:center">HTTP 客户端程序的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">Location</td>
+<td style="text-align:center">响应</td>
+<td style="text-align:center">令客户端重定向至指定 URI</td>
+</tr>
+<tr>
+<td style="text-align:center">Content-Length</td>
+<td style="text-align:center">通用</td>
+<td style="text-align:center">实体主体的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">Content-Type</td>
+<td style="text-align:center">通用</td>
+<td style="text-align:center">实体主体的媒体类型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="URI-vs-URL"><a href="#URI-vs-URL" class="headerlink" title="URI vs. URL"></a>URI vs. URL</h3><p>URI, 统一资源标识符, 用来唯一的标识一个资源.<br>URL,统一资源定位器, 它是一种具体的URI,即可以用来标识一个资源,还指明了如何定位到这个资源.<br>URN,统一资源命名,是通过名字来标识资源,比如urn:isbn:1234567890</p>
+<p>URI是以一种抽象的高层次概念定义统一资源标识,而URL和URN则是具体的资源标识的方式.简单来说每个 URL 都是 URI,但不一定每个 URI 都是 URL.</p>
+<h3 id="Cookie-vs-Session"><a href="#Cookie-vs-Session" class="headerlink" title="Cookie vs. Session"></a>Cookie vs. Session</h3><p>HTTP/1.1 引入 Cookie 来保存状态信息.Cookie 是服务器发送到用户浏览器并保存在本地的一小块数据,它会在浏览器之后向同一服务器再次发起请求时被携带上,用于告知服务端两个请求是否来自同一浏览器.</p>
+<p>新的浏览器 API 已经允许开发者直接将数据存储到本地,如使用LocalStorage 或 IndexedDB.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: yummy_cookie=choco # 浏览器设置</span><br><span class="line">Cookie: yummy_cookie=choco; # 回传给服务器</span><br></pre></td></tr></table></figure>
+<p>没有指定<code>Expires</code>或者<code>max-age</code>的 cookie 是会话期cookie,浏览器关闭后自动删除.指定了这两个属性之一的就变成持久性 cookie.</p>
+<p><code>Domain</code> 标识指定了哪些主机可以接受 Cookie,如果不指定,默认为当前文档的主机–不包含子域名;如果指定了 Domain,则一般包含子域名.</p>
+<p><code>Path</code> 标识指定了主机下的哪些路径可以接受 Cookie–该 URL 路径必须存在于请求 URL 中,以字符<code>/</code>作为路径分隔符,子路径也会被匹配.</p>
+<p>标记为 HttpOnly 的 Cookie 不能被 JavaScript 脚本调用,因此使用 HttpOnly 标记可以在一定程度上避免 XSS 攻击.</p>
+<p>标记为 Secure 的 Cookie 只能通过被 HTTPS 协议加密过的请求发送给服务端.</p>
+<p>Session 是存储在服务器上的文件,数据库或者内存中.通过 Cookie 中的 SessionID关联.如果浏览器禁用了 cookie,就只能使用 session,并且需要使用 URL 重写技术,将 sessionId 放到 URL 中进行传递.</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>一般有 2 种方法: 一是代理服务器进行缓存;而是客户端浏览器进行缓存.HTTP/1.1 通过 Cache-Control 首部字段来控制缓存.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: no-store #不能对请求或响应的任何一部分进行缓存</span><br><span class="line">Cache-Control: no-cache #缓存服务器需要先向源服务器验证缓存资源的有效性,只有当缓存资源有效时才能使用该缓存对客户端的请求进行响应</span><br><span class="line">Cache-Control: private #将资源作为私有缓存,只能被单独用户使用,一般存储在用户浏览器中</span><br><span class="line">Cache-Control: public #将资源作为公共缓存,可以被多个用户使用,一般存储在代理服务器中</span><br><span class="line">Cache-Control: max-age=<span class="number">31536000</span></span><br><span class="line"></span><br><span class="line">ETag: "82e22293907ce725faf67773957acd12" #资源的唯一标识</span><br></pre></td></tr></table></figure>
+<h3 id="多线程下载和断点续传"><a href="#多线程下载和断点续传" class="headerlink" title="多线程下载和断点续传"></a>多线程下载和断点续传</h3><p>断点续传/下载: 在网络情况不好的时候,可以在断开连接以后,仅继续获取部分内容.</p>
+<p>多线程下载: 对大型文件,开启多个线程,每个线程下载其中的某一段,最后下载完成之后,在本地拼接成一个完整的文件.</p>
+<p>HTTP/1.1 中,响应头部 <code>Accept-Ranges</code> 用来标记是否支持范围请求,它只有一个可选参数 <code>bytes</code>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Ranges:bytes=1000- # 指定请求实体的范围</span><br><span class="line">Content-Range:bytes <span class="number">512000</span>-<span class="regexp">/1024000 # 响应,说明当前传递的内容实体范围和总长度, 状态码为 206.</span></span><br></pre></td></tr></table></figure>
+<p>一旦服务器端文件发生变化,需要使用<code>If-Range</code>指定<code>Etag</code>或者<code>Last-Modified</code>的值去判断是否更新.此时,如果两次操作的都是同一个资源文件,就会继续返回 206 状态码,开始后续的操作,反之则会返回 200 状态码,表示文件发生改变,要从头下载.</p>
+<h3 id="分片上传"><a href="#分片上传" class="headerlink" title="分片上传"></a>分片上传</h3><p>分片上传功能支持将一个文件切割为一系列特定大小的小数据片,分别将这些小数据片分别上传到服务端,全部上传完后再在服务端将这些小数据片合并成为一个资源.每片上传完都有一个标记,客户端需要持久化这些标记,一旦发生断连,恢复的时候可以选择性的续传.类似 TCP 过程.</p>
+<h3 id="HTTP-Auth"><a href="#HTTP-Auth" class="headerlink" title="HTTP Auth"></a>HTTP Auth</h3><h4 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WWW-Authenticate: Basic realm="Access to the staging site" #定义了使用何种验证方式</span><br><span class="line"></span><br><span class="line">Authorization: Basic aGFvZW86Y29vbHNoZWxsCg</span><br></pre></td></tr></table></figure>
+<h4 id="HTTP-摘要认证-Digest-Access"><a href="#HTTP-摘要认证-Digest-Access" class="headerlink" title="HTTP 摘要认证(Digest Access)"></a>HTTP 摘要认证(Digest Access)</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">WWW-Authenticate: Digest realm=<span class="string">"testrealm@host.com"</span>,</span><br><span class="line">                        qop=<span class="string">"auth,auth-int"</span>,</span><br><span class="line">                        nonce=<span class="string">"dcd98b7102dd2f0e8b11d0f600bfb0c093"</span>,</span><br><span class="line">                        opaque=<span class="string">"5ccc069c403ebaf9f0171e9517f40e41"</span></span><br><span class="line"></span><br><span class="line">Authorization: Digest username=<span class="string">"Mufasa"</span>,</span><br><span class="line">                     realm=<span class="string">"testrealm@host.com"</span>,</span><br><span class="line">                     nonce=<span class="string">"dcd98b7102dd2f0e8b11d0f600bfb0c093"</span>,</span><br><span class="line">                     uri=<span class="string">"%2Fcoolshell%2Fadmin"</span>,</span><br><span class="line">                     qop=auth,</span><br><span class="line">                     nc=<span class="number">00000001</span>,</span><br><span class="line">                     cnonce=<span class="string">"0a4f113b"</span>,</span><br><span class="line">                     response=<span class="string">"6629fae49393a05397450978507c4ef1"</span>,</span><br><span class="line">                     opaque=<span class="string">"5ccc069c403ebaf9f0171e9517f40e41"</span></span><br></pre></td></tr></table></figure>
+<p>基本思路是请求方把用户名口令和域做一个MD5 <code>MD5(username:realm:password)</code> 然后传给服务器.根据<code>qop</code>和<code>nonce</code>做不同的复杂化处理.算法虽然繁琐,但是关键是用户的 password 是否复杂,容易暴力破解,还容易收到中间人攻击.</p>
+<h4 id="App-Secret-Key-HMAC"><a href="#App-Secret-Key-HMAC" class="headerlink" title="App Secret Key + HMAC"></a>App Secret Key + HMAC</h4><p>MAC(Message Authentication Code)是一种用于给消息签名的技术,防篡改.HMAC(Hash-based Authenticsation Code)是指利用 Hash 技术完成这一过程,如 SHA-256.</p>
+<p>把AppID和HMAC用于API认证,目前来说最专业的应该是AWS了.目前没有统一标准,各家实现不一样.</p>
+<h4 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h4><p>JWT是一个比较标准的认证解决方案,在Java圈里应该用的是非常普遍的.JWT签名也是一种MAC方法.</p>
+<h4 id="OAuth-1-0"><a href="#OAuth-1-0" class="headerlink" title="OAuth 1.0"></a>OAuth 1.0</h4><p>流程有三方:User, Consumer 和 Service Provide,所以又叫 3-legged flow,三脚流程.</p>
+<p>OAuth 1.0 也有不需要用户参与的,只有Consumer 和 Service Provider 的, 也就是 2-legged flow 两脚流程,其中省掉了用户认证的事.</p>
+<h4 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h4><p>从Digest Access,到AppID+HMAC,再到JWT,再到OAuth 1.0,这些个API认证都是要向Client发一个密钥然后用HASH或是RSA来签HTTP的请求,<strong>这其中有个主要的原因是,以前的HTTP是明文传输,所以在传输过程中很容易被篡改,于是才搞出来一套的安全签名机制</strong>,这些个认证的玩法是可以在HTTP明文协议下玩的.</p>
+<p><strong>OAuth 2.0依赖于TLS/SSL的链路加密技术(HTTPS),完全放弃了签名的方式,认证服务器再也不返回什么 token secret 的密钥了,所以OAuth 2.0是完全不同于1.0 的,也是不兼容的</strong>.目前,Facebook 的 Graph API 只支持OAuth 2.0协议,Google 和 Microsoft Azure 也支持Auth 2.0,国内的微信和支付宝也支持使用OAuth 2.0.</p>
+<p>Authorization Code Flow, 这个是 3 legged 的,适用于用户给第三方应用授权访问自己信息的场景.</p>
+<p>Client Credential Flow,这个是 2 legged 的,是一个简化版的API认证,主要是用于认证服务器到服务器的调用,也就是没有用户参与的的认证流程.</p>
+<p><strong>不要使用GET的方式在URL中放入secret之类的东西,因为很多proxy或gateway的软件会把整个URL记在Access Log文件中.</strong></p>
+<h3 id="CORS-Cross-Origin-Resource-Sharing"><a href="#CORS-Cross-Origin-Resource-Sharing" class="headerlink" title="CORS(Cross-Origin Resource Sharing)"></a>CORS(Cross-Origin Resource Sharing)</h3><p>CORS是指一个 web 程序想访问另一个 origin 里面的资源.domain,protocol,port 有一个不同都算是另一个 origin.因为安全原因,浏览器会限制脚本里的 cors 请求.比如<code>XMLHttpRequest</code>.想要跨域访问,需要对方服务器配合,返回相应的 Http Header.如<code>Access-Control-Allow-Origin: *</code>等.</p>
+<p><code>Preflighted requests</code>是指浏览器在执行真正的跨域请求之前,发送一个 OPTIONS 请求探测一下.</p>
+<p>解决跨域的办法:</p>
+<ol>
+<li>JSOP,几乎不再使用了.只支持 GET 请求.JSONP的优势在于支持老式浏览器,以及可以向不支持CORS的网站请求数据.</li>
+<li>CORS,支持所有类型的HTTP请求.具体参考<a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="noopener">跨域资源共享 CORS 详解</a></li>
+<li>代理服务器.一般 web 开发前后分离并且部署在不同域时,前端都会使用代理访问,如 nodejs.</li>
+</ol>
+<h3 id="HTTP长连接"><a href="#HTTP长连接" class="headerlink" title="HTTP长连接"></a>HTTP长连接</h3><p>TCP Keep Alive 和 HTTP Keep Alive 是两个目的不同的技术,不存在谁依赖于谁的关系.TCP Keep Alive 用于探测对端是否存在,而 HTTP Keep Alive 用于协商以复用 TCP 连接.即便一个 TCP 连接未启用 Keep Alive 功能,也不妨碍 HTTP 层面开启长连接.</p>
+<p>当需要建立 HTTP 长连接时,HTTP 请求头应该包含<code>Connection: Keep-Alive</code>, 同样如果服务端同意建立长连接,那么响应头也应该包含<code>Connection: Keep-Alive</code>,关闭的时候使用<code>Connection: Close</code>.</p>
+<h3 id="HTTP方法幂等性"><a href="#HTTP方法幂等性" class="headerlink" title="HTTP方法幂等性"></a>HTTP方法幂等性</h3><p>幂等就是值不变性,相同的请求得到相同的响应结果,不会出现相同的请求出现不同的响应结果.</p>
+<p>方法GET，HEAD，PUT，DELETE都有这种性质.同样,方法OPTIONS和TRACE不应该有副作用,因此具有内在的等幂性.</p>
+<p>Delete有副作用,但是应该满足幂等性.POST所对应的URI并非创建的资源本身,而是资源的接收者.两次 POST 将会创建两个不同的实体,因此不具有幂等性.PUT 因为是同一个资源,应该具有幂等性.</p>
+<h3 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h3><p>是一种网络通信协议.因为 HTTP 协议有一个缺陷:通信只能由客户端发起,所以需要一个能”推送”的协议.</p>
+<p>WebSocket 2008 年出现,2011 年成为国际标准, 它的最大特点就是,服务器可以主动向客户端推送信息,客户端也可以主动向服务器发送信息,是真正的双向平等对话,属于服务器推送技术的一种.</p>
+<ol>
+<li>建立在 TCP 协议之上，服务器端的实现比较容易</li>
+<li>与 HTTP 协议有着良好的兼容性。默认端口也是80和443，并且握手阶段采用 HTTP 协议，因此握手时不容易屏蔽，能通过各种 HTTP 代理服务器</li>
+<li>数据格式比较轻量，性能开销小，通信高效;可以发送文本，也可以发送二进制数据</li>
+<li>没有同源限制，客户端可以与任意服务器通信</li>
+<li>协议标识符是<code>ws</code>（如果加密，则为<code>wss</code>），服务器网址就是 URL。如<code>ws://example.com:80/some/path</code></li>
+</ol>
+<p>参考<a href="https://www.ruanyifeng.com/blog/2017/05/websocket.html" target="_blank" rel="noopener">WebSocket 教程</a> 以及 <a href="http://websocketd.com/" target="_blank" rel="noopener">websocketd</a></p>
+<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p>HTTPS 并不是新协议，而是让 HTTP 先和 SSL（Secure Sockets Layer）通信，再由 SSL 和 TCP 通信，也就是说 HTTPS 使用了隧道进行通信。</p>
+<p>对称加密: 快,密钥不安全.</p>
+<p>非对称加密: 慢, 公钥加密,私钥解密;私钥签名,公钥验签.密钥相对安全.</p>
+<p>HTTPS 采用混合的加密机制，使用非对称密钥加密用于传输对称密钥来保证传输过程的安全性，之后使用对称密钥加密进行通信来保证通信过程的效率。</p>
+<h4 id="SSL-TLS"><a href="#SSL-TLS" class="headerlink" title="SSL/TLS"></a>SSL/TLS</h4><p>SSL是基于HTTP之下TCP之上的一个协议层,在SSL更新到3.0时,IETF对SSL3.0进行了标准化,并添加了少数机制(但是几乎和SSL3.0无差异),标准化后的IETF更名为TLS1.0(Transport Layer Security 安全传输层协议),可以说TLS就是SSL的新版本3.1.</p>
+<p>目前TLS1.2 是最新的 SSL/TLS版本.TLS1.3即将到来.</p>
+<p>SSL/TLS是为了解决互联网通信三大问题:</p>
+<ol>
+<li>防窃听: 防止第三方获知通信内容 — 加密传输</li>
+<li>防篡改: 防止第三方篡改通信内容 — 校验机制</li>
+<li>防冒充: 防止第三方身份冒充 — 身份证书(将公钥放在数字证书中,只要证书是可信的,公钥就是可信的)</li>
+</ol>
+<p>SSL/TLS协议的基本思路是采用公钥加密法,也就是说,客户端先向服务器端索要公钥,然后用公钥加密信息,服务器收到密文后,用自己的私钥解密.</p>
+<h4 id="SSL-四次握手"><a href="#SSL-四次握手" class="headerlink" title="SSL 四次握手"></a>SSL 四次握手</h4><ol>
+<li><p>客户端（通常是浏览器）先向服务器发出加密通信的请求，这被叫做ClientHello请求。</p>
+<blockquote>
+<p>包含: TLS 版本, client nonce, 支持加密算法列表, 支持压缩算法列表</p>
+</blockquote>
+</li>
+<li><p>服务器回应（SeverHello）</p>
+<blockquote>
+<p>确认TLS 版本(版本不一致,服务器关闭加密通信); server nonce; 确认加密算法; 服务器证书.</p>
+<p>如果需要客户端证书,还会有 CertificateRequest.</p>
+</blockquote>
+</li>
+<li><p>客户端回应</p>
+<blockquote>
+<p>验证证书; pre-master key(用公钥加密); 编码改变通知(协商的加密算法和密钥); Finished.</p>
+</blockquote>
+</li>
+<li><p>服务器的最后回应</p>
+<blockquote>
+<p>收到 pre-master key 计算 session key;编码改变通知(协商的加密算法和密钥); Finished.</p>
+</blockquote>
+</li>
+</ol>
+<p>为什么需要三个随机数通过一个密钥导出器最终导出一个对称密钥?</p>
+<blockquote>
+<p>pre master key的存在在于SSL协议不信任每个主机都能产生完全随机的随机数,如果随机数不随机,那么pre master secret就有可能被猜出来,那么仅适用pre master secret作为密钥就不合适了,因此必须引入新的随机因素,那么客户端和服务器加上pre master key三个随机数一同生成的密钥就不容易被猜出了,一个伪随机可能完全不随机,可是是三个伪随机就十分接近随机了.</p>
+</blockquote>
+<p>Keyless服务,即你把网站放到它们的CDN上,不用提供自己的私钥,也能使用SSL加密链接.</p>
+<blockquote>
+<p>私钥的作用主要是解密 pre-master key.这一步让客户参与就可以了.</p>
+<p>如果有人窃听通信，他可以知道双方选择的加密方法，以及三个随机数中的两个。整个通话的安全，只取决于第三个随机数（Premaster secret）能不能被破解。把握手阶段的算法从默认的RSA算法，改为DH[Diffie-Hellman)算法,Premaster secret不需要传递，双方只要交换各自的参数，就可以算出这个随机数.这样就提高了安全性。</p>
+</blockquote>
+<h3 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h3><p>常见的抓包工具有：Charles，Fiddler，WireShark。具体用法参照官网。</p>
+<h3 id="HTTP-2"><a href="#HTTP-2" class="headerlink" title="HTTP/2"></a>HTTP/2</h3><p>HTTP/2 是一个彻底的二进制协议，头信息和数据体都是二进制，并且统称为”帧”（frame）：头信息帧和数据帧。协议的主要目的是提高网页性能。</p>
+<p>HTTP/2 复用TCP连接，在一个连接里，客户端和浏览器都可以同时发送多个请求或回应，而且不用按照顺序一一对应，这样就避免了”队头堵塞”。这样双向的、实时的通信，就叫做多工（Multiplexing）。</p>
+<p>服务器推送（server push）是 HTTP/2 协议里面，唯一一个需要开发者自己配置的功能。其他功能都是服务器和浏览器自动实现，不需要开发者关心。</p>
+<h3 id="常见攻击"><a href="#常见攻击" class="headerlink" title="常见攻击"></a>常见攻击</h3><p>XSS（<strong>跨站脚本攻击</strong> - Cross-site scripting）</p>
+<p>攻击者在网页上发布包含攻击性代码的数据。当浏览者看到此网页时，特定的脚本就会以浏览者用户的身份和权限来执行。</p>
+<p>CSRF（<strong>跨站请求伪造攻击</strong> - Cross-site request forgery）</p>
+<p>攻击者通过各种方法伪造一个请求，模仿用户提交表单的行为，从而达到修改用户的数据，或者执行特定任务的目的。为了 假冒用户的身份，CSRF攻击常常和XSS攻击配合起来做。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/25/tcp-protocol/" rel="next" title="TCP协议">
+                <i class="fa fa-chevron-left"></i> TCP协议
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/how-to-learn/" rel="prev" title="如何学习">
+                如何学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP简介"><span class="nav-number">1.</span> <span class="nav-text">HTTP简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP报文"><span class="nav-number">2.</span> <span class="nav-text">HTTP报文</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#请求报文"><span class="nav-number">2.1.</span> <span class="nav-text">请求报文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应报文"><span class="nav-number">2.2.</span> <span class="nav-text">响应报文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP-方法"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP-状态码"><span class="nav-number">2.4.</span> <span class="nav-text">HTTP 状态码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见HTTP-Header"><span class="nav-number">2.5.</span> <span class="nav-text">常见HTTP Header</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URI-vs-URL"><span class="nav-number">3.</span> <span class="nav-text">URI vs. URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie-vs-Session"><span class="nav-number">4.</span> <span class="nav-text">Cookie vs. Session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">5.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程下载和断点续传"><span class="nav-number">6.</span> <span class="nav-text">多线程下载和断点续传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分片上传"><span class="nav-number">7.</span> <span class="nav-text">分片上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-Auth"><span class="nav-number">8.</span> <span class="nav-text">HTTP Auth</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic"><span class="nav-number">8.1.</span> <span class="nav-text">Basic</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP-摘要认证-Digest-Access"><span class="nav-number">8.2.</span> <span class="nav-text">HTTP 摘要认证(Digest Access)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#App-Secret-Key-HMAC"><span class="nav-number">8.3.</span> <span class="nav-text">App Secret Key + HMAC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JWT"><span class="nav-number">8.4.</span> <span class="nav-text">JWT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OAuth-1-0"><span class="nav-number">8.5.</span> <span class="nav-text">OAuth 1.0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OAuth-2-0"><span class="nav-number">8.6.</span> <span class="nav-text">OAuth 2.0</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CORS-Cross-Origin-Resource-Sharing"><span class="nav-number">9.</span> <span class="nav-text">CORS(Cross-Origin Resource Sharing)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP长连接"><span class="nav-number">10.</span> <span class="nav-text">HTTP长连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP方法幂等性"><span class="nav-number">11.</span> <span class="nav-text">HTTP方法幂等性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket"><span class="nav-number">12.</span> <span class="nav-text">WebSocket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS"><span class="nav-number">13.</span> <span class="nav-text">HTTPS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SSL-TLS"><span class="nav-number">13.1.</span> <span class="nav-text">SSL/TLS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSL-四次握手"><span class="nav-number">13.2.</span> <span class="nav-text">SSL 四次握手</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抓包工具"><span class="nav-number">14.</span> <span class="nav-text">抓包工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-2"><span class="nav-number">15.</span> <span class="nav-text">HTTP/2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见攻击"><span class="nav-number">16.</span> <span class="nav-text">常见攻击</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="OSI (Open System Interconnection)七层模型OSI 开放系统互联模型,描述的是网络或者电信系统功能的概念性框架.分为 7 层(自底向上):  物理层(Physical): 比特(电信号,光信号)在不同介质中的表示.具体设备:网线. 数据链路层(Data Link): 负责两个直接连接的节点之间的数据传输,以及针对物理层的纠错.分为MAC 层(媒体访问控制)和 LLC层">
+<meta name="keywords" content="tcp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP协议">
+<meta property="og:url" content="http://wsabc.top/2019/08/25/tcp-protocol/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="OSI (Open System Interconnection)七层模型OSI 开放系统互联模型,描述的是网络或者电信系统功能的概念性框架.分为 7 层(自底向上):  物理层(Physical): 比特(电信号,光信号)在不同介质中的表示.具体设备:网线. 数据链路层(Data Link): 负责两个直接连接的节点之间的数据传输,以及针对物理层的纠错.分为MAC 层(媒体访问控制)和 LLC层">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/TCP_State.png">
+<meta property="og:updated_time" content="2019-09-12T13:59:07.674Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP协议">
+<meta name="twitter:description" content="OSI (Open System Interconnection)七层模型OSI 开放系统互联模型,描述的是网络或者电信系统功能的概念性框架.分为 7 层(自底向上):  物理层(Physical): 比特(电信号,光信号)在不同介质中的表示.具体设备:网线. 数据链路层(Data Link): 负责两个直接连接的节点之间的数据传输,以及针对物理层的纠错.分为MAC 层(媒体访问控制)和 LLC层">
+<meta name="twitter:image" content="https://github.com/wsabc/images/raw/master/TCP_State.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/08/25/tcp-protocol/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>TCP协议 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">22</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">29</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/25/tcp-protocol/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TCP协议
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-25 22:00:35" itemprop="dateCreated datePublished" datetime="2019-08-25T22:00:35+08:00">2019-08-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 21:59:07" itemprop="dateModified" datetime="2019-09-12T21:59:07+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/tcp/" itemprop="url" rel="index"><span itemprop="name">tcp</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="OSI-Open-System-Interconnection-七层模型"><a href="#OSI-Open-System-Interconnection-七层模型" class="headerlink" title="OSI (Open System Interconnection)七层模型"></a>OSI (Open System Interconnection)七层模型</h3><p>OSI 开放系统互联模型,描述的是网络或者电信系统功能的概念性框架.分为 7 层(自底向上):</p>
+<ol>
+<li>物理层(Physical): 比特(电信号,光信号)在不同介质中的表示.具体设备:网线.</li>
+<li>数据链路层(Data Link): 负责两个直接连接的节点之间的数据传输,以及针对物理层的纠错.分为MAC 层(媒体访问控制)和 LLC层(逻辑链路控制).具体设备:交换机.</li>
+<li>网络层(Network): 通过不同路由分组转发.具体设备:路由器. IP 协议.</li>
+<li>传输层(Transport): 负责传输数据以及可能的算法纠错等. TCP, UDP 协议.</li>
+<li>会话层(Session): 建立,管理,维护会话;简化传输层操作.</li>
+<li>表示层(Presentation): 负责数据的应用格式和网络格式之间的转换.比如加解密.</li>
+<li>应用层(Application): 负责建立与用户直接交互的应用程序.如浏览器.<a id="more"></a>
+</li>
+</ol>
+<p><strong>理解 OSI</strong>(考虑发邮件的例子)</p>
+<p>中国的A 通过网络发送一封邮件给美国的 B.A 通过邮件客户端写好邮件(应用层)点击发送.邮件客户端将邮件加密(表示层)后准备真正的发送.首先需要找到 B 的地址(IP,网络层),然后建立连接(TCP,传输层),开始发送.但是可能需要很多次才能发送完毕,于是建立会话概念简化传输过程(会话层).经过网络层选择了具体的路径之后,数据会在一系列的节点中传播(数据链路层),真正在介质中传播的就是比特流,光信号(物理层).</p>
+<p>接受邮件的过程就反过来了.</p>
+<h3 id="TCP-IP-五层模型"><a href="#TCP-IP-五层模型" class="headerlink" title="TCP/IP 五层模型"></a>TCP/IP 五层模型</h3><p>TCP/IP没有直接遵循 OSI 七层模型,而是将几个 OSI 的层合并成一个层,或者直接没有使用某一层.但是他们之间还是有对应关系的. TCP/IP 5 层(自底向上):</p>
+<ol>
+<li>物理网络层(Physical Network): 指定用于网络的硬件的特征.如 IEEE802.3以太网网络媒体的规范.</li>
+<li>数据链路层(Data-Link): 标识数据包的网络协议类型,提供差错控制和”帧”.以太网IEEE 802.2成帧和点对点协议PPP成帧.</li>
+<li>网络层(Internet): 接受并传送网络数据包.有IP协议, 地址解析协议ARP和Internet控制消息协议ICMP.</li>
+<li>传输层(Transport): 通过交换数据接收的确认信息和重新传输丢失的数据包,确保数据包按顺序到达并且没有错误.有 TCP 协议和 UDP 协议.</li>
+<li>应用层(Application): 指定了标准的Internet服务和网络应用程序,他们与传输层一起发送和接受数据.</li>
+</ol>
+<p><strong>具体协议解释</strong></p>
+<p>IP 协议: 1负责 IP 寻址; 2根据接收主机的 IP 地址确定数据包必须采用的路径(主机到主机的通信); 3将数据包组装成称为 IP数据报 的单元(数据包格式化); 4如果数据包太大而无法通过网络媒体传输,则发送主机上的IP会将数据包分成更小的片段.然后,接收主机上的IP将片段重建为原始数据包(分段).</p>
+<p>IP寻址 -  IP寻址约定是IP协议的一部分。第3章，规划TCP / IP网络（任务）详细介绍了IPv4寻址，第14章，IPv6（概述）详细介绍了IPv6寻址。</p>
+<p>主机到主机通信 -  IP根据接收主机的IP地址确定数据包必须采用的路径。</p>
+<p>数据包格式化 -  IP将数据包组装成称为IP数据报的单元。数据报在Internet Layer中有完整描述。</p>
+<p>分段 - 如果数据包太大而无法通过网络媒体传输，则发送主机上的IP会将数据包分成更小的片段。然后，接收主机上的IP将片段重建为原始数据包。</p>
+<p>ARP 协议: 概念上存在于Data-Link和Internet层之间.ARP 通过将以太网地址(48位长)映射到已知IP地址(32位长)来协助 IP 将数据报定向到适当的接收主机.</p>
+<p>ICMP 协议: 检测并报告网络错误情况.有1丢弃的数据包 - 到达速度太快而无法处理的数据包; 2连接失败 - 无法访问的目标主机; 3重定向 - 重定向发送主机以使用其他路由器.</p>
+<p>TCP 协议: TCP 连接好像物理电路连接一样.TCP以一种看似以一个个字符传输的方式发送数据,而不是用离散数据包.该传输包括一个起始点,谁打开的连接,字节序列,结束标记.TCP 将头附加到传输的数据上,此标头包含大量参数,可帮助发送计算机上的进程连接到接收计算机上的对等进程.TCP被认为是”可靠的,面向连接的”的协议.</p>
+<p>UDP 协议: 提供数据报传送服务,UDP不验证接收和发送主机之间的连接.</p>
+<h3 id="OSI-vs-TCP-IP"><a href="#OSI-vs-TCP-IP" class="headerlink" title="OSI vs. TCP/IP"></a>OSI vs. TCP/IP</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">OSI Layer No.</th>
+<th style="text-align:center">OSI Name</th>
+<th style="text-align:center">TCP/IP Name</th>
+<th style="text-align:center">TCP/IP Protocol Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">5, 6, 7</td>
+<td style="text-align:center">Application<br>Presentation<br>Session</td>
+<td style="text-align:center">Application</td>
+<td style="text-align:center">DNS, telnet, ftp, SNMP, and others</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">Transport</td>
+<td style="text-align:center">Transport</td>
+<td style="text-align:center">TCP, UDP</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">Network</td>
+<td style="text-align:center">Internet</td>
+<td style="text-align:center">IP, ARP, ICMP</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Data-Link</td>
+<td style="text-align:center">Data-Link</td>
+<td style="text-align:center">PPP, IEEE802.2</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">Physical</td>
+<td style="text-align:center">Physical Network</td>
+<td style="text-align:center">Ethernet(IEEE 802.3)Token Ring, RS-232</td>
+</tr>
+</tbody>
+</table>
+<h3 id="TCP-IP-Handshake"><a href="#TCP-IP-Handshake" class="headerlink" title="TCP/IP Handshake"></a>TCP/IP Handshake</h3><p>TCP 协议是面向连接的,可靠的协议.这意味着在传输任何数据之前,必须获得并确认可靠的连接.这些过程(建立,传输,断开)都是通过特定的控制参数来管理的.控制参数如下:</p>
+<ul>
+<li>URG: Urgent Pointer field significant</li>
+<li>ACK: Acknowledgement field significant</li>
+<li>PSH: Push Function</li>
+<li>RST: Reset the connection</li>
+<li>SYN: Synchronize sequence numbers</li>
+<li>FIN: No more data from sender</li>
+</ul>
+<p>具体表示: 例子如<code>TCP ....S.</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TCP: ..0..... = No urgent data</span><br><span class="line">TCP: ...0.... = Acknowledgement field not significant</span><br><span class="line">TCP: ....0... = No Push function</span><br><span class="line">TCP: .....0.. = No Reset</span><br><span class="line">TCP: ......1. = Synchronize sequence numbers</span><br><span class="line">TCP: .......0 = No Fin</span><br></pre></td></tr></table></figure>
+<h4 id="建立连接"><a href="#建立连接" class="headerlink" title="建立连接"></a>建立连接</h4><p>第一步: 客户端发送<code>TCP ....S.</code>即<code>SYN</code>.要初始化一个连接,客户端和服务器必须同步对方的<code>sequences number</code>.<code>SYN</code>命令就是请求服务器同步序列号.下例中<code>ISN</code>(初始序列号)就是<code>seq: 8221822</code>.同时还可以设置<code>MSS</code>(Max Segment Size)指示客户端接受的最大报文长度<code>len: 4</code>.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1    2.0785 NTW3 --&gt; BDC3 TCP ....S., len: 4, seq: 8221822-8221825, ack: 0,</span><br><span class="line">win: 8192, src: 1037  dst:  139 (NBT Session)  NTW3 --&gt;  BDC3 IP</span><br></pre></td></tr></table></figure>
+<p>第二步: 服务器发送<code>TCP .A..S.</code>即<code>ACK</code>+<code>SYN</code>.<code>ACK</code>是用于回应客户端的<code>SYN</code>在客户端的序列号上加 1<code>ack:
+8221823</code>;<code>SYN</code>是请求客户端同步序列号<code>seq: 1109645</code>.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2   2.0786 BDC3 --&gt; NTW3  TCP .A..S., len: 4, seq: 1109645-1109648, ack:</span><br><span class="line">8221823, win: 8760, src: 139 (NBT Session)  dst: 1037 BDC3 --&gt; NTW3  IP</span><br></pre></td></tr></table></figure>
+<p>第三步: 客户端发送<code>TCP .A....</code>即<code>ACK</code>回应服务器端的<code>SYN</code>(<code>ack:1109646</code>在服务器端序列号上加 1).</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3   2.787 NTW3 --&gt; BDC3  TCP .A...., len: 0, seq: 8221823-8221823, ack:</span><br><span class="line">1109646, win: 8760, src: 1037  dst:  139 (NBT Session)  NTW3 --&gt; BDC3  IP</span><br></pre></td></tr></table></figure>
+<p>三步结束以后,客户端和服务器端就建立起一个可靠的连接了.可以通俗的理解一下(A 和 B 隔着山沟喊话):</p>
+<ol>
+<li>A 朝着 B 的方向喊: B 你听得见我说话吗?(<code>SYN</code>)听见了吱一声.</li>
+<li>B 朝着 A 的方向喊: 吱!(<code>ACK</code>),你听到我说话吗?(<code>SYN</code>)听见了也吱一声.</li>
+<li>A 朝着 B 的方向喊: 吱!(<code>ACK</code>)</li>
+</ol>
+<h4 id="断开连接"><a href="#断开连接" class="headerlink" title="断开连接"></a>断开连接</h4><p>第一步: 客户端发送<code>TCP .A...F</code>.<code>FIN</code>告诉服务器没有数据发送了;<code>ACK</code>告诉服务器是哪个连接.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">4   16.0279 NTW3 --&gt; BDC3 TCP .A...F, len: 0, seq: 8221823-8221823,</span><br><span class="line">ack:3462835714, win: 8760, src: 2337  dst: 139 (NBT Session)  NTW3 --&gt; BDC3 IP</span><br></pre></td></tr></table></figure>
+<p>第二步: 服务器发送<code>TCP .A....</code>.<code>ACK</code>是用于回应客户端的<code>FIN</code>的.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5    16.0281 BDC3 --&gt; NTW3 TCP .A...., len:    0, seq: 1109646-1109646,</span><br><span class="line">ack: 8221824, win:28672, src: 139  dst: 2337 (NBT Session) BDC3 --&gt;  NTW3 IP</span><br></pre></td></tr></table></figure>
+<p>第三步: 服务器端发送<code>TCP .A…F</code>.<code>FIN</code>是告诉客户端没有数据发送了;<code>ACK</code>是告诉客户端是哪个连接.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">6   17.0085 BDC3 --&gt; NTW3 TCP .A...F, len: 0, seq: 1109646-1109646, ack:</span><br><span class="line">8221824, win:28672, src: 139 dst: 2337 (NBT Session) BDC3 --&gt;  NTW3   IP</span><br></pre></td></tr></table></figure>
+<p>第四步: 客户端发送<code>TCP .A….</code>,<code>ACK</code>是回应服务器的 <code>FIN</code>.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">7   17.0085 NTW3 --&gt; BDC3 TCP .A...., len: 0, seq: 8221824-8221824, ack:</span><br><span class="line">1109647, win: 8760, src: 2337  dst: 139 (NBT Session) NTW3 --&gt; BDC3 IP</span><br></pre></td></tr></table></figure>
+<p>四步结束以后,客户端就可以关闭连接了.可以通俗的理解一下(A 和 B 隔着山沟喊话,讨论 TCP 问题):</p>
+<ol>
+<li>A 朝着 B 的方向喊: 关于 TCP 的问题(<code>ACK</code>),我没什么说的了(<code>FIN</code>).</li>
+<li>B 朝着 A 的方向喊: 吱!(<code>ACK</code>).</li>
+<li>B 想了一会, 朝着 A 的方向喊: 关于 TCP(<code>ACK</code>)的问题,我也没什么补充的了(<code>FIN</code>).</li>
+<li>A 朝着 B 的方向喊: 知道了(<code>FIN</code>),回家了.</li>
+</ol>
+<p>因为TCP连接是全双工的(数据可以在每个方向上独立于另一个方向流动),每个方向必须独立终止.因此有四次握手.</p>
+<h4 id="连接状态"><a href="#连接状态" class="headerlink" title="连接状态"></a>连接状态</h4><p>参考<a href="https://users.cs.northwestern.edu/~agupta/cs340/project2/TCPIP_State_Transition_Diagram.pdf" target="_blank" rel="noopener">TCP State Transition</a></p>
+<p><img src="https://github.com/wsabc/images/raw/master/TCP_State.png" alt="TCP State"></p>
+<h4 id="超时重发-滑动窗口等"><a href="#超时重发-滑动窗口等" class="headerlink" title="超时重发,滑动窗口等"></a>超时重发,滑动窗口等</h4><p>当发送端将数据发出后,会等待对端的确认应答(ACK),如有确认应答,说明数据已经到达对端,则可以继续发送下一个数据包.异常情况分两种:1 是数据包丢失;2 是 ACK 丢失;3 是数据包重复(ACK 丢失导致重发);4 是乱序(丢失重发导致乱序).解决办法是:</p>
+<ol>
+<li>超时重发.超时是指在重发数据之前,等待确认应答到来超过了某个特定时间间隔,如果在超过这个时间间隔仍未收到ACK,发送端就进行数据包重发.数据包丢失,或者 ACK 丢失都会超时重发.</li>
+<li>如果一次性发了三个包,只要最后一个包确认收到之后,就默认前面两个也收到了.</li>
+<li>数据包重复可以通过序列号去重.</li>
+<li>乱序通常有两种方法进行处理:一是对没有按序号到达的报文直接丢弃;二是将未按序号到达的数据包先放于缓冲区内;等待它前面的序号包到达后再统一交给上层应用.</li>
+<li>超时时间确定:TCP为了保证无论在任何环境下都能比较高性能的通信,因此会动态计算这个最大超时时间(Round Trip Time).如果重发一次之后,仍然得不到应答,等待2 倍超时时间后再进行重传,如果仍然得不到应答,等待4 倍超时时间进行重传.依次类推,以指数形式递增,累计到一定的重传次数,TCP认为网络或者对端主机出现异常,强制关闭连接,并且通知应用通信异常强行终止.</li>
+<li>为了跟踪已经发送了的数据在发送端有TCP发送缓存,在接受端有接受缓存,滑动窗口则是这个缓存的一部分,接收方接受数据后会把ack和当前滑动窗口可用空间告诉发送方,发送方则发送的数据不能超过接收方剩余窗口大小,如果接收方窗口内数据还没来得及由应用程序读取,窗口满了,则发送方会停止发送数据,直到接收方滑动窗口有空间.</li>
+</ol>
+<h4 id="MSL-和-TIME-WAIT"><a href="#MSL-和-TIME-WAIT" class="headerlink" title="MSL 和 TIME_WAIT"></a>MSL 和 TIME_WAIT</h4><p>Maximum Segment Lifetime(MSL): 指TCP Segment在网络上的存活时间最大值.从TIME_WAIT状态到CLOSED状态,有一个超时设置,这个超时设置是2 个MSL.主要是因为:</p>
+<ol>
+<li>TIME_WAIT确保有足够的时间让对端收到了ACK,如果被动关闭的那方没有收到ACK,就会触发被动端重发FIN,一来一去正好2个MSL.</li>
+</ol>
+<p>1）TIME_WAIT确保有足够的时间让对端收到了ACK，如果被动关闭的那方没有收到Ack，就会触发被动端重发Fin，一来一去正好2个MSL，</p>
+<ol start="2">
+<li>有足够的时间让这个连接不会跟后面的连接混在一起(有些路由器会缓存IP数据包,如果连接被重用了,那么这些延迟收到的包就有可能会跟新连接混在一起)</li>
+</ol>
+<p>TIME_WAIT是主动断连产生的,如果让对端断连接,就不会产生<strong>TIME_WAIT数量太多</strong>的问题.</p>
+<h4 id="粘包-拆包"><a href="#粘包-拆包" class="headerlink" title="粘包,拆包"></a>粘包,拆包</h4><p>一个数据包中包含了发送端发送的两个数据包的信息,这种现象即为粘包.同样,接收端收到了两个数据包,但是这两个数据包要么是不完整的,要么就是多出来一块,这种情况即发生了拆包和粘包.</p>
+<p><strong>粘包,拆包发生原因</strong></p>
+<ol>
+<li>要发送的数据大于TCP发送缓冲区剩余空间大小,将会发生拆包</li>
+<li>待发送数据大于MSS,TCP在传输前将进行拆包</li>
+<li>要发送的数据小于TCP发送缓冲区的大小,TCP将多次写入缓冲区的数据一次发送出去,将会发生粘包.</li>
+<li>接收数据端的应用层没有及时读取接收缓冲区中的数据,将发生粘包.</li>
+</ol>
+<p><strong>解决办法</strong></p>
+<ul>
+<li>在报文末尾增加换行符表明一条完整的消息,这样在接收端可以根据这个换行符来判断消息是否完整</li>
+<li>将消息分为消息头,消息体,可以在消息头中声明消息的长度,根据这个长度来获取报文</li>
+<li>规定好报文长度,不足的空位补齐,取的时候按照长度截取即可</li>
+</ul>
+<p>Netty 中提供了开箱即用的方法.</p>
+<ul>
+<li><code>LineBasedFrameDecoder</code> 可以基于换行符解决</li>
+<li><code>DelimiterBasedFrameDecoder</code>可基于分隔符解决</li>
+<li><code>FixedLengthFrameDecoder</code>可指定长度解决</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tcp/" rel="tag"># tcp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/18/inside-jvm/" rel="next" title="JVM知识点">
+                <i class="fa fa-chevron-left"></i> JVM知识点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/26/http-protocol/" rel="prev" title="HTTP协议">
+                HTTP协议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OSI-Open-System-Interconnection-七层模型"><span class="nav-number">1.</span> <span class="nav-text">OSI (Open System Interconnection)七层模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-IP-五层模型"><span class="nav-number">2.</span> <span class="nav-text">TCP/IP 五层模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OSI-vs-TCP-IP"><span class="nav-number">3.</span> <span class="nav-text">OSI vs. TCP/IP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-IP-Handshake"><span class="nav-number">4.</span> <span class="nav-text">TCP/IP Handshake</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立连接"><span class="nav-number">4.1.</span> <span class="nav-text">建立连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#断开连接"><span class="nav-number">4.2.</span> <span class="nav-text">断开连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接状态"><span class="nav-number">4.3.</span> <span class="nav-text">连接状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#超时重发-滑动窗口等"><span class="nav-number">4.4.</span> <span class="nav-text">超时重发,滑动窗口等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MSL-和-TIME-WAIT"><span class="nav-number">4.5.</span> <span class="nav-text">MSL 和 TIME_WAIT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#粘包-拆包"><span class="nav-number">4.6.</span> <span class="nav-text">粘包,拆包</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
