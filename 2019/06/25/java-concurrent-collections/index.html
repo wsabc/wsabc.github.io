@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="集合类  迭代器模式: Iterator模式是一个行为模式,意图提供一个标准的方式去迭代一组对象,而不暴露集合对象的底层细节给调用者. 考虑实现一个收音机频道迭代器(Channel, ChannelLanguage, ChannelCollection, ChannelIterator, ChannelCollectionImpl, ChannelIteratorImpl)并注意迭代器实现的线程安">
+<meta name="keywords" content="concurrent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java高级并发集合">
+<meta property="og:url" content="http://wsabc.top/2019/06/25/java-concurrent-collections/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="集合类  迭代器模式: Iterator模式是一个行为模式,意图提供一个标准的方式去迭代一组对象,而不暴露集合对象的底层细节给调用者. 考虑实现一个收音机频道迭代器(Channel, ChannelLanguage, ChannelCollection, ChannelIterator, ChannelCollectionImpl, ChannelIteratorImpl)并注意迭代器实现的线程安">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-12T14:25:10.304Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java高级并发集合">
+<meta name="twitter:description" content="集合类  迭代器模式: Iterator模式是一个行为模式,意图提供一个标准的方式去迭代一组对象,而不暴露集合对象的底层细节给调用者. 考虑实现一个收音机频道迭代器(Channel, ChannelLanguage, ChannelCollection, ChannelIterator, ChannelCollectionImpl, ChannelIteratorImpl)并注意迭代器实现的线程安">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/06/25/java-concurrent-collections/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java高级并发集合 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/06/25/java-concurrent-collections/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java高级并发集合
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-25 22:00:35" itemprop="dateCreated datePublished" datetime="2019-06-25T22:00:35+08:00">2019-06-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:25:10" itemprop="dateModified" datetime="2019-09-12T22:25:10+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/concurrent/" itemprop="url" rel="index"><span itemprop="name">concurrent</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="集合类"><a href="#集合类" class="headerlink" title="集合类"></a>集合类</h3><blockquote>
+<p> 迭代器模式: Iterator模式是一个行为模式,意图<strong>提供一个标准的方式去迭代一组对象,而不暴露集合对象的底层细节给调用者</strong>. 考虑实现一个收音机频道迭代器(Channel, ChannelLanguage, ChannelCollection, ChannelIterator, ChannelCollectionImpl, ChannelIteratorImpl)并注意迭代器实现的线程安全性.</p>
+</blockquote>
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><ol>
+<li>构造器. 默认容量16, 负载因子0.75, 当size &gt; 16 * 0.75时自动扩容.</li>
+<li>底层结构: 数组+链表(当链表膨胀到8并且数组长度大于64时,链表转化成红黑树)</li>
+<li>put: 首先计算hash(key), 然后判断是否需要初始化数组, 再根据<code>(length-1)&amp;hash</code>获取下标,根据情况插入: 如果当前位置为null,插入;如果当前有值(发生hash碰撞),要么替换,要么放到红黑树里,要么<strong>尾插法</strong>放到链表里.</li>
+<li>get: 计算hash值, 定位, 判断第一个节点是否符合(hash相同,key相同),然后查找树或者迭代链表.</li>
+<li>迭代: keySet, entrySet, forEach等.常用entrySet,一次就可以取出key和value.Jdk1.8里entrySet和forEach是相同的实现.原理都是外层迭代数组,内层迭代链表或者红黑树.<a id="more"></a>
+</li>
+</ol>
+<p>Jdk1.7 HashMap在多线程并发插入的情况下,发生hash碰撞之后容易形成环形链表(主要原因是迁移链表时顺序和原顺序是相反的.采用头插法).此时如果在这个hash位置寻找一个不存在的key,就会死循环.导致CPU100%. jdk1.8没有这个问题.</p>
+<p>红黑树对于查询效率大大提高了.链表时o(n), 红黑树是o(logn).</p>
+<p>总体上HashMap不是线程安全的,建议使用synchronizedMap或者ConcurrentHashMap代替.</p>
+<h4 id="SynchronizedMap"><a href="#SynchronizedMap" class="headerlink" title="SynchronizedMap"></a>SynchronizedMap</h4><p>SynchronizedMap是Collections类提供的一个Map的包装类,提供线程安全能力.所有对于底层的Map的访问都被同步了.注意单个操作是同步的,如果需要多个操作组合,则需要对包装类进行同步.</p>
+<h4 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h4><ol>
+<li>构造器: 默认数组大小16, 加载因子0.75.提供一个控制concurrentcyLevel的构造.</li>
+<li>底层结构还是数组+链表/红黑树.</li>
+<li>put: 不允许null作为key.计算hash值, 数组为空初始化数组, 否则定位元素,如果是表头进行CAS写入,成功就跳出;不成功则看看是否在扩容(帮助扩容),Synchronized锁住表头,添加到尾部.</li>
+<li>get: hash,定位,当前位置符合就返回,否则按照树或者链表方式返回.</li>
+<li>迭代: 同HashMap.</li>
+</ol>
+<p>ConcurrentHashMap使用分段锁技术.1.7默认16个分段,每个Segment下是HashEntry数组.通过两次hash定位到元素.锁定只锁定一个分段.提升了并发.get不用加锁,通过volatile提供可见性.</p>
+<p>Jdk1.8将锁进一步细化,synchronized只锁定当前链表或红黑二叉树的首节点,这样只要hash不冲突,就不会产生并发,效率又提升很多.</p>
+<p><strong>虽然CHM提供了单操作线程安全的能力,但是对于组合操作,不一定是线程安全的.</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!chm.containsKey(k) &#123; <span class="comment">// similar get(k) operation</span></span><br><span class="line">  chm.put(k, v); <span class="comment">// race condition, two threads A put VA done, while B is suspend and then put done, thus k is VB finnaly. This would case thread A worked wrongly.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因此对于这种操作,还是需要同步块访问.或者使用putIfAbsent, computeIfAbsent代替put,并检查返回值.注意putIfAbsent, computeIfAbsent返回值逻辑不同.</p>
+<p><strong>SynchronizedMap VS. ConcurrentHashMap</strong></p>
+<ol>
+<li>锁不同, 一个对象锁, 一个分段锁.</li>
+<li>性能不同, 锁整个集合效率低, CHM高并发.</li>
+<li>迭代器不一样, SM返回底层的迭代器,fail-fast;CHM不会,但是CHM也不保证多线程可见.</li>
+</ol>
+<h4 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h4><p>CopyOnWrite(cow)是一种优化策略,一种延时满足策略.ArrayList在多线程迭代场景下,容易发生ConcurrentModificationException.CowArrayList则是ArrayList的线程安全版本,对于add, set等修改方法提供了同步支持(锁定,复制数据,添加元素,指针重置).</p>
+<ol>
+<li>消耗大,尤其元素多的时候; 实时性不好,可能读到的是旧的数组</li>
+<li>适用读多于写的场景; 适用于读不加锁,但是又想避免多线程写不安全的场景</li>
+<li>snapshot迭代器不支持改变如remove,set,add等都会UnsupportOperationException.</li>
+</ol>
+<p>典型场景: 白名单(读多写少, 元素不多消耗少, 实时性不是那么高)</p>
+<h4 id="BlockingQueue"><a href="#BlockingQueue" class="headerlink" title="BlockingQueue"></a>BlockingQueue</h4><p>Queue是一个集合,一般作为处理前期的对象缓存池,提供了额外的插入,提取,检查的方法.每个方法都有两个版本:一个如果失败就抛出异常;一个返回特定值(null,false或者实际值).offer方法通常用于有界队列.</p>
+<p>抛出异常的方法有: add, remove, element; 返回值的方法有: offer, poll, peek.(方法是一一对应的)</p>
+<p>Queue通常是FIFO,但是也可以是LIFO, 后者优先级队列.存放位置依据排序规则变化.</p>
+<p>remove和poll无论怎么排序,都会删除并返回头部元素.为空时remove抛出异常;poll返回null.</p>
+<p>element和peek返回但是不删除头部元素.</p>
+<p>add和offer添加元素,add只能通过异常来检测添加是否成功,offer则是返回false.</p>
+<p><strong>Queue不定义阻塞方法,具体参照BlockingQueue.通常也不支持插入null,因为poll将null作为特殊值指示空队列.因为排序可能不一样,所以也不定义基于元素的equals方法.</strong></p>
+<p>BlockingQueue提供阻塞方法.对于插入,提取,检查提供4个版本的方法:除了queue提供的2种外,还提供无限阻塞版本(put和take),和限时阻塞版本(offer, poll).</p>
+<p><strong>当队列容器已满,生产者线程会被阻塞,直到队列未满;当队列容器为空时,消费者线程会被阻塞,直至队列非空时为止</strong></p>
+<p>常见的实现类有以下:</p>
+<ul>
+<li>ArrayBlockingQueue: 数组有界队列, 默认非公平锁.</li>
+<li>LinkedBlockingQueue: 默认Integer.Max,一般需要指定大小,防止过度消耗内存.链表实现.</li>
+<li>PriorityBlockingQueue: 默认有界队列,数组实现.</li>
+<li>SynchronousQueue: 默认非公平锁, 没有缓冲容量.每个插入操作必须等待另一个线程进行相应的删除操作.</li>
+<li>LinkedTransferQueue: 链表无界队列,如果当前有线程正在调用take方法或者可延时的poll方法进行消费数据时,生产者线程可以调用transfer方法将数据传递给消费者线程.</li>
+</ul>
+<p><strong>自己实现一个ArrayBlockingQueue</strong></p>
+<p>要点: 一个object[], 一个lock, 两个condition(full, empty), FIFO, putIndex, takeIndex, await, signalAll.</p>
+<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>线程池的原理:因为线程是昂贵的资源,不能无限制的创建.线程池可以限制一个应用同一时刻运行的线程数量.在线程池的内部,任务被插入一个阻塞队列,线程池里的线程会去取这个队列里的任务.当一个新任务插入队列时,一个空闲线程就会成功的从队列中取出任务并且执行它.实现一个线程池: BlockingQueue, List(Thread), offer, take, interrupt, stop, synchronized等.</p>
+<p>好处: 可以降低资源消耗(防止重复创建); 提高响应速度(省略创建销毁的时间); 易于管理监控和调优(统一分配).</p>
+<h4 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h4><p>JDK1.5开始提供了线程池实现.有Executors辅助类.</p>
+<p>核心类是<code>ThreadPoolExecutor</code>,主要的参数有:</p>
+<ul>
+<li><p>corePoolSize(线程池的基本大小):当提交一个任务到线程池时,线程池会创建一个线程来执行任务,<strong>即使其他空闲的基本线程能够执行新任务也会创建线程,</strong>等到需要执行的任务数大于线程池基本大小时就不再创建.如果调用了线程池的prestartAllCoreThreads方法,线程池会提前创建并启动所有基本线程.</p>
+</li>
+<li><p>maximumPoolSize(线程池最大大小):线程池允许创建的最大线程数.如果队列满了,并且已创建的线程数小于最大线程数,则线程池会再创建新的线程执行任务.<strong>如果使用了无界的任务队列这个参数就没什么效果</strong>.</p>
+</li>
+<li><p>keepAliveTime(线程活动保持时间):如果线程数超过core大小,线程池的工作线程空闲后,保持存活的时间.所以如果任务很多,并且每个任务执行的时间比较短,可以调大这个时间,提高线程的利用率.TimeUnit是时间单位.</p>
+</li>
+<li><p>workQueue(任务队列): 用于保存等待执行的任务的阻塞队列(只保存execute方法提交的),可以选择以下几个阻塞队列:</p>
+<blockquote>
+<ol>
+<li>ArrayBlockingQueue:是一个基于数组结构的有界阻塞队列,此队列按 FIFO原则对元素进行排序.</li>
+<li>LinkedBlockingQueue:一个基于链表结构的阻塞队列,此队列按FIFO排序元素,吞吐量通常要高于ArrayBlockingQueue.静态工厂方法Executors.newFixedThreadPool()使用了这个队列.</li>
+<li>SynchronousQueue:一个不存储元素的阻塞队列.每个插入操作必须等到另一个线程调用移除操作,否则插入操作一直处于阻塞状态,吞吐量通常要高于LinkedBlockingQueue,静态工厂方法Executors.newCachedThreadPool使用了这个队列.</li>
+<li>PriorityBlockingQueue:一个具有优先级得无限阻塞队列.</li>
+</ol>
+</blockquote>
+</li>
+<li><p>ThreadFactory: 用于设置创建线程的工厂,可以通过线程工厂给每个创建出来的线程设置更有意义的名字,Debug和定位问题时非常又帮助.</p>
+</li>
+<li><p>RejectedExecutionHandler(饱和策略):当队列和线程池都满了,说明线程池处于饱和状态,那么必须采取一种策略处理提交的新任务.这个策略默认情况下是AbortPolicy,表示无法处理新任务时抛出异常.以下是JDK1.5提供的四种策略.</p>
+<blockquote>
+<ol>
+<li>AbortPolicy:直接抛出异常</li>
+<li>CallerRunsPolicy:只用调用者所在线程来运行任务.</li>
+<li>DiscardOldestPolicy:丢弃队列里最近的一个任务,并执行当前任务.</li>
+<li>DiscardPolicy:不处理,丢弃掉.</li>
+<li>可以根据应用场景需要来实现RejectedExecutionHandler接口自定义策略.如记录日志或持久化不能处理的任务.</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<p><strong>execute vs. submit</strong></p>
+<p>submit内部调用了execute. execute没有返回值,无法判断任务执行情况;submit返回一个future,可以用于判断任务执行情况.</p>
+<p><strong>shutdown vs. shutdownNow</strong></p>
+<p>shutdown设置线程池状态为SHUTDOWN,不接受新任务,然后中断所有Idle的线程,队列里的任务会执行完毕; shutdownNow设置线程池状态为STOP,不接受新任务,暂停任务执行,然后尝试中断所有活跃线程(不等待线程执行结束),并返回等待执行的任务列表.注意没有响应中断的线程可能永远无法停止.</p>
+<p>只要调用了这两个关闭方法的其中一个,isShutdown方法就会返回true.当所有的任务都已关闭后,才表示线程池关闭成功,这时调用isTerminaed方法会返回true.至于我们应该调用哪一种方法来关闭线程池,应该由提交到线程池的任务特性决定,通常调用shutdown来关闭线程池,如果任务不一定要执行完,则可以调用shutdownNow.</p>
+<h4 id="execute工作流程"><a href="#execute工作流程" class="headerlink" title="execute工作流程"></a>execute工作流程</h4><ol>
+<li>首先线程池判断基本线程池是否已满?没满,创建一个工作线程来执行任务.满了,则进入下个流程</li>
+<li>其次线程池判断工作队列是否已满?没满,则将新提交的任务存储在工作队列里.满了,则进入下个流程</li>
+<li>最后线程池判断整个线程池是否已满?没满,则创建一个新的工作线程来执行任务,满了,则交给饱和策略来处理这个任务</li>
+</ol>
+<h4 id="线程池大小配置策略"><a href="#线程池大小配置策略" class="headerlink" title="线程池大小配置策略"></a>线程池大小配置策略</h4><p>线程池肯定不是越大越好,具体的数量跟任务的性质有关. 可以考虑几个维度: IO密集型, CPU密集型,还是混合型; 有没有优先级; 耗时长短; 是否有DB操作或者其他资源依赖.</p>
+<ul>
+<li>IO密集型由于IO等待,线程不是一直执行任务,可以配置多一点线程,如2Ncpu.</li>
+<li>CPU密集型需要尽可能少的线程,如Ncpu+1.</li>
+<li>混合型的任务,有可能拆分成IO密集型的,和CPU密集型的.如果这两个任务执行时间相差太大,则没必要进行分解(效果不大).</li>
+<li>优先级注意使用PriorityBlockingQueue来处理,要考虑低优先级任务始终得不到执行的情况.</li>
+<li>执行时间不同的任务可以交给不同规模的线程池来处理,或者也可以使用优先级队列,让执行时间短的任务先执行.</li>
+<li>依赖数据库连接池的任务,因为线程提交SQL后需要等待数据库返回结果,如果等待的时间越长CPU空闲时间就越长,那么线程数应该设置越大,这样才能更好的利用CPU.</li>
+</ul>
+<p><strong>建议使用有界队列</strong>.有界队列能增加系统的稳定性和预警能力,可以根据需要设大一点,比如几千.有界队列可以防止雪崩效应.考虑慢SQL导致线程全部阻塞,如果使用无界队列,将会导致内存撑爆.</p>
+<h4 id="线程池监控"><a href="#线程池监控" class="headerlink" title="线程池监控"></a>线程池监控</h4><p>通过线程池提供的参数进行监控.线程池里有一些属性在监控线程池的时候可以使用:</p>
+<ul>
+<li>taskCount: 线程池需要执行的任务数量</li>
+<li>completedTaskCount: 线程池在运行过程中已完成的任务数量</li>
+<li>largestPoolSize: 线程池曾经创建过的最大线程数量.通过这个数据可以知道线程池是否满过.如等于线程池的最大大小,则表示线程池曾经满了</li>
+<li>poolSize:线程池的线程数量.如果线程池不销毁的话,池里的线程不会自动销毁,所以这个大小只增不减</li>
+<li>activeCount: 获取活动的线程数</li>
+</ul>
+<p>通过继承线程池并重写线程池的beforeExecute,afterExecute和terminated方法,我们可以在任务执行前,执行后和线程池关闭前干一些事情.如监控任务的平均执行时间,最大执行时间和最小执行时间等.</p>
+<h4 id="线程池隔离"><a href="#线程池隔离" class="headerlink" title="线程池隔离"></a>线程池隔离</h4><p>Hystrix</p>
+<h4 id="常用线程池"><a href="#常用线程池" class="headerlink" title="常用线程池"></a>常用线程池</h4><ul>
+<li><code>Executors.newCachedThreadPool()</code>：无限线程池,SynchronousQueue</li>
+<li><code>Executors.newFixedThreadPool(nThreads)</code>：创建固定大小的线程池,LinkedBlockingQueue</li>
+<li><code>Executors.newSingleThreadExecutor()</code>：创建单个线程的线程池,LinkedBlockingQueue</li>
+</ul>
+<h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><ol>
+<li>线程池是用少数线程来执行大量任务,创建一个线程,就会调用start方法,死循环去获取任务.任务虽然也是Runnable,但是只调用run方法,因为我们是要用既有线程去运行任务,而不是为每个任务创建一个线程.</li>
+<li>任务中run方法如果有没有捕获的异常会导致这个线程死亡,线程池会捕获,再抛出.同时线程池将回收该线程,创建一个新线程.线程池不会停止也不受影响.</li>
+<li><code>ScheduledExecutorService</code>中定时任务,一旦发生异常,后续就不执行了.但是不影响该线程池继续工作.</li>
+</ol>
+<h3 id="ForkJoinPool"><a href="#ForkJoinPool" class="headerlink" title="ForkJoinPool"></a>ForkJoinPool</h3><p>Jdk1.7引入ForkJoinPool, 不是为了替代ExecutorService,而是作为它的补充.FJP充分利用多处理器,将任务分割成小的任务,递归下去.适合计算密集型的任务.采用work-stealing算法.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/concurrent/" rel="tag"># concurrent</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/25/cpu-100/" rel="next" title="CPU 100%">
+                <i class="fa fa-chevron-left"></i> CPU 100%
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/04/spring-boot-ms-practice/" rel="prev" title="SpringBoot微服务实践">
+                SpringBoot微服务实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#集合类"><span class="nav-number">1.</span> <span class="nav-text">集合类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HashMap"><span class="nav-number">1.1.</span> <span class="nav-text">HashMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SynchronizedMap"><span class="nav-number">1.2.</span> <span class="nav-text">SynchronizedMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">1.3.</span> <span class="nav-text">ConcurrentHashMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">1.4.</span> <span class="nav-text">CopyOnWriteArrayList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">1.5.</span> <span class="nav-text">BlockingQueue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程池"><span class="nav-number">2.</span> <span class="nav-text">线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ThreadPoolExecutor"><span class="nav-number">2.1.</span> <span class="nav-text">ThreadPoolExecutor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#execute工作流程"><span class="nav-number">2.2.</span> <span class="nav-text">execute工作流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程池大小配置策略"><span class="nav-number">2.3.</span> <span class="nav-text">线程池大小配置策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程池监控"><span class="nav-number">2.4.</span> <span class="nav-text">线程池监控</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程池隔离"><span class="nav-number">2.5.</span> <span class="nav-text">线程池隔离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用线程池"><span class="nav-number">2.6.</span> <span class="nav-text">常用线程池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见问题"><span class="nav-number">2.7.</span> <span class="nav-text">常见问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ForkJoinPool"><span class="nav-number">3.</span> <span class="nav-text">ForkJoinPool</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

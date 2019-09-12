@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Java IO 是一套Java用来读写数据(输入和输出)的API.大部分程序都要处理一些输入,并由输入产生一些输出.Java为此提供了java.io包.Java.io包主要涉及文件,网络数据流,内存缓冲等的输入输出. Java IO基础 什么是流Stream?  流从概念上来说是一个连续的数据流.你既可以从流中读取数据,也可以往流中写数据.流有方向即输入和输出.  什么是字节流?字符流?  在Ja">
+<meta name="keywords" content="IO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java IO">
+<meta property="og:url" content="http://wsabc.top/2019/03/23/java-io/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="Java IO 是一套Java用来读写数据(输入和输出)的API.大部分程序都要处理一些输入,并由输入产生一些输出.Java为此提供了java.io包.Java.io包主要涉及文件,网络数据流,内存缓冲等的输入输出. Java IO基础 什么是流Stream?  流从概念上来说是一个连续的数据流.你既可以从流中读取数据,也可以往流中写数据.流有方向即输入和输出.  什么是字节流?字符流?  在Ja">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-12T14:27:39.096Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java IO">
+<meta name="twitter:description" content="Java IO 是一套Java用来读写数据(输入和输出)的API.大部分程序都要处理一些输入,并由输入产生一些输出.Java为此提供了java.io包.Java.io包主要涉及文件,网络数据流,内存缓冲等的输入输出. Java IO基础 什么是流Stream?  流从概念上来说是一个连续的数据流.你既可以从流中读取数据,也可以往流中写数据.流有方向即输入和输出.  什么是字节流?字符流?  在Ja">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/03/23/java-io/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java IO | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/03/23/java-io/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java IO
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-23 22:00:35" itemprop="dateCreated datePublished" datetime="2019-03-23T22:00:35+08:00">2019-03-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:27:39" itemprop="dateModified" datetime="2019-09-12T22:27:39+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/IO/" itemprop="url" rel="index"><span itemprop="name">IO</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Java IO 是一套Java用来读写数据(输入和输出)的API.大部分程序都要处理一些输入,并由输入产生一些输出.Java为此提供了java.io包.Java.io包主要涉及文件,网络数据流,内存缓冲等的输入输出.</p>
+<h4 id="Java-IO基础"><a href="#Java-IO基础" class="headerlink" title="Java IO基础"></a>Java IO基础</h4><ol>
+<li>什么是流Stream?</li>
+</ol>
+<p>流从概念上来说是一个连续的数据流.你既可以从流中读取数据,也可以往流中写数据.流有方向即输入和输出.</p>
+<ol start="2">
+<li>什么是字节流?字符流?</li>
+</ol>
+<p>在Java IO中流既可以是字节流(以字节为单位进行读写,InputStream,OutputStream为基类),也可以是字符流(以字符为单位进行读写,Reader,Writer是基类).<br><a id="more"></a></p>
+<ol start="3">
+<li>流的方向?</li>
+</ol>
+<p>所谓输入输出是从计算机的角度描述的.输入流就是向内存/CPU输入数据;输出流就是从内存输出数据.</p>
+<ol start="4">
+<li>Java文件的工作目录?</li>
+</ol>
+<p>一般是以user.dir为工作目录的,也就是在整个项目根目录.如果通过class.getResourceAsStream方法则是在该类所在的目录;如果通过getClassloader().getResourceAsStream方法则是在所有的class根目录.</p>
+<h4 id="Java-NIO-from-Java-1-4"><a href="#Java-NIO-from-Java-1-4" class="headerlink" title="Java NIO (from Java 1.4)"></a>Java NIO (from Java 1.4)</h4><ol>
+<li>io和nio区别?</li>
+</ol>
+<p>工作方式不同:标准的IO基于字节流和字符流进行操作的,而NIO是基于通道(Channel)和缓冲区(Buffer)进行操作,数据总是从通道读取到缓冲区中,或者从缓冲区写入到通道中.</p>
+<ol start="2">
+<li>nio新特性?</li>
+</ol>
+<p>Non-blockingIO可以非阻塞的使用IO,即线程在IO操作的时候还可以做其他的事.Selector可以监听多个通道上的事件,因此单个线程可以监听多个数据通道.</p>
+<ol start="3">
+<li>nio的核心组件?</li>
+</ol>
+<p>通道channel,缓冲buffer和选择器selector.基本上NIO中所有的IO都是从一个channel开始的.向selector注册channel,就可以使用select()方法监听通道事件.select()是阻塞的,监听的任何一个channel有相应事件发生就会返回,线程池就可以处理这些事件.这也是使用了IO多路复用的原理.</p>
+<ol start="4">
+<li>Channel特点?</li>
+</ol>
+<p>既可以从通道读,也可以向通道写,与流不同,流通常是单向的;通道可以异步读写;通道读写总是要经过buffer.</p>
+<ol start="5">
+<li>Buffer特点?</li>
+</ol>
+<p>Buffer本质是一块内存,NIO封装了一下.有几个指标position,limit,capacity.Buffer的操作基本是分配内存,写,flip,读,clear或者compact.flip是切换模式,从写切换到读.rewind, clear, compact, mark, reset, equals, compareTo都是字面意思.</p>
+<p>buffer和channel之间还有scatter/gather操作,scatter是将channel中的数据写入多个buffer(分散),gather是将多个buffer中的数据写入channel(聚集).scatter适宜于处理固定大小的信息(写满一个才能往下一个写),gather适宜于处理动态信息(只读取position和limit之间的数据).</p>
+<ol start="6">
+<li>Selector特点?</li>
+</ol>
+<p>一个selector处理多个channel.与selector一起工作的channel必须是非阻塞的,FileChannel就不可以.通过selectionKey可以找到interest集合,ready集合,通道,选择器,以及可以附加特殊对象到这个key上.</p>
+<ol start="4">
+<li>并发IO?</li>
+</ol>
+<p>在io中很难在同一个时刻有多个线程操作同一个stream,reader或者writer.因为很难保证一个线程读取多少数据以及并发顺序.Selector能很好的处理并发IO.</p>
+<blockquote>
+<p>并发&amp;并行: 举例多人排队共享同一个咖啡机(竞争咖啡机)就是并发;多人分两个队列共享两个咖啡机(两个队列之间无竞争)就是并行.在多核CPU时代,应该考虑并行计算.</p>
+</blockquote>
+<h4 id="Java-NIO-2-0-from-Java-1-7"><a href="#Java-NIO-2-0-from-Java-1-7" class="headerlink" title="Java NIO 2.0(from Java 1.7)"></a>Java NIO 2.0(from Java 1.7)</h4><p>Java1.7开始提供NIO2.0,增加了异步的套接字通道,才是真正的异步IO(也称为AIO),之前的NIO还是同步IO.</p>
+<h4 id="IO-模型"><a href="#IO-模型" class="headerlink" title="IO 模型"></a>IO 模型</h4><p>内核空间和用户空间</p>
+<blockquote>
+<p>操作系统将虚拟空间分为两部分,以32位机器为例,最高1G给内核用,就是内核空间;剩下3G给各个进程使用,称为用户空间.</p>
+</blockquote>
+<p>进程切换</p>
+<blockquote>
+<p>内核有能力挂起正在CPU上运行的某个进程,并恢复以前挂起的某个进程.这就是进程切换,很耗资源.</p>
+</blockquote>
+<p>文件描述符</p>
+<blockquote>
+<p>一个非负整数,是个索引值,指向内核记录的每个进程所打开的文件.Linux中一切都是文件.</p>
+</blockquote>
+<p>缓存IO</p>
+<blockquote>
+<p>数据会先被复制到内核的缓冲区,然后再复制到进程的地址空间,CPU和内存开销很大.</p>
+</blockquote>
+<p>以读为例,会经历2个阶段,一是<strong>等待数据准备阶段</strong>,比如网络上的数据分组到达;二是<strong>从内核缓冲区复制到进程空间</strong>.</p>
+<p>Linux5种IO模型: 同步, 阻塞, 非阻塞, 多路复用, 信号驱动式(不常用), 异步.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>阻塞Blocking</th>
+<th>非阻塞Non-Blocking</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同步Synchronous</td>
+<td>Read/Write</td>
+<td>Read/Write(O_NONBLOCK), I/O multiplexing(select, poll, epoll)</td>
+</tr>
+<tr>
+<td>异步Asynchronous</td>
+<td></td>
+<td><strong>AIO</strong></td>
+</tr>
+</tbody>
+</table>
+<p>同步非阻塞IO需要进程不断询问内核数据准备好没有.性能比同步阻塞IO要差,可能有延迟.</p>
+<p>IO多路复用就是轮询多个Socket数据是否准备好,一旦有数据就返回通知进程.这个过程是阻塞的.一般用于高并发场景.</p>
+<p>同步阻塞,同步非阻塞,多路复用都是同步模型.</p>
+<h3 id="Java-对应模型"><a href="#Java-对应模型" class="headerlink" title="Java 对应模型"></a>Java 对应模型</h3><p>Java对应的常见应用有:同步阻塞, 多路复用, 异步非阻塞.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">BIO(同步阻塞)</th>
+<th style="text-align:center">NIO(非阻塞)</th>
+<th style="text-align:center">AIO(异步)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">客户端数 : IO线程数</td>
+<td style="text-align:center">1:1(1个线程处理1个客户端连接)</td>
+<td style="text-align:center">N:1(1个线程处理N个客户端连接)</td>
+<td style="text-align:center">N:0(不需要启动额外线程,被动回调)</td>
+</tr>
+<tr>
+<td style="text-align:center">IO类型</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">非阻塞</td>
+<td style="text-align:center">非阻塞</td>
+</tr>
+<tr>
+<td style="text-align:center">IO类型</td>
+<td style="text-align:center">同步</td>
+<td style="text-align:center">同步(多路复用)</td>
+<td style="text-align:center">异步</td>
+</tr>
+<tr>
+<td style="text-align:center">API易用性</td>
+<td style="text-align:center">简单</td>
+<td style="text-align:center">非常复杂</td>
+<td style="text-align:center">复杂</td>
+</tr>
+<tr>
+<td style="text-align:center">调试难度</td>
+<td style="text-align:center">简单</td>
+<td style="text-align:center">复杂</td>
+<td style="text-align:center">复杂</td>
+</tr>
+<tr>
+<td style="text-align:center">可靠性</td>
+<td style="text-align:center">非常差</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">高</td>
+</tr>
+<tr>
+<td style="text-align:center">吞吐量</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">高</td>
+</tr>
+</tbody>
+</table>
+<p>常见IO应用认识误区:</p>
+<p><strong>Tomcat8支持NIO,所以基于Tomcat8开发的HTTP调用都是异步的.</strong></p>
+<ul>
+<li>Tomcat6.x之前使用BIO模式,一个连接一个线程,受限较多.</li>
+<li>Tomcat6.x提供了NIO支持,可以指定Connector开启NIO模式.Tomcat8.x默认开启NIO.</li>
+<li>尽管Tomcat做了NIO接入,但是HTTP请求的处理还可以是同步阻塞的.如果Tomcat支持servlet3.0+版本,可以开启servlet异步支持,这样HTTP请求处理就能真正异步化(IO异步和业务异步)了.</li>
+</ul>
+<p><strong>使用了Netty/Vertx等异步框架,所以这些RPC天生就是异步的.</strong></p>
+<ul>
+<li>RPC实际是进程间通信,框架和具体协议无关.大多数情况下RPC框架使用异步IO来实现全栈异步,但是RPC异步和异步IO没有必然关系.</li>
+<li>RPC框架只需要保证不阻塞调用方线程,协调好请求和响应之间的关联即可,至于底层IO没有要求,可以是同步.因为异步性能好,所以大多数框架都采用异步IO.</li>
+<li>同步RPC主要缺点有:线程利用率低,超时时间不好拿捏,容易引起雪崩效应.</li>
+<li>异步RPC可以将串行调用转化成并行,减少业务线程阻塞时间;同时化同步为异步,减少业务线程阻塞.</li>
+</ul>
+<p><strong>由于底层不支持异步机制,所以PRC调用也无法异步化.</strong></p>
+<ul>
+<li>使用Servlet3.0+异步处理HTTP请求.</li>
+<li>SpringMVC3.2+封装了Servlet3.</li>
+</ul>
+<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><ol>
+<li><p>InputStream#read方法是阻塞的,如果在socket编程中,循环读取期待得到-1是不现实的,这将会导致线程挂起.解决方法就是要设计协议,比如结尾添加结束标志,或者添加头部标记长度,在读取到相应标记时退出循环.</p>
+</li>
+<li><p>NIO通道读取也有#1的问题,其实都是协议(数据包)设计的问题.</p>
+</li>
+<li><p>OP_WRITE事件的就绪条件并不是发生在调用channel的write方法之后,而是在当底层缓冲区有空闲空间的情况下.因为写缓冲区在绝大部分时候都是有空闲空间的,所以如果注册了写事件,这会使得写事件一直处于就绪状态,selector写处理就会一直占用着CPU资源.所以只有确实有数据要写时再注册写操作,并在写完以后马上取消注册.由此在大部分情况下,我们直接调用channel的write方法写数据就好了,没必要都用OP_WRITE事件.</p>
+</li>
+<li><p>OP_WRITE事件主要是在什么情况下使用呢?主要是在发送缓冲区空间满的情况下使用的.如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (buffer.hasRemaining()) &#123;</span><br><span class="line">     <span class="keyword">int</span> len = socketChannel.write(buffer); </span><br><span class="line">     <span class="keyword">if</span> (len == <span class="number">0</span>) &#123;</span><br><span class="line">          selectionKey.interestOps(selectionKey.interestOps() | SelectionKey.OP_WRITE);</span><br><span class="line">          selector.wakeup(); <span class="comment">// 唤醒阻塞的select方法尽快进行下一轮问询,以尽快执行写事件.</span></span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>buffer还有数据,但是已经不能写到channel了.此时将此channel注册写事件,可以在将来缓冲区有空间的时候继续写.写完之后一定要取消关注写事件,因为这个channel上已经没有写需求了.</p>
+</li>
+<li><p>SelectionKey的cancel方法使该SelectionKey加到Selector的cancel selectionKey set集合中,这样在下一次select的时候,就会将其从selector中相关的selectionKey集合中移除,并且不会监听该selectionKey所感兴趣的事件了.注意cancel方法不能关闭一个被客户端关闭的channel,会导致底层TCP连接一直处于CLOSE_WAIT状态.</p>
+</li>
+<li>如果一个连接处理完毕,不需要保留的时候,调用channel.close方法关闭注册的channel.底层逻辑将会调用key#cancel方法,以及设置channel.open状态为false关闭底层TCP连接.注意如果关闭客户端,服务端会发生一个read事件,并且在read的时候抛出异常,来表示关闭.另外,这个事件会不断发生,就算从已准备好的集合移除也没有,必须将该channel关闭或者调用该key的cancel方法,直到从该Selector移除去.</li>
+<li>如果attach到了selection key上,而这个selection key对应的操作迟迟不能就绪,那么这些selection key所attach的附件都是被强引用的,从而无法被gc.如果有大量这样的selection key累积,程序就好像发生了内存泄漏了一样.attachment主要还是用于channel绑定,一般都是上下文,缓冲区,session或者用户身份等.</li>
+</ol>
+<h3 id="NIO-Reactor"><a href="#NIO-Reactor" class="headerlink" title="NIO Reactor"></a>NIO Reactor</h3><h4 id="Basic-Reactor-Design-单reactor单线程"><a href="#Basic-Reactor-Design-单reactor单线程" class="headerlink" title="Basic Reactor Design(单reactor单线程)"></a>Basic Reactor Design(单reactor单线程)</h4><p>Reactor线程: 负责起服务,注册accept事件,并将Acceptor单例绑到serverSocket,然后只关心分发事件到key相应的attachmet上.</p>
+<p>Acceptor:负责接收客户端连接并构建Handler.为什么设计成Runnable实例?一个普通的类就可以了.</p>
+<p>Handler: 负责消息处理,构建时绑定事件并把自己attach到这个channel上,一个channel一个handler.</p>
+<p>总结:说是单线程,其实整个例子中可以不用线程,普通的类就可以完成.实际使用不多,不能充分利用CPU和多核资源.还是多数时间在处理IO事件.<strong>适合业务组件能够快速完成的场景(不会造成线程占用太多太久的情况).</strong>技术上还需要注意线程跑飞了的问题.</p>
+<h4 id="Multithreaded-Design-单reactor多线程"><a href="#Multithreaded-Design-单reactor多线程" class="headerlink" title="Multithreaded Design(单reactor多线程)"></a>Multithreaded Design(单reactor多线程)</h4><p>相比上述方案,Handler共享一个线程池,可以将业务处理交给线程池去做,减少了主reactor的性能开销.</p>
+<p>疑问: <a href="http://gee.cs.oswego.edu/dl/cpjslides/nio.pdf" target="_blank" rel="noopener">Doug Lea的pdf</a>中添加了同步.不太理解.</p>
+<h4 id="Multiple-Reactor-Thread-多Reactor多线程"><a href="#Multiple-Reactor-Thread-多Reactor多线程" class="headerlink" title="Multiple Reactor Thread(多Reactor多线程)"></a>Multiple Reactor Thread(多Reactor多线程)</h4><p>mainRactor主要用来处理网络建立连接,subReactor负责和已建立连接的socket进行数据交换.Handler还是共享线程池.</p>
+<p>Netty有着类似的默认线程模式.</p>
+<h3 id="事件处理模式"><a href="#事件处理模式" class="headerlink" title="事件处理模式"></a>事件处理模式</h3><h4 id="Proactor"><a href="#Proactor" class="headerlink" title="Proactor"></a>Proactor</h4><p>reactor用于同步I/O,proactor用于异步I/O.reactor主动轮询事件,读写数据;proactor则是被动等待回调,从缓冲区读写数据.</p>
+<h4 id="Asynchronous-Completion-Token"><a href="#Asynchronous-Completion-Token" class="headerlink" title="Asynchronous Completion Token"></a>Asynchronous Completion Token</h4><h4 id="Acceptor-Connector"><a href="#Acceptor-Connector" class="headerlink" title="Acceptor-Connector"></a>Acceptor-Connector</h4>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IO/" rel="tag"># IO</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/17/stock-price-calc/" rel="next" title="股票成本计算器">
+                <i class="fa fa-chevron-left"></i> 股票成本计算器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/15/how-to-learn-a-program-language/" rel="prev" title="如何掌握一门编程语言">
+                如何掌握一门编程语言 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-IO基础"><span class="nav-number">1.</span> <span class="nav-text">Java IO基础</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-NIO-from-Java-1-4"><span class="nav-number">2.</span> <span class="nav-text">Java NIO (from Java 1.4)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-NIO-2-0-from-Java-1-7"><span class="nav-number">3.</span> <span class="nav-text">Java NIO 2.0(from Java 1.7)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IO-模型"><span class="nav-number">4.</span> <span class="nav-text">IO 模型</span></a></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-对应模型"><span class="nav-number"></span> <span class="nav-text">Java 对应模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实践"><span class="nav-number"></span> <span class="nav-text">实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO-Reactor"><span class="nav-number"></span> <span class="nav-text">NIO Reactor</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Reactor-Design-单reactor单线程"><span class="nav-number">1.</span> <span class="nav-text">Basic Reactor Design(单reactor单线程)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multithreaded-Design-单reactor多线程"><span class="nav-number">2.</span> <span class="nav-text">Multithreaded Design(单reactor多线程)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multiple-Reactor-Thread-多Reactor多线程"><span class="nav-number">3.</span> <span class="nav-text">Multiple Reactor Thread(多Reactor多线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件处理模式"><span class="nav-number"></span> <span class="nav-text">事件处理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Proactor"><span class="nav-number">1.</span> <span class="nav-text">Proactor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Asynchronous-Completion-Token"><span class="nav-number">2.</span> <span class="nav-text">Asynchronous Completion Token</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Acceptor-Connector"><span class="nav-number">3.</span> <span class="nav-text">Acceptor-Connector</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

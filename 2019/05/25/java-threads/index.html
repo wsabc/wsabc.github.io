@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="进程和线程进程有自己的执行环境和内存空间,通常看起来一个程序/应用就是一个进程,不过有时候一个程序也可能是由多个进程协作组成的.进程间通过IPC(进程间通信)协作.大多数JVM实现都是一个单进程. 线程是在进程的范围内存在的,一个进程至少有一个线程.线程也有自己的执行环境,但是他们是共享进程的资源(内存,文件句柄等)的.很多时候一个Java进程里面就只有一个main线程. 形象的比喻参见进程与线程">
+<meta name="keywords" content="threads">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程">
+<meta property="og:url" content="http://wsabc.top/2019/05/25/java-threads/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="进程和线程进程有自己的执行环境和内存空间,通常看起来一个程序/应用就是一个进程,不过有时候一个程序也可能是由多个进程协作组成的.进程间通过IPC(进程间通信)协作.大多数JVM实现都是一个单进程. 线程是在进程的范围内存在的,一个进程至少有一个线程.线程也有自己的执行环境,但是他们是共享进程的资源(内存,文件句柄等)的.很多时候一个Java进程里面就只有一个main线程. 形象的比喻参见进程与线程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/thread-state.jpg">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/jmm.png">
+<meta property="og:updated_time" content="2019-09-12T14:24:08.599Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java多线程">
+<meta name="twitter:description" content="进程和线程进程有自己的执行环境和内存空间,通常看起来一个程序/应用就是一个进程,不过有时候一个程序也可能是由多个进程协作组成的.进程间通过IPC(进程间通信)协作.大多数JVM实现都是一个单进程. 线程是在进程的范围内存在的,一个进程至少有一个线程.线程也有自己的执行环境,但是他们是共享进程的资源(内存,文件句柄等)的.很多时候一个Java进程里面就只有一个main线程. 形象的比喻参见进程与线程">
+<meta name="twitter:image" content="https://github.com/wsabc/images/raw/master/thread-state.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/05/25/java-threads/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java多线程 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/05/25/java-threads/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java多线程
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-25 22:00:35" itemprop="dateCreated datePublished" datetime="2019-05-25T22:00:35+08:00">2019-05-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:24:08" itemprop="dateModified" datetime="2019-09-12T22:24:08+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/threads/" itemprop="url" rel="index"><span itemprop="name">threads</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h3><p>进程有自己的执行环境和内存空间,通常看起来一个程序/应用就是一个进程,不过有时候一个程序也可能是由多个进程协作组成的.进程间通过IPC(进程间通信)协作.大多数JVM实现都是一个单进程.</p>
+<p>线程是在进程的范围内存在的,一个进程至少有一个线程.线程也有自己的执行环境,但是他们是共享进程的资源(内存,文件句柄等)的.很多时候一个Java进程里面就只有一个main线程.</p>
+<p>形象的比喻参见<a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html" target="_blank" rel="noopener">进程与线程的一个简单解释</a><br><a id="more"></a></p>
+<h3 id="线程分类"><a href="#线程分类" class="headerlink" title="线程分类"></a>线程分类</h3><ul>
+<li>用户线程: 高优先级线程,JVM退出前会等待所有用户线程结束.</li>
+<li>守护线程: 低优先级线程,唯一的目的就是为用户线程提供服务.如果所有的用户线程都结束了,运行的守护线程不会阻止JVM退出,实际上如果剩下的都是守护线程时,JVM会退出.</li>
+<li>线程Deamon状态会继承自创建它的线程.main是用户线程,main方法里创建的线程将都是用户线程,除非显式更改状态.</li>
+</ul>
+<p>由于上述特点,我们会看到平时的使用中有如下典型场景:</p>
+<ol>
+<li>守护线程中有无限循环代码,但并不会导致问题.因为在所有用户线程结束时守护线程中的任何代码包括finally块都不会执行了.因此在IO任务中谨慎使用守护线程.</li>
+<li>守护线程中不正确的使用线程协作会导致阻止JVM退出,比如调用某个线程的join(等该该线程结束)方法.</li>
+</ol>
+<p>常见问题:</p>
+<ol>
+<li>main线程是用户线程.</li>
+<li>main线程不能设置成为守护线程,setDaemon方法只能在线程开始之前设置.main线程已经开始了再设置会出IllegalThreadStateException.</li>
+</ol>
+<h3 id="线程vs资源"><a href="#线程vs资源" class="headerlink" title="线程vs资源"></a>线程vs资源</h3><p><strong>一个线程占多少内存呢?</strong></p>
+<p>JVM规范说每个java虚拟机线程都有一个私有的java堆栈,和线程同时创建,用于保存局部变量,部分结果以及帧(frame).堆栈的内存也不需要连续.可以通过参数<strong>-Xss</strong>调整大小.</p>
+<p>在JDK 6中, 默认大小是32位机器512K, 64位机器1M; 在x86 Solaris/Linux上则是320k(32-bit), 1024k (64-bit).在Windows,也是320k和1M. 64k是允许的最小空间.</p>
+<p>所以假设JVM堆内存是512M,栈大小是512K,那么能创建的线程就是512M/512K=1024.</p>
+<p>Jdk11以后可以使用下属命令估算(JDK8 NMT统计不准,将committed设置成和reversed一样了):</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintNMTStatistics -version</span><br></pre></td></tr></table></figure>
+<p><strong>如何排查不能创建线程的错误?</strong> java.lang.OutOfMemoryError: unable to create new native thread</p>
+<ol>
+<li>查看系统内存占用情况. free -m</li>
+<li>查看文件句柄数和用户最大进程数. ulimit -a</li>
+<li>查看现有线程数. top</li>
+<li>查看系统最大线程数. cat /proc/sys/kernel/threads-max</li>
+<li>查看pid是否超过最大pid限制. cat /proc/sys/kernel/pid_max</li>
+<li>查看cgroup限制.</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for i in `find /sys/fs/cgroup/pids/user.slice -name 'pids.max'`; do echo "$i"; cat "$i"; done</span><br></pre></td></tr></table></figure>
+<h3 id="线程协作"><a href="#线程协作" class="headerlink" title="线程协作"></a>线程协作</h3><p><strong>Java线程状态</strong></p>
+<p>线程有6种状态: NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED.</p>
+<p>Runnable包含就绪(等待CPU)和运行中两种.</p>
+<p>Blocked是在等待获取监控锁,以便进入(或者重进)同步方法或者同步块.是被动状态.</p>
+<p>Waiting是在等待其他线程完成某个动作.是主动状态,因为主动调用了Object.wait, Thread.join, LockSupport.park方法.</p>
+<p>Timed-Waiting是Waiting的限时版.也是因为主动调用了Thread.sleep, Object.wait, Thread.join, LockSupport.parkNanos, LockSupport.parkUntil方法.</p>
+<p><strong>常见的通用说法/误解</strong></p>
+<p>常见的说法中有就绪状态,即线程等待CPU的状态,而常说的运行状态则是狭义地指获得CPU时间正在运行中的状态.</p>
+<p><strong>阻塞</strong>状态是指”等待”,既可以是等待获取锁,也可以是等待其他线程协作完成,还有就是等待I/O完成.如果是协作问题,就涉及到锁的问题:</p>
+<ul>
+<li>Object.wait的前提是已经获得锁(Object),当前线程调用这个方法,会释放锁,进入就绪状态.唤醒方法就是调用Object.notify或者notifyAll,前提也是必须拥有锁,并且notify/notifyAll不会立即释放锁而是等待正常结束释放.</li>
+<li>Thread.join不涉及锁的问题.唤醒方法是等待目标线程结束.</li>
+<li>LockSupport.part不涉及锁的问题,只是暂停调用这个方法的线程的调度.唤醒方法是unpark或者中断.</li>
+<li>Thread.sleep会暂停线程执行,但是不会让出锁.</li>
+<li>Thread.yield提示当前线程愿意放弃CPU以防止过度占用CPU.</li>
+</ul>
+<p><img src="https://github.com/wsabc/images/raw/master/thread-state.jpg" alt="thread-state"></p>
+<p><strong>如何停止一个正在工作的线程?</strong></p>
+<ul>
+<li>线程有stop方法,但是stop方法天生不安全.它是通过ThreadDeath异常来悄悄杀死线程,应用程序不会关心这种ERROR.stop方法会导致线程释放其获得的所有监视器的锁,从而让其他受该锁保护的对象处于不一致状态.(实例?)</li>
+<li>使用一个volatile变量,用于指示线程是否应该停止.目标线程应该定期检查这个变量值.</li>
+<li>如果一个线程处在长时间阻塞状态,可能无法检查标志位,此时需要调用target.interrupt()传递中断信息.</li>
+<li>如果一个线程对于interrupt没有响应,则需要使用一些其他技巧:如关闭socket.</li>
+</ul>
+<p><strong>理解中断interrupt</strong></p>
+<p>中断的作用是给目标线程传递一个信号,告诉它该中断了.至于到底是中断还是继续执行,由线程自己决定.</p>
+<ul>
+<li>如果线程处于阻塞状态(不设置状态)如wait,join,sleep,或者处在IO中(设置状态),将会收到InterruptedException.</li>
+<li>如果线程处在活跃状态,仅仅是设置状态而已.</li>
+</ul>
+<p>所以如何处理状态和InterruptedException,完全取决于线程自己.</p>
+<p><strong>Suspend VS. Resume</strong></p>
+<p>因为死锁问题,API废弃,类似的还有destroy方法.解释:如果一个持锁线程暂停,需要另一个线程恢复,而这个线程恰恰需要竞争锁,就导致了循环等待.替换的方案是使用object.wait和notify组合.</p>
+<p><strong>Notify vs. NotifyAll</strong></p>
+<p>唤醒等待该对象锁的线程,一个或者所有.Notify将会随机选择一个.唤醒的线程将和其他线程一起去竞争锁.</p>
+<p><strong>常见线程协作手段</strong></p>
+<ul>
+<li>wait,notify组合</li>
+<li>join等待</li>
+<li>响应中断</li>
+<li>volatie共享内存</li>
+<li>管道通信 PipedWriter.connect(PipedReader)</li>
+<li>CountDownLatch,CyclicBarrier等工具</li>
+<li>线程池awaitTermination方法</li>
+</ul>
+<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><p><strong>多线程存在什么问题?</strong></p>
+<p>多线程由于共享字段或者引用,会导致两个问题:线程干扰(thread interference)和内存一致性错误(memory consistency errors).线程干扰是指多个线程交互作用于相同的数据时产生的混乱,无法预期,bug很难发现和修复.内存一致性错误原因很复杂,简单说就是对于同一个数据,不同线程看到的视图不一样(不一致).</p>
+<p><strong>Synchronized解决什么问题,怎么解决?</strong></p>
+<p>synchronized是用来解决上述两个问题的:任意时刻只有一个线程执行synchronized方法/语句.,同时由happens-before机制保证改变的顺序.synchronized是通过对象的固有锁(intrinsic lock)来实现的.每个对象都有一个固有锁.固有锁参与synchronized的两个方面:排他访问和happens-before可见性.</p>
+<p>一个线程无法获取其他线程已经拥有的锁,但是一个线程可以获得他自己已经拥有的锁.考虑一个场景:同步代码里面直接或者间接的调用了另一个同步方法,而这两个方法用的是同一个锁.如果没有允许重复进入的同步锁,那么线程就可能被自己阻塞.Synchronized本身就支持重入锁.</p>
+<p><strong>原子操作能不能替代Synchronized?</strong></p>
+<ul>
+<li>引用变量和大部分的基本类型变量(除了long和double,他们是分字节处理的)读写都是原子的.</li>
+<li>所有volatile修饰的变量读写都是原子的(包括long和double).</li>
+</ul>
+<p>原子操作不能交替执行,所以没有线程干扰问题,但是<u>仍然有内存一致性错误的可能</u>.</p>
+<p><strong>Synchronized带来什么问题?</strong></p>
+<p>Synchronized引入了线程竞争(thread contention)的问题.多线程执行时会变慢,甚至暂停执行.常见的有饥饿(starvation)和活锁(livelock),甚至死锁(deadlock)问题.这些都称为线程活性(liveness)问题.</p>
+<p>饥饿: 某个线程无法获得对共享资源的访问,程序无法进展.通常是由于其他线程执行了很耗时的同步方法,而且是频繁执行这个方法,导致其他线程总是阻塞.</p>
+<p>活锁: 和死锁很像,但是线程没有阻塞.整个线程无法进一步发展,都在忙于相互回应以恢复工作.比喻:两个人互相让路,并且同时为对方让路,导致一直循环在让路-拥堵的过程中而无法继续前行.</p>
+<p><strong>Synchronized原理</strong></p>
+<p>Java虚拟机会利用monitorenter和monitorexit条字节码指令来处理synchronized这个关键字.根据虚拟机规范的要求,在执行monitorenter指令时,首先要尝试获取对象的锁,如果这个对象没有被锁定,或者当前线程已经拥有了那个对象的锁,把锁的计数器加1,相应地,在执行monitorexit指令时会将锁计数器减1,当计数器为0时,锁就会被释放,如果获取对象锁失败,那当前线程就要阻塞等待,直到对象锁被另外一个线程释放为止.</p>
+<p>因为Java的线程是映射到操作系统的原生线程之上的,如果要阻塞或者唤醒一个线程,都需要操作系统来帮忙完成,这就需要<strong>从用户态转换到核心态中</strong>,因此状态转换需要耗费很多的处理器时间,对于代码简单的同步块,状态转换消耗的时间有可能比用户代码执行的时间还长,所以synchronized是Java语言中一个重量级锁.</p>
+<p><em>JDK1.6 开始的优化</em></p>
+<ol>
+<li>轻量锁.无锁状态下新建一个LockRecord区域,将对象头中的MarkWord复制到LockRecord中,同时通过CAS将MarkWord修改成指向LockRecord的指针.成功就获取锁,失败的话看看是不是自己占用了锁.多线程竞争该锁就会升级成重量级锁Synchronized.解锁过程也是通过CAS来实现的.<strong>因为认为大多数情况下整个同步周期内不存在竞争,所以采用比互斥开销少的CAS计算.一旦竞争激烈,除了互斥开销外,还有CAS开销,性能甚至比重量锁还要慢.</strong></li>
+<li>偏向锁. 由于大多数对象在其生命周期中至多被一个线程锁定,因此我们允许该线程将对象偏向线程自身.一旦有偏差,该线程随后可以锁定和解锁对象,而无需使用昂贵的原子指令(锁不存在多线程竞争,并且一个线程可以多次获得锁).也是通过CAS计算将线程ID同步到MarkWord中,更新成功后就获得偏向锁,以后再进入也不需要再次获取锁了.一旦有竞争发生,会在下一个全局安全点(没有字节码运行)暂停持有偏向锁的线程,根据锁对象的状况来决定MarkWord中是设置成什么(无锁或者轻量锁). 偏向锁不适用于竞争锁.可以使用-XX:-UseBiasedLocking关闭,默认进入轻量锁.</li>
+</ol>
+<p>HotSpot虚拟机中对象头结构:</p>
+<table>
+<thead>
+<tr>
+<th><strong>存 储 内 存</strong></th>
+<th><strong>标 识 位</strong></th>
+<th><strong>状    态</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对象哈希码, 对象分代年龄</td>
+<td>01</td>
+<td>未锁定</td>
+</tr>
+<tr>
+<td>指向锁记录的指针</td>
+<td>00</td>
+<td>轻量级锁定</td>
+</tr>
+<tr>
+<td>指向重量级锁的指针</td>
+<td>10</td>
+<td>膨胀(重量级锁定)</td>
+</tr>
+<tr>
+<td>空, 不需要记录信息</td>
+<td>11</td>
+<td>GC标记</td>
+</tr>
+<tr>
+<td>偏向线程ID, 偏向时间戳, 对象分代年龄</td>
+<td>01</td>
+<td>可偏向</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>自旋锁和适应性自旋: 互斥同步实现对性能影响最大的是阻塞的实现,挂起线程和恢复线程的操作都需要转入内核状态完成,这些操作给系统的并发性能带来了很大的压力.由于很多共享数据的锁定状态只会持续很短的一段时间,为了这段时间去挂起和恢复线程并不值得.如果我们可以让后面请求锁的那个线程”稍等一下”,但不放弃处理器的执行时间,看看持有锁的线程是否很快就会释放锁.为了让线程等待,我们只需要<strong>让线程执行一个忙循环,这项技术就是所谓的自旋锁</strong>.在JDK1.4.2就已经引入了自旋锁,但是自旋等待本身虽然避免了线程切换的开销,但是它是要占据处理器时间的,因此如果锁被占用的时间很长,那么自旋的线程只会白白消耗处理器资源,而不会做任何有用的工作,反而会带来性能上的浪费,因此自选等待必须有一定的限度,如果自旋超过了限定的次数仍然没有成功获得锁,就应当使用传统的方式去挂起线程了,自旋次数的默认值是10.在JDK1.6之后引入了自适应的自旋锁,自适应意味着自旋的时间不再固定了,而是由前一次在同一个锁上自旋的时间以及锁的拥有者的状态来决定.如果在同一个锁对象上,自旋等待刚刚获得过锁,并且持有锁的线程正在运行中,那么虚拟机就会认为这次自旋也很有可能再次成功,进而它将允许自旋等待持续相对更长的时间,比如100个循环.另外如果对于某一个锁.自旋很少成功获得过,那么在以后要获得这个锁时将可能忽略掉自旋过程,以避免浪费处理器资源.</li>
+<li><p>锁消除: 如果代码上要求同步,但是虚拟机检测到不可能存在共享数据竞争时,会进行锁的清除.主要依据是<u>逃逸分析</u>.</p>
+</li>
+<li><p>锁粗化: 一般情况下都需要将同步的范围限制很小,使得需要同步的操作变少;但是如果一系列的操作都是针对同一个对象,那么反复加锁解锁会导致更多的不必要的性能损耗.此时需要扩大锁的范围,即粗化.</p>
+</li>
+</ol>
+<p><strong>新的方案之一: 不可变对象 Immutable Objects</strong></p>
+<ul>
+<li>不可变对象是并发程序的好伙伴,没有线程干扰和内存一致性问题.</li>
+<li>不可变对象的创建对象成本高,但是不要太高估,可以通过其他机制抵消(比如GC会减少,协调多线程代码减少,模型更简单等).</li>
+<li>创建不可变对象的策略: 不要提供setter; 所有字段都是final+private; 不允许子类重写方法,用final修饰,甚至类都是final的;不暴露构造方法private化;对于某个字段是可变对象的,不要提供操作方法,不要在多个对象间共享可变对象.</li>
+</ul>
+<p><strong>新的方案之二: Lock</strong></p>
+<p>Synchronized依赖简单的重入锁,易于使用,但是缺点多.Lock类似使用对象的隐式锁(内部还是使用了Synchronized),但是Lock最大的改进是可以尝试获取锁,一旦获取不到立刻退回.可以使用Lock解决死锁问题.</p>
+<p>Lock vs. Synchronized异同:</p>
+<ul>
+<li>语义相同,但是Synchronized用法单一,Lock提供了更灵活的操作.Lock是接口,Synchronized是关键字.</li>
+<li>都能提供独占式的互斥锁,但是Lock还能提供共享锁如读锁.</li>
+<li><p>Synchronized要求结构化,顺序加锁/解锁.编程简单.但是Lock支持以任何顺序加锁和解锁.即使用方法不一样: synchronized只能在一个方法里加锁/释放;但是lock可以在不同的方法里分别lock和unlock.</p>
+</li>
+<li><p>lock支持公平锁,非重入锁,死锁检测;Synchronized不支持.</p>
+</li>
+<li>lock提供tryLock减少线程block时间.包含非阻塞尝试和限时尝试.</li>
+<li>synchronized阻塞无法中断;lock可以<strong>lockInterruptibly</strong>(线程正在等待获取该锁,可能由于等待时间过长,线程不想等待了,想先处理其他事情,我们可以让它中断自己或者在别的线程中中断它).</li>
+<li>Lock(可中断,不可中断,限时)在具体实现上可能不同.</li>
+<li>发生异常时Synchronized能自动释放锁,但是lock如果没有unlock的话就不会释放.</li>
+<li>资源竞争激烈的情况下, Lock性能好些.在1.6优化之后,满足需求的前提下,还是推荐使用简单的Synchronized.</li>
+</ul>
+<p>Lock实现支持: <strong>ReenrtantLock</strong>, <strong>ReentrantReadWriteLock</strong>, <strong>StampedLock</strong>.</p>
+<p><strong>什么是可重入锁ReenrtantLock?</strong></p>
+<p>一个可重入的互斥锁(mutual exclusion, 缩写mutex),和synchronized基本行为/语义相同,但是有扩展性.</p>
+<p>synchronized依靠编译添加机器指令来实现,隐式的获取和释放;但是ReentrantLock是一个类,依据AbstractQueuedSynchronizer来实现.</p>
+<p>分为公平锁和非公平锁(默认构造),公平锁是指对于等待锁的线程给予一个公平的排队策略,一般就是FIFO,这样长期等待的线程有机会获得锁,不会导致饥饿现象,但是会降低吞吐量.tryLock方法不遵守公平设置,抢占式的获取.</p>
+<p>获取锁的几个步骤:</p>
+<ol>
+<li>尝试获取tryAcquire,两部分逻辑:1无锁直接去锁, 2有锁看是不是自己,是自己就重入计数.公平锁这个地方要考虑队列里是不是有等待的线程.有等待线程就得排队;非公平锁不用.</li>
+<li>公平锁因为有排队,所以获取不到锁的时候就需要加入队列.加入队列也是首先尝试CAS直接加到队尾,如果失败就通过自旋(无限循环)保证加入成功.</li>
+<li>公平锁一旦入队,需要将线程挂起;挂起之前如果上一个节点是头结点,就再试一次获取锁,获取到了就不用挂起了;如果上一个节点不是头结点, 则根据前节点的状态要么移除,要么改成SIGNAL,第二次循环的时候就直接挂起了(park).</li>
+<li>释放锁的过程一样, 减少重入计数,如果重入计数为0,则唤醒头部线程(unpark).</li>
+</ol>
+<p>由于公平锁需要关心队列的情况,得按照队列里的先后顺序来获取锁(会造成大量的线程上下文切换),而非公平锁则没有这个限制.所以也就能解释非公平锁的效率会被公平锁更高.</p>
+<p><strong>ReadWriteLock</strong></p>
+<p>一个新接口,提供一对关联锁:读锁和写锁,读锁可以同时被多个线程同时持有,写锁是独占的.写锁要保持内存同步效果,就是说任何读锁的持有者都能看见先前写锁释放时所做的更改.</p>
+<p>读写锁分离是基于一个读多于写的事实设计的,这样共享读锁能提高并发性(实际上这种并发性的增加只能在多处理器上完全实现).典型的场景是:最初写入之后就不经常修改,但是频繁搜索的数据.如果更新很频繁,就会有大量时间被锁定,几乎就没有并发性的增加;同时如果读取的时间很短, 读写锁定的开销也划不来.</p>
+<ul>
+<li>在 writer 释放写入锁时,reader 和 writer 都处于等待状态,在这时要确定是授予读取锁还是授予写入锁.Writer 优先比较普遍应为一般认为写会比较快.</li>
+</ul>
+<p><strong>ReentrantReadWriteLock</strong></p>
+<ul>
+<li>保持公平锁和非公平锁设计</li>
+<li>可重入</li>
+<li>支持锁降级(写锁编程读锁),不支持升级.降级路径(同一线程内): get w-lock -&gt; get r-lock -&gt; w-unlock -&gt; r-unlock</li>
+<li>读写锁之间也是互斥的,写锁释放之前,读锁不能获取到锁.反之也是.</li>
+</ul>
+<p><strong>StampedLock</strong></p>
+<p>从JDK1.8开始提供的类, 提供3种模式控制读写访问.锁由version和mode组成.try*方法会返回一个数字用来表示锁获取的状态(0表示失败,stamp表示版本).作为ReentrantReadWriteLock的补充,解决饥饿问题,同时提供了读写锁之间的转换,增加了细粒度控制.</p>
+<ul>
+<li>互斥的写锁.如果锁是在写状态,那么就不能获得读锁,乐观读锁也都是会验证失败.</li>
+<li>共享的读锁.</li>
+<li>乐观读锁.</li>
+</ul>
+<p>StampedLock不支持重入,支持锁升级<strong>tryConvertToWriteLock</strong>.</p>
+<p>注意: 该类的设计初衷是作为一个内部工具类,用于辅助开发其它线程安全组件.</p>
+<p><strong>乐观锁 vs. 悲观锁</strong></p>
+<p>乐观锁认为并发很少发生,假设不会有人并发修改,只在最后应用更新的时候比较版本/字段.常见的手段有version字段比较, CAS自旋.</p>
+<p>悲观锁假设并发无时不在,需要提前锁定,有读锁,写锁,行锁,表锁等.常见的有select for update, Synchronized等.</p>
+<p>自旋的问题: 常见方式是设计一个volatile变量自旋.要注意ABA问题和自旋时间控制.</p>
+<p><strong>Lock Condition</strong></p>
+<p>Lock配合Condition使用,用await替代wait,用signal/signalAll替代notify/notifyAll.</p>
+<h3 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h3><p>线程安全是指避免数据竞争,避免数据在多个线程并发执行的情况下出现不一致性.线程不安全的表现通常是数据的赋值,取决于访问数据的线程的顺序.</p>
+<p>如果不打算共享,请给每个线程提供数据的私有副本;如果共享,则显示提供同步确保程序以确定的方式运行.</p>
+<p>实际编码中,有三个标准:线程不安全; 线程安全(可串行执行的); 线程安全(多线程安全).常说的是第三种.</p>
+<p><strong>线程安全(可串行执行的)</strong>泛指线程顺序执行,可能线程间并不存在竞争关系,这时同步就不那么必要了.</p>
+<p><strong>线程不安全的原理</strong></p>
+<p>数据不一致性的原理是因为更新一个字段的值不是一个原子操作,有三个步骤:1. 读取当前值; 2. 计算新值; 3. 赋值.</p>
+<p>线程安全的关键就是控制<strong>共享变量的非原子操作</strong>,常见手段有(显式同步操作):</p>
+<ol>
+<li>Synchronized关键字</li>
+<li>使用原子包装类<em>java.util.concurrent.atomic</em></li>
+<li>使用lock类<em>java.util.concurrent.locks</em></li>
+<li>使用线程安全的集合类如ConcurrentHashMap</li>
+<li>使用volatile关键字强制线程从内存读取值,而不是从线程的缓存里读取</li>
+</ol>
+<p><strong>Servlet(xx)是线程安全的吗?</strong></p>
+<p>如果存在共享数据(如实例变量, 类变量, 或者共享资源如file),在多线程环境中就是线程不安全的.Servlet是单例模式,多线程访问service方法可能会造成不一致性.因此Servlet不是线程安全的.</p>
+<h3 id="Volatile关键字"><a href="#Volatile关键字" class="headerlink" title="Volatile关键字"></a>Volatile关键字</h3><p>对于共享变量的访问,为了防止多线程带来数据一致性问题,Java除了提供了互斥锁来保证,还提供了volatile关键字方法. Java内存模型将保证对于Volatile修饰的变量所有的线程都会看见一样的值.</p>
+<p><strong>volatile原理</strong></p>
+<p>当对volatile变量进行写操作的时候,JVM会向处理器发送一条lock前缀的指令,将这个缓存中的变量回写到系统主存中.但是就算写回到内存,如果其他处理器缓存的值还是旧的,再执行计算操作就会有问题,所以在多处理器下,为了保证各个处理器的缓存是一致的,就会实现<u>缓存一致性协议</u>(每个处理器通过嗅探在总线上传播的数据来检查自己缓存的值是不是过期了,如果过期而处理器又要对这个数据进行修改操作的时候,会强制重新从系统内存里把数据读到处理器缓存里).所以,如果一个变量被volatile所修饰的话,在每次数据变化之后,其值都会被强制刷入主存.而其他处理器的缓存由于遵守了缓存一致性协议,也会把这个变量的值从主存加载到自己的缓存中,这就保证了一个volatile在并发编程中,其值在多个缓存中是可见的.</p>
+<p><strong>缓存一致性协议</strong>：每个处理器通过嗅探在总线上传播的数据来检查自己缓存的值是不是过期了，当处理器发现自己缓存行对应的内存地址被修改，就会将当前处理器的缓存行设置成无效状态，当处理器要对这个数据进行修改操作的时候，会强制重新从系统内存里把数据读到处理器缓存里。</p>
+<p>所以，如果一个变量被<code>volatile</code>所修饰的话，在每次数据变化之后，其值都会被强制刷入主存。而其他处理器的缓存由于遵守了缓存一致性协议，也会把这个变量的值从主存加载到自己的缓存中。这就保证了一个<code>volatile</code>在并发编程中，其值在多个缓存中是可见的。</p>
+<p><strong>volatile应用场景</strong></p>
+<ol>
+<li>保证可见性:多线程修改某个变量,其他线程马上就看见.比如单例模式中用volatile修饰单例.</li>
+<li>保证有序性: 禁止指令重排优化,严格按照代码顺序执行.</li>
+</ol>
+<p><strong>volatile不能做什么?</strong></p>
+<p>不能保证原子性.原子操作不能交叉执行.volatile能保证单一操作的原子性,但是不能保证多个操作如(i++)的原子性.考虑一个案例:多线程循环累加一个volatile变量.</p>
+<h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><p><strong>硬件内存架构</strong></p>
+<p>通常情况下,当一个CPU需要读取主存时,它会将主存的部分读到CPU缓存中,它甚至可能将缓存中的部分内容读到它的内部寄存器中,然后在寄存器中执行操作.当CPU需要将结果写回到主存中去时,它会将内部寄存器的值刷新到缓存中,然后在某个时间点将值刷新回主存(通过更小的cache lines来操作).</p>
+<p><strong>指令重排</strong></p>
+<p>在执行程序时为了提高性能,编译器和处理器常常会对指令做重排序.重排序分三类:</p>
+<ul>
+<li><p>编译器优化的重排序: 编译器在不改变单线程程序语义的前提下,可以重新安排语句的执行顺序.</p>
+</li>
+<li><p>指令级并行的重排序: 现代处理器采用了指令级并行技术来将多条指令重叠执行,如果不存在数据依赖性,处理器可以改变语句对应机器指令的执行顺序.</p>
+</li>
+<li><p>内存系统的重排序: 由于处理器使用缓存和读/写缓冲区,这使得加载和存储操作看上去可能是在乱序执行.</p>
+</li>
+</ul>
+<p>Java程序会经过上述三个阶段进行指令排序.指令重排可能会导致多线程内存可见性的问题.对于编译器,JMM 的编译器重排序规则会禁止特定类型的编译器重排序(不是所有的编译器重排序都要禁止);对于处理器重排序,JMM 的处理器重排序规则会要求 Java 编译器在生成指令序列时,插入特定类型的内存屏障指令,通过内存屏障指令来禁止特定类型的处理器重排序(不是所有的处理器重排序都要禁止).</p>
+<p>JMM 属于语言级的内存模型,它确保在不同的编译器和不同的处理器平台之上,通过禁止特定类型的编译器重排序和处理器重排序,为程序员提供一致的内存可见性保证.</p>
+<p><strong>happens-before</strong></p>
+<p>JSR-133 内存模型使用 happens-before 的概念来阐述操作之间的内存可见性.在 JMM 中,如果<strong>一个操作执行的结果需要对另一个操作可见</strong>,那么这两个操作之间必须要存在 happens-before 关系.这里提到的两个操作既可以是在一个线程之内,也可以是在不同线程之间.</p>
+<p>常见的规则有:</p>
+<ul>
+<li>程序顺序规则: 一个线程中的每个操作,happens-before 于该线程中的任意后续操作</li>
+<li>监视器锁规则: 对一个监视器的解锁,happens-before 于随后对这个监视器的加锁</li>
+<li>volatile 变量规则: 对一个 volatile 域的写,happens-before 于任意后续对这个 volatile 域的读</li>
+<li>传递性: 如果 A happens-before B,且 B happens-before C,那么 A happens-before C</li>
+</ul>
+<p><strong>Java MM</strong></p>
+<p>Java内存模型把Java虚拟机内部划分为线程栈(工作内存)和堆(共享内存).每一个运行在Java虚拟机里的线程都拥有自己的线程栈.这个线程栈是私有的.所有实例变量,静态变量和数组元素存储在堆内存中,堆内存在线程之间共享.局部变量,方法形参和异常处理器参数不会在线程之间共享,它们不会有内存可见性问题,也不受内存模型的影响.(简单来说,所有局部变量无论是原始类型还是引用类型,都放在栈上,引用类型指向的对象在堆山;所有成员变量,无论是原始类型还是引用类型,都在堆上;静态变量也在堆上)</p>
+<p>JMM设计的主要目标: 1是给编程提供足够强的内存可见性; 2是尽量少对编译器和处理器做限制.</p>
+<p><img src="https://github.com/wsabc/images/raw/master/jmm.png" alt="JMM"></p>
+<p>JMM通过禁止[会改变程序结果的指令重排]来保证足够好的可见性.</p>
+<ol>
+<li>单线程程序.单线程程序不会出现内存可见性问题.编译器,runtime和处理器会共同确保单线程程序的执行结果与该程序在顺序一致性模型中的执行结果相同.</li>
+<li>正确同步的多线程程序.正确同步的多线程程序的执行将具有顺序一致性（程序的执行结果与该程序在顺序一致性内存模型中的执行结果相同）.这是JMM关注的重点,JMM通过限制编译器和处理器的重排序来为程序员提供内存可见性保证.</li>
+<li>未同步/未正确同步的多线程程序.JMM为它们提供了最小安全性保障:线程执行时读取到的值,要么是之前某个线程写入的值,要么是默认值（0，null，false）.</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/threads/" rel="tag"># threads</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/23/blue-green-deploy/" rel="next" title="蓝绿发布">
+                <i class="fa fa-chevron-left"></i> 蓝绿发布
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/12/rdb/" rel="prev" title="关系型数据库">
+                关系型数据库 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程和线程"><span class="nav-number">1.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程分类"><span class="nav-number">2.</span> <span class="nav-text">线程分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程vs资源"><span class="nav-number">3.</span> <span class="nav-text">线程vs资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程协作"><span class="nav-number">4.</span> <span class="nav-text">线程协作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁"><span class="nav-number">5.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程安全"><span class="nav-number">6.</span> <span class="nav-text">线程安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Volatile关键字"><span class="nav-number">7.</span> <span class="nav-text">Volatile关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java内存模型"><span class="nav-number">8.</span> <span class="nav-text">Java内存模型</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

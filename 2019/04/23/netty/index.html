@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目前Netty的稳定版是4.1.38. Netty关键字: 异步 事件驱动 网络编程框架 快速开发 高性能 高扩展性 服务器端 客户端 入门">
+<meta name="keywords" content="netty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty">
+<meta property="og:url" content="http://wsabc.top/2019/04/23/netty/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="目前Netty的稳定版是4.1.38. Netty关键字: 异步 事件驱动 网络编程框架 快速开发 高性能 高扩展性 服务器端 客户端 入门">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-12T14:28:18.670Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty">
+<meta name="twitter:description" content="目前Netty的稳定版是4.1.38. Netty关键字: 异步 事件驱动 网络编程框架 快速开发 高性能 高扩展性 服务器端 客户端 入门">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/04/23/netty/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Netty | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/04/23/netty/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Netty
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-23 22:00:35" itemprop="dateCreated datePublished" datetime="2019-04-23T22:00:35+08:00">2019-04-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:28:18" itemprop="dateModified" datetime="2019-09-12T22:28:18+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>目前Netty的稳定版是4.1.38.</p>
+<p>Netty关键字: <strong>异步 事件驱动 网络编程框架 快速开发 高性能 高扩展性 服务器端 客户端</strong></p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><a id="more"></a>
+<ol>
+<li>Inbound入站,outbound出站.ChannelInboundHandler提供一个接口,抽象了入站的各种操作.ChannelInboundHandlerAdapter提供了一个基类,方便实现.</li>
+<li>ByteBuf是Netty里的基本缓冲类型,需要调用release方法释放.这个是handler的责任.可以通过ChannelHandlerContext分配空间.ByteBuf操作不需要flip,因为Netty维护2个指针,一个读,一个写.</li>
+<li>exceptionCaught异常发生时,通常是需要记日志和关闭对应的channel.有时候也可以回复客户端错误然后再关闭.</li>
+<li>channelRead当数据到来时就会调用这个方法.</li>
+<li>channelActive当连接建立并准备进行通信时调用这个方法.</li>
+<li>handlerAdded,handlerRemoved可以添加一些轻量级的初始化/释放工作,但是不能阻塞太长时间.</li>
+<li>NioEventLoopGroup是基于NIO selector的多线程接收器.boss用来接收连接类似mainReactor,worker用来处理建立的连接类似subReactor.线程池的大小可以通过构造方法或者具体实现配置.</li>
+<li>ServerBootstrap是一个助手类,用来简化构造服务器的代码.调用链一般是b.group.channel.childHandler.childOption.option,最后是bind,close.</li>
+<li>childHandler用来注册客户端连接的处理器.通过ChannelPipeline来构造通道处理路线.每个通道有自己的pipeline,并且是通道建立的时候就创建好了.pipeline的执行顺序(12345)是:inbound从1到5;outbound是从5到1.addLast则是按照顺序添加handler.</li>
+<li>option用来配置ServerSocketChannel,childOption用来配置SocketChannel.SO_BACKLOG用来配置server端accept对列大小,取决于min(backlog, somaxconn),超过会导致ECONNREFUSED错误.</li>
+<li>ChannelHandlerContext提供了各种IO操作和触发器.如write,flush,close等.</li>
+<li>Netty里的所有操作都是异步的.如果有先后关系的操作,可能需要放在future的回调里,比如close可能会在flush之前完成.</li>
+<li>Bootstrap用于构建客户端连接程序,只需要一个workergroup.调用链是b.group.channel.option.handler.connect.注意没有child*方法了(因为没有ServerSocketChannel这个parent了).</li>
+<li>流式传输协议(如TCP)有一个数据包碎片化的问题,需要程序来组包.Netty提供了Decoder/Encoder功能(也是ChannelInbound/OutboundHandler实例).他们内部会维持一个累积的buffer用来存储数据.常见的有ByteToMessageDecoder,ReplayingDecoder等.</li>
+<li>尽管ByteBuf解决了组包问题,但是不能复用,不易于理解.Netty支持在Encoder/Decoder中直接使用POJO的能力.</li>
+<li>使用shutdownGracefully关闭eventloopgroup即可关闭应用,同时也会关闭该group的通道.</li>
+<li>Netty提供了丰富的编解码器,如LineBasedFrameDecoder,也可以自定义如ByteToMessageDecoder.</li>
+</ol>
+<h3 id="Netty作为类库使用"><a href="#Netty作为类库使用" class="headerlink" title="Netty作为类库使用"></a>Netty作为类库使用</h3><ol>
+<li>良好的Buffer API: 易用, 可扩展, 高效.</li>
+<li>可监控的Future和事件循环: EventExecutorGroup, GlobalEventExecutor.</li>
+<li>其他的辅助类: ThreadLocalPool, Extensible Enum, Attribute Map, Hashed Wheel Timer.</li>
+</ol>
+<h3 id="主要线程模型"><a href="#主要线程模型" class="headerlink" title="主要线程模型"></a>主要线程模型</h3><p>服务端的线程模型和Multithreaded Reactor模型类似.BossGroup是Acceptor,负责处理TCP连接同时将连接注册到Worker中;WorkerGroup是IO读写.客户端线程模型很简单,只有一个WorkerGroup.</p>
+<p>NioEventLoop被设计成串行化,防止频繁切换线程和线程冲突带来的开发难度和性能损耗.由于消息读取,解码,业务始终在一个线程中执行,对时间要求可控.复杂业务如外网交互,读写DB等应该由业务线程池统一处理.</p>
+<ol>
+<li>I/O 线程 NioEventLoop 从 SocketChannel 中读取数据报,将 ByteBuf 投递到 ChannelPipeline,触发 ChannelRead 事件.</li>
+<li>I/O 线程 NioEventLoop 调用 ChannelHandler 链,直到将消息投递到业务线程,然后 I/O 线程返回,继续后续的读写操作.</li>
+<li>业务线程调用 ChannelHandlerContext.write(Object msg) 方法进行消息发送.</li>
+<li>如果是由业务线程发起的写操作,ChannelHandlerInvoker 将发送消息封装成 Task,放入到 I/O 线程 NioEventLoop 的任务队列中,由 NioEventLoop 在循环中统一调度和执行.放入任务队列之后,业务线程返回.</li>
+<li>I/O 线程 NioEventLoop 调用 ChannelHandler 链,进行消息发送,处理 Outbound 事件,直到将消息放入发送队列,然后唤醒 Selector.进而执行写操作.</li>
+</ol>
+<h3 id="协议设计"><a href="#协议设计" class="headerlink" title="协议设计"></a>协议设计</h3><p>公有协议: 如HTTP; 私有协议: 如Thrift. 同一种协议可能有多种序列化形式,如HTTP可以有XML和JSON及Protobuf等.</p>
+<p>考虑点: 协议中立,大部分语言都支持; 序列化工具链以及可读性,序列化性能等.</p>
+<p>常见的选择有JSON, Protobuf.</p>
+<p>Protobuf通过proto文件生成代码,使团队保持协议一致;提供Java支持,Netty也有默认支持;性能好.</p>
+<h3 id="长连接实现"><a href="#长连接实现" class="headerlink" title="长连接实现"></a>长连接实现</h3><p>TCP协议支持KeepAlived机制,但是默认不打开,心跳间隔是2小时.</p>
+<p>使用Netty自带IdleStateHandler,并关注userEventTriggered方法.服务器端进行hb失联次数统计;客户端注意在channelInactive时重连,需要将connect方法独立出来.</p>
+<ol>
+<li>如果系统只有一个服务端 port 需要监听,则 BossGroup 线程组线程数设置为 1</li>
+<li>使用 Netty 的线程池,共三组线程池,分别为 BossGroup,WorkerGroup 和 ExecutorGroup.其中,BossGroup 用于接收客户端的 TCP 连接,WorkerGroup 用于处理 I/O,执行系统 Task 和定时任务,ExecutorGroup 用于处理业务加解密,限流,路由,及将请求转发给后端的服务等业务操作.</li>
+<li><p>使用EventExecutorGroup另起一个线程池来执行耗时操作,以免堵塞I/O线程.具体见ChannelPipe Javadoc.</p>
+</li>
+<li><p>LVS提供DR模式,可以将VIP后面的多个NIO服务器与客户端分别保持长连接.</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/netty/" rel="tag"># netty</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/20/how-to-read-financial-report/" rel="next" title="财报阅读">
+                <i class="fa fa-chevron-left"></i> 财报阅读
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/13/sync-async-block-nblock/" rel="prev" title="同步异步阻塞非阻塞">
+                同步异步阻塞非阻塞 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#入门"><span class="nav-number">1.</span> <span class="nav-text">入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Netty作为类库使用"><span class="nav-number">2.</span> <span class="nav-text">Netty作为类库使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要线程模型"><span class="nav-number">3.</span> <span class="nav-text">主要线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协议设计"><span class="nav-number">4.</span> <span class="nav-text">协议设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#长连接实现"><span class="nav-number">5.</span> <span class="nav-text">长连接实现</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

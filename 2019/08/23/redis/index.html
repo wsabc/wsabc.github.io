@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="数据类型以及应用场景Redis不仅是一个单纯的K-V存储,还是一个数据结构服务器.支持5种数据类型:  字符串String,可以包含任何数据,二进制安全的.最大512MB. Lists: 有序列表,保持插入的顺序.可以添加元素到列表头部或者尾部.最多可以存储2^32-1个元素. Sets: 集合,无序,唯一.最多存储2^32-1个元素. Sorted sets: 有序集合.每个元素有一个分数,根据">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis数据库">
+<meta property="og:url" content="http://wsabc.top/2019/08/23/redis/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="数据类型以及应用场景Redis不仅是一个单纯的K-V存储,还是一个数据结构服务器.支持5种数据类型:  字符串String,可以包含任何数据,二进制安全的.最大512MB. Lists: 有序列表,保持插入的顺序.可以添加元素到列表头部或者尾部.最多可以存储2^32-1个元素. Sets: 集合,无序,唯一.最多存储2^32-1个元素. Sorted sets: 有序集合.每个元素有一个分数,根据">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-12T14:32:57.017Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis数据库">
+<meta name="twitter:description" content="数据类型以及应用场景Redis不仅是一个单纯的K-V存储,还是一个数据结构服务器.支持5种数据类型:  字符串String,可以包含任何数据,二进制安全的.最大512MB. Lists: 有序列表,保持插入的顺序.可以添加元素到列表头部或者尾部.最多可以存储2^32-1个元素. Sets: 集合,无序,唯一.最多存储2^32-1个元素. Sorted sets: 有序集合.每个元素有一个分数,根据">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/08/23/redis/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Redis数据库 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/23/redis/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis数据库
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-23 22:00:35" itemprop="dateCreated datePublished" datetime="2019-08-23T22:00:35+08:00">2019-08-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:32:57" itemprop="dateModified" datetime="2019-09-12T22:32:57+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/redis/" itemprop="url" rel="index"><span itemprop="name">redis</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="数据类型以及应用场景"><a href="#数据类型以及应用场景" class="headerlink" title="数据类型以及应用场景"></a>数据类型以及应用场景</h3><p>Redis不仅是一个单纯的K-V存储,还是一个数据结构服务器.支持5种数据类型:</p>
+<ol>
+<li>字符串String,可以包含任何数据,二进制安全的.最大512MB.</li>
+<li>Lists: 有序列表,保持插入的顺序.可以添加元素到列表头部或者尾部.最多可以存储2^32-1个元素.</li>
+<li>Sets: 集合,无序,唯一.最多存储2^32-1个元素.</li>
+<li>Sorted sets: 有序集合.每个元素有一个分数,根据分数从小到大排序.元素唯一,但是分数可以相同.</li>
+<li>字典Hashs: k-v都是String.一个Hash可以存储2^32-1个键值对.适合存储对象.</li>
+<li>HyperLogLog: 基数统计, 在输入元素的数量或者体积非常非常大的时候,计算基数所需空间总是固定的,很小的.基数估计就是在误差范围可接受的情况下快速计算基数(不重复元素).典型应用场景是计算UV, IP数等指标.</li>
+<li>Bit Arrays: 位数组.</li>
+<li>Streams: 类似消息队列.</li>
+<li>GEO: 地理位置信息.典型应用是获取附近x公里的车辆,附近商家等.<a id="more"></a>
+</li>
+</ol>
+<h3 id="Redis-Module"><a href="#Redis-Module" class="headerlink" title="Redis Module"></a>Redis Module</h3><p>Redis 4引入模块,官方推荐一个RedisBloom作为Redis布隆过滤器的Module.</p>
+<p>布隆过滤器原理是通过一个数组和N个hash函数定位,用于判断一个元素是否在集合中.有一定的误判.占用空间小,时间短.判断存在可能有误报,但是判断不存在一定就是不存在.</p>
+<p>应用场景: 防止大量冷数据缓存击穿造成雪崩效应.只有在布隆过滤器中的数据才去查询DB,不在就立刻返回.</p>
+<p>类似的还有RedisSearch一个基于Redis的全文检索引擎.Redis-ML机器学习.</p>
+<h3 id="常见命令"><a href="#常见命令" class="headerlink" title="常见命令"></a>常见命令</h3><p>redis-cli 启动本地客户端.</p>
+<p>redis-cli -h host -p port -a password 连接远程Redis服务.</p>
+<p>常见的操作key的命令有: SET, DEL, DUMP, EXISTS, EXPIRE/EXPIRATE, KEYS, MOVE, PERSIST, PTTL, TTL, RENAME, RENAMENX, TYPE等.</p>
+<p>Redis支持管道命令,即将多个命令发送给服务器,而不用等待回复,最后一起读取回复.只占用一个RTT的时间.</p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>Redis的所有操作都是原子性的.由MULTI开始,EXEC结束的一系列命令集合.</p>
+<p>Redis不支持事务嵌套.事务三个阶段:开启事务MULTI,缓存命令QUEUED,执行命令EXEC.如果exec之前出现错误,一般都会丢弃事务;exec之后出现错误,没有特殊处理(不会回滚),其他命令仍然正常执行.</p>
+<p>不支持回滚的主要原因是Redis命令的失败主要是因为语法错误导致,这些错误在编程时期就能发现并改正.客户端也会针对事务里的错误进行修复.</p>
+<p>WATCH命令提供cas(check-and-set)行为,可以实现乐观锁.</p>
+<h3 id="持久化以及性能分析"><a href="#持久化以及性能分析" class="headerlink" title="持久化以及性能分析"></a>持久化以及性能分析</h3><p>两种方式:RDB指定时间间隔对数据进行快照存储.AOF记录每次对服务器的写操作,类似binlog.Redis还可以对AOF文件进行优化保证文件体积不过大.可以两种方式同时打开,但是Redis会优先载入AOF因为更准确.</p>
+<p>RDB优缺点:</p>
+<ol>
+<li>文件紧凑,单一,方便传送,适合灾难恢复.在数据量大的时候,恢复比AOF更快一些.</li>
+<li>使用fork的子进程处理RDB文件,最大化Redis性能.</li>
+<li><strong>可能会丢失较多数据,取决于快照的时间间隔.</strong></li>
+<li><strong>需要经常fork子进程来保存数据,fork操作耗时,在数据量大并且cpu不好的情况下容易导致Redis短时间无法响应.</strong></li>
+</ol>
+<p>AOF优缺点:</p>
+<ol>
+<li>同步策略多样:无fsync,每秒fsync,每次写的时候fsync.默认使用每秒fsync,由后台线程完成,性能很好.一旦故障,最多丢失一秒钟的数据.</li>
+<li>AOF重写绝对安全,在AOF体积过大时,Redis会创建一个新的AOF文件并准备一个恢复当前数据集所需的最小命令集.如果AOF文件出现错误,也可以使用redis-check-aof工具修复.</li>
+<li>AOF顺序保存所有写入操作,文本可以读懂,容易分析.</li>
+<li><strong>缺点是相对RDB文件体积过大</strong></li>
+<li><strong>根据使用的fsync策略,性能可能低于RDB.关闭fsync的话,可以和RDB一样快.RDB在处理大数据量载入时更好</strong></li>
+</ol>
+<p>推荐同时使用两种持久化方式.如果允许数分钟内的数据丢失,可以只用RDB.</p>
+<p>RDB策略: N秒内数据集至少有M个改动,就自动保存一次数据集.命令如: SAVE 60 1000</p>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>Redis复制的三个特点: 异步复制, 超时部分重同步, 终极大招全量重同步.从节点会跟主节点异步确认同步的数据量.</p>
+<p>注意如果master没有配置持久化时,一定要注意复制的安全性,防止自动重启之后数据被清空(从同步了主的空数据).</p>
+<p>Redis复制是通过replicationId和offset来标识一个master数据集的确切版本的.</p>
+<p>通过Slaveof命令配置主从复制.slave不会让key过期的,而是通过从master复制过来的del命令删除key.</p>
+<h3 id="哨兵"><a href="#哨兵" class="headerlink" title="哨兵"></a>哨兵</h3><p>Sentinel是Redis的高可用方案,负责三个事情: 监控主从是否正常, 问题出现时提醒管理员或者APP, 自动故障迁移.</p>
+<p>Sentinel使用gossip协议接受服务器是否下线的消息;使用agreement协议来决定是否自动故障迁移以及Master选择.</p>
+<p>主观下线和客观下线,有效回复为PONG, LOADING, MASTERDOWN.</p>
+<p>Sentinel会通过sentinel:hello频道进行信息交换来实现自动发现.Sentinel占用26379端口,Redis是6379端口.</p>
+<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><p>Redis 3.0开始提供集群.集群不支持处理多个Key的命令(需要在不同的节点间移动数据,性能不够).集群提供一定的可用性.集群使用主从复制方式提供高可用.但是如果某个节点和它的从节点都故障了,集群就不可用了.</p>
+<p>集群没有使用一致性hash,提供了哈希槽的概念.提供16384个哈希槽.删除和改变某个节点上的哈希槽的数量都不会导致服务不可用.</p>
+<p>Redis集群不能保证数据的强一致性:1是因为使用异步复制,2是因为网络分裂导致新的Master产生.</p>
+<h3 id="整合Lua"><a href="#整合Lua" class="headerlink" title="整合Lua"></a>整合Lua</h3><p>Redis 2.6开始提供EVAL进行Lua脚本求值.Redis保证脚本以原子的方式执行:脚本执行时,没有其他的脚本或者命令在执行.由此注意脚本不能太慢导致其他客户端无法响应.脚本最大执行时间默认是5秒钟.</p>
+<h3 id="消息模式"><a href="#消息模式" class="headerlink" title="消息模式"></a>消息模式</h3><p>发送者(pub)发送消息,订阅者(sub)接收消息.支持基于频道的pubsub,也支持基于模式的.PUB/SUB还可以实现1:N消费对列,即生产一次,消费N次.</p>
+<h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><p>分布式锁的最低要求: 安全,任意一个时刻只有一个人获得;无死锁,即使持有者崩溃或者网络分裂,任然可以被获取;容错,只要大部分redis节点都活着,客户端就可以获取和释放.</p>
+<h4 id="单实例Redis中分布式锁的实现"><a href="#单实例Redis中分布式锁的实现" class="headerlink" title="单实例Redis中分布式锁的实现"></a>单实例Redis中分布式锁的实现</h4><p>使用SETNX(SET if Not eXist)命令.为了防止expire命令之前崩溃,将SET和PX一起使用.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET resource_name my_random_value NX PX 30000</span><br></pre></td></tr></table></figure>
+<p>注意这里的value必须是一个全局唯一的随机值,这么做是为了更安全的释放锁.防止某个客户端因为某个长时间的操作导致锁自动过期后客户端发起释放锁命令导致错误释放掉别人已经获得的锁.</p>
+<h4 id="Redis集群中分布式锁的实现"><a href="#Redis集群中分布式锁的实现" class="headerlink" title="Redis集群中分布式锁的实现"></a>Redis集群中分布式锁的实现</h4><p>在多节点环境中,上述SETNX方案失效:因为Redis主从复制是异步的,在主同步锁信息到从之前,如果主失败了导致锁没有同步到从节点,而此时从升级为主,就会导致有新的客户端能获取到锁.锁互斥性失败.</p>
+<p>参考Redis官方Redlock算法.</p>
+<h3 id="Redis-amp-LRU"><a href="#Redis-amp-LRU" class="headerlink" title="Redis &amp; LRU"></a>Redis &amp; LRU</h3><p>LRU是Redis唯一支持的回收方法.<code>maxmemory</code>配置指令用于配置Redis存储数据时指定限制的内存大小.0表示没有限制.32位系统默认3GB,64位系统默认没有限制.</p>
+<p>当maxmemory限制达到的时候Redis会使用的行为由Redis的maxmemory-policy配置指令来进行配置.</p>
+<p>6大策略: noeviction, allkeys-lru, volatile-lru, allkeys-random, volatile-random, volatile-ttl.volatile表示只在过期的集合keys里释放,这样新添加的数据空间有限.</p>
+<p>一般使用经验:不知道选什么的时候(或者幂律分布)选allkeys-lru.如果是循环访问(几率均等)选allkeys-random.如果缓存对象都设置了ttl,可以选择volatile-ttl.Redis因为内存的大小限制,采用的是近似的LRU算法.可以通过maxmemory-samples来改变采样数,从而调整算法精度.</p>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><ol>
+<li><p>假如Redis里面有1亿个key,其中有10w个key是以某个固定的已知的前缀开头的,如果将它们全部找出来?</p>
+<blockquote>
+<p>KEYS命令可以查找符合给定模式(正则)的所有key.KEYS命令很快,但是仍然有性能担忧.Redis是单线程工作,KEYS可能会阻塞服务器.可以使用SCAN命令循环迭代指定模式的KEY,因为SCAN每次返回的数据很少,不会阻塞服务.但是SCAN回来的数据可能会重复,需要调用方去重,而且整体时间也会长些.</p>
+</blockquote>
+</li>
+<li><p>Redis异步队列?</p>
+<blockquote>
+<p>Redis列表数据类型可以实现FIFO队列,比如RPUSH生产数据,LPOP消费数据.如果需要阻塞行为,可以使用BLPOP命令.如果队列为空,BLPOP将阻塞到直到有客户端PUSH元素为止.</p>
+<p>Redis还可以实现延迟对列,使用有序集合SortedSet,将时间作为score,可以通过ZRANGEBYSCORE过滤.</p>
+</blockquote>
+</li>
+<li><p>大批量key同一时间过期,需要注意什么?</p>
+<blockquote>
+<p>可能会出现卡顿现象,一般都允许过期时间有一定的波动,可以加个随机值使过期时间略微分散一点.</p>
+</blockquote>
+</li>
+<li><p>Sentinel和集群有什么区别?</p>
+<blockquote>
+<p>Sentinel目的是高可用,Cluster除了高可用,还有扩展性.比如内存增加.</p>
+</blockquote>
+</li>
+<li><p>Redis线程模型?</p>
+<blockquote>
+<p>单线程FileEventHandler: IO多路复用EPOLL, EVENT分发器, EVENT处理器.</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/18/inside-jvm/" rel="next" title="JVM知识点">
+                <i class="fa fa-chevron-left"></i> JVM知识点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/25/tcp-protocol/" rel="prev" title="TCP协议">
+                TCP协议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据类型以及应用场景"><span class="nav-number">1.</span> <span class="nav-text">数据类型以及应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-Module"><span class="nav-number">2.</span> <span class="nav-text">Redis Module</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见命令"><span class="nav-number">3.</span> <span class="nav-text">常见命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务"><span class="nav-number">4.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持久化以及性能分析"><span class="nav-number">5.</span> <span class="nav-text">持久化以及性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从复制"><span class="nav-number">6.</span> <span class="nav-text">主从复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哨兵"><span class="nav-number">7.</span> <span class="nav-text">哨兵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集群"><span class="nav-number">8.</span> <span class="nav-text">集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整合Lua"><span class="nav-number">9.</span> <span class="nav-text">整合Lua</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息模式"><span class="nav-number">10.</span> <span class="nav-text">消息模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式锁"><span class="nav-number">11.</span> <span class="nav-text">分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单实例Redis中分布式锁的实现"><span class="nav-number">11.1.</span> <span class="nav-text">单实例Redis中分布式锁的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis集群中分布式锁的实现"><span class="nav-number">11.2.</span> <span class="nav-text">Redis集群中分布式锁的实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-amp-LRU"><span class="nav-number">12.</span> <span class="nav-text">Redis &amp; LRU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">13.</span> <span class="nav-text">常见问题</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

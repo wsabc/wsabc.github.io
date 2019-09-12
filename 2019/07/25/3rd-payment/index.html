@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="第三方支付第三方(没有资金所有权,只中转)支付(需要申请支付业务许可证): 完成货币支付, 资金清算, 查询统计等系列过程. 为什么需要第三方支付? 屏蔽银行支付接口的差异,对外提供统一接入平台,类似中间件. 安全等级和易用性之间平衡,方便用户,提高体验. 大型企业(阿里,腾讯)信用背书.">
+<meta name="keywords" content="payment">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三方支付">
+<meta property="og:url" content="http://wsabc.top/2019/07/25/3rd-payment/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="第三方支付第三方(没有资金所有权,只中转)支付(需要申请支付业务许可证): 完成货币支付, 资金清算, 查询统计等系列过程. 为什么需要第三方支付? 屏蔽银行支付接口的差异,对外提供统一接入平台,类似中间件. 安全等级和易用性之间平衡,方便用户,提高体验. 大型企业(阿里,腾讯)信用背书.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/wsabc/images/raw/master/wechat-pay-sequence.jpg">
+<meta property="og:updated_time" content="2019-09-12T14:25:57.643Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第三方支付">
+<meta name="twitter:description" content="第三方支付第三方(没有资金所有权,只中转)支付(需要申请支付业务许可证): 完成货币支付, 资金清算, 查询统计等系列过程. 为什么需要第三方支付? 屏蔽银行支付接口的差异,对外提供统一接入平台,类似中间件. 安全等级和易用性之间平衡,方便用户,提高体验. 大型企业(阿里,腾讯)信用背书.">
+<meta name="twitter:image" content="https://github.com/wsabc/images/raw/master/wechat-pay-sequence.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/07/25/3rd-payment/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>第三方支付 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/07/25/3rd-payment/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/wsabc.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">第三方支付
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-25 22:00:35" itemprop="dateCreated datePublished" datetime="2019-07-25T22:00:35+08:00">2019-07-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 22:25:57" itemprop="dateModified" datetime="2019-09-12T22:25:57+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/payment/" itemprop="url" rel="index"><span itemprop="name">payment</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="第三方支付"><a href="#第三方支付" class="headerlink" title="第三方支付"></a>第三方支付</h4><p>第三方(没有资金所有权,只中转)支付(需要申请支付业务许可证): 完成货币支付, 资金清算, 查询统计等系列过程.</p>
+<h5 id="为什么需要第三方支付"><a href="#为什么需要第三方支付" class="headerlink" title="为什么需要第三方支付?"></a>为什么需要第三方支付?</h5><ul>
+<li>屏蔽银行支付接口的差异,对外提供统一接入平台,类似中间件.</li>
+<li>安全等级和易用性之间平衡,方便用户,提高体验.</li>
+<li>大型企业(阿里,腾讯)信用背书.<a id="more"></a>
+</li>
+</ul>
+<h5 id="知名品牌"><a href="#知名品牌" class="headerlink" title="知名品牌"></a>知名品牌</h5><ul>
+<li>PayPal</li>
+<li>支付宝(第三方担保交易模式)</li>
+</ul>
+<h5 id="第三方支付牌照"><a href="#第三方支付牌照" class="headerlink" title="第三方支付牌照"></a>第三方支付牌照</h5><p>目前市面上剩余243张牌照正常运营, 同时具备开展互联网支付,移动支付和银行卡收单三项业务的仅有26家.现在非常有名的是支付宝,财付通,银联商务等.</p>
+<h5 id="第三方支付的参与者"><a href="#第三方支付的参与者" class="headerlink" title="第三方支付的参与者"></a>第三方支付的参与者</h5><ul>
+<li><p>三个关键团队: 运营, 风控, 结算.</p>
+<blockquote>
+<p>运营: 负责服务代理商,商户接入.</p>
+<p>风控: 审核商户资质,风险交易,防控反洗钱,盗卡等.</p>
+<p>结算: 负责给代理商分润,商户资金结算.</p>
+</blockquote>
+</li>
+<li><p>六个参与者: 客户, 商户, 代理商, 第三方支付, 卡组织, 发卡方.</p>
+<blockquote>
+<p>客户付钱, 商户卖东西, 代理商帮助第三方支付发展小商户, 大商户直接和第三方支付签约, 卡组织负责提供支付卡信息交换网络, 发卡方负责发卡.</p>
+</blockquote>
+</li>
+<li><p>客户正常付费(没有付多余的钱), 商户负责出手续费.剩下的4个参与者分享手续费.</p>
+</li>
+<li>721分成模式: 手续费的7成归发卡行, 1成归卡组织, 2成归收单行(第三方支付),代理商的由收单行分润.业内一般商户收费都在千6左右.</li>
+</ul>
+<h5 id="监管"><a href="#监管" class="headerlink" title="监管"></a>监管</h5><p>备付金管理, 统一清算, 直连, 间联, 创新业务(二维码支付等).</p>
+<h5 id="盈利模式"><a href="#盈利模式" class="headerlink" title="盈利模式"></a>盈利模式</h5><ul>
+<li>卡组织, 发卡方: 手续费</li>
+<li>第三方支付企业: 电商交易佣金, 电商平台支付解决方案, 沉淀资金利息收入等.</li>
+</ul>
+<hr>
+<h4 id="支付系统演化"><a href="#支付系统演化" class="headerlink" title="支付系统演化"></a>支付系统演化</h4><ol>
+<li>业务代码中接入支付宝,微信支付,没有单独的支付业务表,数据都融合在业务表中.</li>
+<li>业务增长,出现掉单(银行成功扣款,但未到达用户账户),手动更改数据纠正流程.</li>
+<li>退款掉单,超过原路返回期限等情况出现.人工进行干预.</li>
+</ol>
+<p>至此,财务混乱不可避免,需要一个职责明确的支付系统有自动处理机制.</p>
+<h5 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h5><ul>
+<li>交易和支付分开.交易映射业务操作,同时将业务的不确定性屏蔽到支付系统之外.交易和支付是1对多的关系.1笔交易允许拆单支付.</li>
+<li><p>退款路径:原路和非原路, 全额和部分.支付和退款也是1对多的关系.</p>
+</li>
+<li><p>订单防重: 比如订餐支付成功了,但是APP内没有显示成功,也不允许重复支付;又或者重复支付成功了,但是APP内只显示一次成功,之前支付的钱不见了.</p>
+</li>
+</ul>
+<h5 id="常规支付流程"><a href="#常规支付流程" class="headerlink" title="常规支付流程"></a>常规支付流程</h5><p><img src="https://github.com/wsabc/images/raw/master/wechat-pay-sequence.jpg" alt="wechat-pay-sequence"></p>
+<ul>
+<li>支付结果存在不能实时更新的可能(网络原因,服务器自身原因等) — 掉单</li>
+<li>没有及时支付,再支付提示”支付中请勿重复提交” — 防重</li>
+</ul>
+<h5 id="设计点"><a href="#设计点" class="headerlink" title="设计点"></a>设计点</h5><ol>
+<li>异步补偿: 在正常流程中使用旁挂定时的方式扫描系统中一定时间范围内的pending订单,通过主动查询获取订单状态.如果没有查询到还需要使用重复轮询机制,确保订单至最终状态或者失效.<ul>
+<li>最终未付 - 轮询一定次数/时间后订单失效</li>
+<li>收不到支付结果回调 - 轮询时间可能过长(尤其是订单量较大的时候), APP无法及时派单,导致投诉.</li>
+<li>用户未及时支付且订单未失效,系统中交易处于支付中状态,触发防重机制,用户无法再次发起付款.</li>
+</ul>
+</li>
+<li>优化:<ul>
+<li>一笔业务支付订单请求获取一个codis全局锁,查看锁的更新时间,如果&lt;10s,可以认为正在处理,可以防重.</li>
+<li>如果&gt;10s,可能是没有支付,此时应允许重新支付;也可能是掉单.不能区分出来.</li>
+<li>采用1:3订单模型, 1笔业务订单号对应3笔支付订单号,每笔支付订单号的发起条件是上一次支付订单未成功,并且需要将上一次订单放入动态实效队列,进行快速失效处理.</li>
+<li>经过3次支付流水(30s)还未成功,可以基本认定属于恶意点击行为,可以直接拒绝此业务发起重新支付了.</li>
+<li>订单动态实效队列,是为了让处于实效队列并接受到回调的支付请求自动发起原路退回逻辑,并确保不通知商户侧.</li>
+</ul>
+</li>
+</ol>
+<h5 id="微信支付实现"><a href="#微信支付实现" class="headerlink" title="微信支付实现"></a>微信支付实现</h5>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/payment/" rel="tag"># payment</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/25/online-issues/" rel="next" title="线上问题经验总结">
+                <i class="fa fa-chevron-left"></i> 线上问题经验总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/04/java-volatile/" rel="prev" title="Volatile总结">
+                Volatile总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#第三方支付"><span class="nav-number">1.</span> <span class="nav-text">第三方支付</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么需要第三方支付"><span class="nav-number">1.1.</span> <span class="nav-text">为什么需要第三方支付?</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#知名品牌"><span class="nav-number">1.2.</span> <span class="nav-text">知名品牌</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三方支付牌照"><span class="nav-number">1.3.</span> <span class="nav-text">第三方支付牌照</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三方支付的参与者"><span class="nav-number">1.4.</span> <span class="nav-text">第三方支付的参与者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#监管"><span class="nav-number">1.5.</span> <span class="nav-text">监管</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#盈利模式"><span class="nav-number">1.6.</span> <span class="nav-text">盈利模式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#支付系统演化"><span class="nav-number">2.</span> <span class="nav-text">支付系统演化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#系统设计"><span class="nav-number">2.1.</span> <span class="nav-text">系统设计</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常规支付流程"><span class="nav-number">2.2.</span> <span class="nav-text">常规支付流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设计点"><span class="nav-number">2.3.</span> <span class="nav-text">设计点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#微信支付实现"><span class="nav-number">2.4.</span> <span class="nav-text">微信支付实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
