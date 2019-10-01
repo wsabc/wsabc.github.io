@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="SpringSpring框架是目前使用最广泛的框架之一,其核心组件有core,context,beans等,它们3个组成了Spring的骨骼结构.Bean是Spring里的主角,一切都是面向Bean编程.Spring通过依赖注入来管理bean之间的关系,也就是context(Ioc容器).那如何做到发现并管理这些关系呢?就是通过core组件(也就是工具). Ioc具体代码参见AbstractApp">
+<meta name="keywords" content="frameworks,spring,zookeeper,kafka,guava">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础框架">
+<meta property="og:url" content="http://wsabc.top/2019/09/23/java-frameworks/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="SpringSpring框架是目前使用最广泛的框架之一,其核心组件有core,context,beans等,它们3个组成了Spring的骨骼结构.Bean是Spring里的主角,一切都是面向Bean编程.Spring通过依赖注入来管理bean之间的关系,也就是context(Ioc容器).那如何做到发现并管理这些关系呢?就是通过core组件(也就是工具). Ioc具体代码参见AbstractApp">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-01T10:43:51.246Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java基础框架">
+<meta name="twitter:description" content="SpringSpring框架是目前使用最广泛的框架之一,其核心组件有core,context,beans等,它们3个组成了Spring的骨骼结构.Bean是Spring里的主角,一切都是面向Bean编程.Spring通过依赖注入来管理bean之间的关系,也就是context(Ioc容器).那如何做到发现并管理这些关系呢?就是通过core组件(也就是工具). Ioc具体代码参见AbstractApp">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/09/23/java-frameworks/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java基础框架 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">63</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">39</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">47</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/09/23/java-frameworks/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java基础框架
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-23 12:07:35" itemprop="dateCreated datePublished" datetime="2019-09-23T12:07:35+08:00">2019-09-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-01 18:43:51" itemprop="dateModified" datetime="2019-10-01T18:43:51+08:00">2019-10-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/frameworks/" itemprop="url" rel="index"><span itemprop="name">frameworks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h4><p>Spring框架是目前使用最广泛的框架之一,其核心组件有core,context,beans等,它们3个组成了Spring的骨骼结构.Bean是Spring里的主角,一切都是面向Bean编程.Spring通过依赖注入来管理bean之间的关系,也就是context(Ioc容器).那如何做到发现并管理这些关系呢?就是通过core组件(也就是工具).</p>
+<p>Ioc具体代码参见<code>AbstractApplicationContext #refresh()</code>方法.<br><a id="more"></a></p>
+<h5 id="Bean-生命周期"><a href="#Bean-生命周期" class="headerlink" title="Bean 生命周期"></a>Bean 生命周期</h5><p>Spring提供2种类型的bean:单例和prototype.单例bean的生命周期由Spring管理.prototype类型的bean创建以后就由使用者负责管理.</p>
+<ol>
+<li>实例化,并填装属性.</li>
+<li>调用<code>BeanNameAware#setBeanName</code>方法.</li>
+<li>调用<code>BeanFactoryAware#setBeanFactory</code>方法.</li>
+<li>调用<code>ApplicationContextAware#setApplicationContext</code>方法.</li>
+<li>调用<code>BeanPostProcessor#postProcessBeforeInitialization</code>方法.</li>
+<li>调用<code>InitializingBean#afterPropertiesSet</code>方法.</li>
+<li>调用定制化的<code>init-method</code>方法.</li>
+<li>调用<code>BeanPostProcessor#postProcessAfterInitialization</code>方法.</li>
+</ol>
+<p>到此为止,bean准备好了.一旦容器关闭,则调用如下:</p>
+<ol>
+<li>调用<code>DisposableBean#destroy</code>方法.</li>
+<li>调用定制化的<code>destroy-method</code>方法.</li>
+</ol>
+<p>具体到编程实践中,如创建和销毁hook可以使用<code>@PostConstruct</code>以及<code>@PreDestroy</code>实现;也可以实现<code>InitializingBean, DisposableBean</code>这2个接口;也可以通过<code>@Bean(initMethod = &quot;start&quot;, destroyMethod = &quot;destroy&quot;)</code>指定.</p>
+<p>类似的实现<code>xxAware</code>接口,也就可以在bean初始化阶段获得Spring中一些核心对象,如<code>ApplicationContext</code>.</p>
+<p>注意: <code>BeanPostProcessor</code>接口会干预Spring中所有bean的初始化,可以通过beanName进行区分对待.</p>
+<h5 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h5><p>面向切面编程.Spring AOP是基于动态代理实现的.</p>
+<p><strong>代理模式</strong></p>
+<p>代理模式是一种结构型模式,通过组装目标类,在不改变目标类的前提下,提供额外的功能来增强目标类.</p>
+<p><strong>静态代理</strong></p>
+<p>缺点: 一个目标类有一个代理导致类数量增长太快;不易维护,一旦目标类修改就需要修改代理类.</p>
+<p><strong>动态代理</strong></p>
+<p>利用反射,在内存中构建代理对象.目标对象一定要实现接口,否则无法代理.因为ProxyGenerator 生成的代理类继承了Proxy类,而Java是单继承的,因此只能通过接口约束.</p>
+<blockquote>
+<p>为什么代理类一定要继承 Proxy?设计使然.如果继承目标类,一是会继承目标类的字段,造成大量内存浪费,没有必要.二是如果目标类有Final方法将导致代理类无法覆盖这个方法.</p>
+</blockquote>
+<p>好处: 类数量固定了.可以在<code>InvocationHandler</code>上做文章,AOP既是如此(关联多个interceptor).</p>
+<p><strong>CGLIB 动态代理</strong></p>
+<p>CGLib采用了字节码技术(ASM开源包)为一个类创建子类,并在子类中采用方法拦截的技术拦截所有父类方法的调用,顺势织入横切逻辑.</p>
+<p>和 JDK代理很像,Enhancer类似 Proxy,MethodInterceptor 类似 InvocationHandler.最终调用<code>methodProxy.invokeSuper(obj,args)</code>.</p>
+<p>注意: 代理最终都是委托目标对象,如果调用时使用了 proxy 对象,会导致无限循环最终 StackoverflowError.</p>
+<p>如果实现了接口,默认采用 JDK 动态代理实现 AOP,也可以强制使用 CGlib 实现 AOP.如果没有实现接口,就必须采用 CGLIB 库.但是 CGLib 不能代理 final 类,也不能代理 final 方法.</p>
+<p>注意: JDK6 之前 CGLib 效率高于 JDK 动态代理;到 JDK8 已经反超了.</p>
+<h5 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h5><p>Spring中大量使用设计模式,有代理模式(AOP),策略模式(选择代理方式等).</p>
+<h4 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h4><p>Kafka是一个分布式的流处理平台.提供MQ功能,以及高容错存储流,按顺序消费流的能力.</p>
+<p>Kafka架构中有多个Producer,多个Broker,多个Consumer.每个Producer可以对应多个Topic,每个Consumer只能对应一个ConsumerGroup.架构中还有一个ZooKeeper集群管理Kafka集群配置,如选举Leader,以及在consumer group发生变化时进行rebalance.</p>
+<ul>
+<li>Broker: 消息中间件处理节点,一个Kafka节点就是一个broker,一个或者多个Broker可以组成一个Kafka集群.</li>
+<li>Producer: 消息生产者,向Broker发送消息的客户端.</li>
+<li>Consumer: 消息消费者,从Broker读取消息的客户端.</li>
+<li>ConsumerGroup: 每个Consumer属于一个特定的Group,一条消息可以发送到多个不同的Group,但是一个Group中只能有一个Consumer能够消费该消息.</li>
+<li>Topic: Kafka根据主题Topic对消息进行分类,发布到Kafka的每条消息都需要一个Topic.</li>
+<li>Partition: Topic物理上的分组,一个topic可以分为多个partition,每个partition内部是有序的.</li>
+</ul>
+<p><strong>Kafka发送消息过程</strong></p>
+<ol>
+<li>初始化Producer以及真正发送消息的 <code>kafka-producer-network-thread</code> IO 线程</li>
+<li>将消息序列化</li>
+<li>得到需要发送的分区,默认轮询算法(消息数 % Topic分区数)</li>
+<li>写入内部的一个缓存区中</li>
+<li>初始化的 IO 线程不断的消费这个缓存来发送消息</li>
+</ol>
+<p><strong>Kafka 文件存储</strong></p>
+<p>Kafka 的数据都存在文件里.根目录由<code>log.dirs</code>指定.一个 topic 一个目录,根据 partition 的数量再分散.例如:</p>
+<p>report主题有 4 个分区,那就有 4 个目录:<code>report-0,report-1,report-2,report-3</code>.</p>
+<p>每个 partition 目录其实就是一个抽象的巨型文件,里面细化成 N 个 segment 数据文件.每个 segment 大小相等,但是包含的消息数量不一定相等.每个分区顺序读写.</p>
+<p>segment 数据文件包含 2 部分:一部分是索引 index,一部分是数据 log.segment 文件命名规则是全局第一个从 0 开始,后续的每个都是第一个最后一条消息的 offset 值.数值最大 64 位,一共 19 个数字长度,前置 0 填充.</p>
+<p>根据二分查找,可以很快定位某个 offset 在哪个 segment 文件中,然后通过 index 找到消息的物理偏移地址即可.</p>
+<p><strong>副本机制</strong></p>
+<p>Kafka的副本机制是多个服务端节点对其他节点的主题分区的日志进行复制.当集群中的某个节点出现故障,访问故障节点的请求会被转移到其他正常节点(这一过程通常叫Reblance),kafka每个主题的每个分区都有一个主副本以及0个或者多个副本,副本保持和主副本的数据同步,当主副本出故障时就会被替代.</p>
+<p>副本升级成主副本的条件:</p>
+<ol>
+<li><p>节点必须和ZK保持连接</p>
+</li>
+<li><p>在同步的过程中这个副本不能落后主副本太多</p>
+</li>
+</ol>
+<h4 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h4><p>ZK 是一个开源的分布式协调服务,它监视集群中各个节点状态,根据节点反馈进行下一步操作,并对外暴露简单,高效,稳定的 API.</p>
+<p>ZK 提供类似文件系统的数据结构.一个根节点,下面是子节点.每个目录(节点)称为一个 znode,是可以存储数据的.可以自由的添加删除 znode.</p>
+<p>节点有4 种类型: 从客户端和 zk 断开连接后,节点是否存在分为持久化节点和临时节点.临时节点就是连接断开后节点被删除.从是否编号分为普通节点和编号节点.编号节点会有 zk 给的顺序编号.</p>
+<p>客户端监听自己关心的节点,一旦节点发生变化(数据变化,被删除,或者增加子节点)时,zk 会通知客户端.</p>
+<p><strong>ZK 常见用法: 命名服务, 配置管理, 集群管理, 分布式锁, 队列管理</strong></p>
+<p>命名服务: 分布式应用中通常需要有一套完整的命名规则,既能够产生唯一的名称又便于人识别和记住,通常情况下用树形的名称结构是一个理想的选择.类似 JNDI,但是zk 不需要进行真的资源关联,可以只提供一个分布式 ID.</p>
+<p>配置管理: 配置集中放在 zk 上,相关客户端监听该节点,一旦发生变化,zk 通知给各个客户端.类似 SB 中的 config_server.</p>
+<p>集群管理: 负责管理节点加入或者退出以及选举Leader.设置一个节点 GroupMembers 并关注其子节点变化.每个分布式服务器节点对应GroupMembers 下的临时节点.还可以通过编号来进行选举 Master(如编号最小当选).</p>
+<p>分布式锁: 通过竞争来创建临时节点,谁创建成功谁就获得锁.独占式的,用完删除节点即释放锁.如果想控制时序,可以通过在分布式锁节点下创建临时节点,最小的编号获得锁,用完删除,依次更替锁持有者.</p>
+<p>队列管理: 同步队列,一个队列里的所有成员都到齐了才能用,否则一直等待;FIFO 队列,按照编号来.</p>
+<p>zk 分 Leader, Follower, Observer三个角色.Leader 负责投票发起和决议以及更新系统状态;Follower负责客户端请求接受和响应,同时参与投票;Observer可以接受客户端请求,负责将写请求分发到 Leader,但是不负责投票,值同步 Leader 状态,Observer 的目的是为了扩展系统,提高读取速度.</p>
+<p><strong>ZK 概念</strong></p>
+<p>会话: 客户端到 zk 是TCP长连接,负责心跳,请求响应以及Watch 事件通知.sessionID 全局唯一;sessionTimeout 时间内重连之前的会话仍然有效.</p>
+<p>zxid: 对于客户端的每个请求,zk 都会分配一个全局的递增 ID反应所有事务的先后顺序.</p>
+<p>ZAB: zk 原子广播协议, 为 zk 设计的一种支持崩溃恢复的原子广播协议.当整个服务框架在启动过程中,或是当 Leader 服务器出现网络中断,崩溃退出与重启等异常情况时,ZAB 协议就会进人恢复模式并选举产生新的Leader服务器.当选举产生了新的 Leader 服务器,同时集群中已经有过半的机器与该Leader服务器完成了状态(即数据)同步之后,ZAB协议就会退出恢复模式.</p>
+<p><strong>ZK不适合做服务发现</strong></p>
+<p>Network Partition(网络分区,脑裂综合征): 网络波动导致的集群割裂成 2 个或者更多的小集群,并且小集群认为对方已死(实际上没有).网络失败无法避免,因此需要考虑的是当网络恢复时小集群能不能再次融合,一旦融合,数据一致性怎么保证.</p>
+<p>注册中心应该偏向 AP 而不是 CP.数据不一致会导致短暂的流量不均衡,但是很快就会修复;CP 会为了保证脑裂情况下数据一致性而放弃可用性,导致同机房的服务之间无法调用(实际是通的).但是原则是<strong>注册中心不能因为自身的任何原因破坏服务之间本身的可连通性</strong>. ZK 是 CP, Eureka 是 AP.</p>
+<p>ZK 的服务发现和健康监测都是基于 TCP 长连接的; ZK还会保留每个写请求的事务日志,以及定期的内存镜像;因此当服务规模增长以后,ZK 很可能不堪重负.</p>
+<p>ZK 提供了好的工具集合,但是客户端代码不易掌握和维护.</p>
+<p>在粗粒度分布式锁,分布式选主,主备高可用切换等不需要高 TPS 支持的场景下ZK有不可替代的作用,而这些需求往往多集中在大数据,离线任务等相关的业务领域,因为大数据领域,讲究分割数据集,并且大部分时间分任务多进程 / 线程并行处理这些数据集,但是总是有一些点上需要将这些任务和进程统一协调,这时候就是 ZooKeeper 发挥巨大作用的用武之地.</p>
+<p>但是在交易场景交易链路上,在主业务数据存取,大规模服务发现,大规模健康监测等方面有天然的短板,应该竭力避免在这些场景下引入 ZooKeeper.</p>
+<p><strong>ZK 写不可水平扩展</strong></p>
+<p>ZK 设计目标:</p>
+<p>最终一致性; 可靠性; 实时性; 等待无关(每个 client 互不干扰); 原子性; 顺序性(全局有序和偏序).</p>
+<p>选举</p>
+<p>非公平选主: 节点同时注册<code>Ephemeral, Non-sequence</code>的znode,只有一个成功,成功即为 Leader.如要主动放弃领导权力,删除 znode 即可.如果意外宕机,znode 会被自动删除.剩余节点会收到通知并重新选主.</p>
+<p>公平选主: 节点同时创建<code>Ephemeral, Sequence</code>的 znode,由 zk 编号.每个客户端都会判断自己创建成功的节点的序号是不是当前最小的,如果是,则该客户端为 Leader.重新选主按照编号顺序进行,编号大的关注前一个编号小的,依次获取 Leader 位置.</p>
+<h4 id="Guava"><a href="#Guava" class="headerlink" title="Guava"></a>Guava</h4><p>Guava 是 Google 出品的 Java 核心增强库,涉及基础工具, PrimitiveSupport, StringProcess, IO, Collection, Cache, Concurrent等多个方面.</p>
+<ol>
+<li>原生类型支持. 使用前先查找 Java 包装类和 Arrays 类.原生类型不能当作对象或泛型的类型参数使用,这意味着许多通用方法都不能用,Guava提供了若干通用工具,包括原生类型数组与集合API的交互,原生类型和字节数组的相互转换,以及对某些原生类型的无符号形式的支持.</li>
+<li>基础工具: 包括 Optional, </li>
+</ol>
+<blockquote>
+<ul>
+<li>Optional 强迫使用者考虑引用缺失的情况.直接使用null很容易让人忘掉某些情形.</li>
+<li>Preconditions 提供了语义明确的前置条件判断.</li>
+<li>Objects(MoreObjects)提供了如 equals, hashcode, toString, compare 等方法.</li>
+<li>Ordering 提供了一些基础的比较器,适合 JDK8 之前的用户使用.</li>
+<li>Throwables 简化异常和错误的传播与检查.适用于 JDK7 以前的用户.</li>
+</ul>
+</blockquote>
+<ol start="3">
+<li>字符串处理: 线程安全的 Joiner, Splitter,以及 CharMatcher 和 CaseFormat.</li>
+<li>函数式风格. 慎用.</li>
+<li>区间. 数学开闭区间的实现.</li>
+<li>数学运算. 针对各种溢出计算进行快速失败处理而不是忽略.API 语义清晰易读,性能也很好.</li>
+<li>散列计算. JDK 内置的散列数被限制为 32 位,而且散列码劣质,才有了 Guava 的散列函数.由 HashFunction,Hasher,Funnel 组成.典型应用有 BloomFilter.</li>
+<li>IO. 简化 IO 操作,提供ByteStreams, CharStreams, ByteSource, ByteSink, CharSource 和 CharSink等.</li>
+<li>反射,事件总线等.</li>
+</ol>
+<h5 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h5><ol>
+<li>不可变集合. 不可变使得线程安全,时间和空间上都节省资源.JDK 也提供类似的方法<code>Collections.unmodifiableXXX</code>但是低效,不安全.<em>注意所有Guava不可变集合的实现都不接受null值</em>.主要使用of,copyOf,asList等方法.</li>
+<li>新集合类型: Guava添加了multisets, multimaps, tables, bidirectional maps等.<blockquote>
+<ul>
+<li>Multiset既是没有元素顺序限制的ArrayList<e>,也是Map&lt;E, Integer&gt;(键为元素,值为计数).</e></li>
+<li>MultiMap提供类似Map&lt;K, List<v>&gt;这种结构.把一个键映射到多个值.</v></li>
+<li>BiMap实现键值对的双向映射.</li>
+<li>Table类似Map&lt;FirstName, Map&lt;LastName, Person&gt;&gt;使用多个键做索引.</li>
+<li>还有ClassToInstanceMap, RangeSet, RangeMap等.</li>
+</ul>
+</blockquote>
+</li>
+<li>集合工具类.Guava提供了很多静态方法,易用.比如JDK7之前就提供了泛型的类型推导.还有初始化即可指定起始元素,Iterables助手类等.</li>
+<li>易于扩展.提供Forwarding装饰器,PeekingIterator等.</li>
+</ol>
+<h5 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h5><p>Guava适应场景(与ConcurrentMap的区别是后者会一直保存所有添加的元素,直到显式地移除.Guava Cache为了限制内存占用,通常都设定为自动回收元素):</p>
+<ol>
+<li>以空间换时间来提升速度.</li>
+<li>某些值会被查询一次以上.</li>
+<li>缓存中的数据不会超过内存,Guava是JVM本地缓存.</li>
+</ol>
+<p>加载:推荐使用自动加载<code>CacheLoader</code>,而非显示插入.</p>
+<ol>
+<li>一旦CacheLoader声明了检查型异常,就不可以调用getUnchecked(K).</li>
+<li>不管有没有自动加载功能，都支持<code>get(K, Callable)</code>方法,这个方法简便地实现了模式”如果有缓存则返回,否则运算,缓存,然后返回”.</li>
+</ol>
+<p>回收:</p>
+<ul>
+<li>基于容量回收,使用<code>CacheBuilder.maximumSize(long)</code>或者<code>maximumWeight</code>.</li>
+<li>定时回收,使用<code>expireAfterAccess</code>或者<code>expireAfterWrite</code>.</li>
+<li>基于引用回收, 通过使用弱引用的键,弱引用的值,或软引用的值,可以把缓存设置为允许垃圾回收.</li>
+<li>手动回收, <code>Cache.invalidate</code>(key),<code>invalidateAll(keys)</code>或者<code>invalidateAll()</code></li>
+</ul>
+<p>使用CacheBuilder构建的缓存不会”自动”执行清理和回收工作,也不会在某个缓存项过期后马上清理,也没有诸如此类的清理机制.它会在写操作时顺带做少量的维护工作,或者偶尔在读操作时做——如果写操作实在太少的话.这样做的原因在于:如果要自动地持续清理缓存,就必须有一个线程,这个线程会和用户操作竞争共享锁,此外,某些环境下线程创建可能受限制,这样CacheBuilder就不可用了.</p>
+<h5 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h5><p><code>ListenableFuture</code>可以允许你注册回调方法,在运算(多线程执行)完成的时候进行调用,或者在运算(多线程执行)完成后立即执行.这些 API 优势在 JDK8 后已经不存在了.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/frameworks/" rel="tag"># frameworks</a>
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
+          
+            <a href="/tags/kafka/" rel="tag"># kafka</a>
+          
+            <a href="/tags/guava/" rel="tag"># guava</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/how-to-learn/" rel="next" title="如何学习">
+                <i class="fa fa-chevron-left"></i> 如何学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/25/basic-data-structure/" rel="prev" title="基础数据结构">
+                基础数据结构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/young-leslie-cartoon.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring"><span class="nav-number">1.</span> <span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Bean-生命周期"><span class="nav-number">1.1.</span> <span class="nav-text">Bean 生命周期</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AOP"><span class="nav-number">1.2.</span> <span class="nav-text">AOP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设计模式"><span class="nav-number">1.3.</span> <span class="nav-text">设计模式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kafka"><span class="nav-number">2.</span> <span class="nav-text">Kafka</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zookeeper"><span class="nav-number">3.</span> <span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Guava"><span class="nav-number">4.</span> <span class="nav-text">Guava</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#集合"><span class="nav-number">4.1.</span> <span class="nav-text">集合</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缓存"><span class="nav-number">4.2.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#并发"><span class="nav-number">4.3.</span> <span class="nav-text">并发</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

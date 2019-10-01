@@ -106,7 +106,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/wsabc/images/raw/master/reliable-msg.jpg">
 <meta property="og:image" content="https://github.com/wsabc/images/raw/master/rocketmq.jpg">
-<meta property="og:updated_time" content="2019-07-04T14:59:06.961Z">
+<meta property="og:updated_time" content="2019-09-30T00:31:39.894Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式系统开发">
 <meta name="twitter:description" content="分布式系统开发什么是分布式系统?第一映像: 不同地点, 不同规模, 不同目的, 彼此联系, 复杂, 异构系统.  横看成岭侧成峰,远近高低各不同  常见误区 分布式系统 == SOA/ESB/微服务  服务化的本质是”分而治之”.分治的手段就是拆分,拆成高内聚,低耦合的独立模块组以降低协作复杂度.怎么拆的具体手段很多,SOA/ESB/MS等并不是关键.关键的是拆分的原则(怎么梳理,归类,封装).">
@@ -244,7 +244,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">63</span></a>
 
   </li>
         
@@ -263,7 +263,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">39</span></a>
 
   </li>
         
@@ -282,7 +282,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">47</span></a>
 
   </li>
 
@@ -339,7 +339,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wsabc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -377,12 +377,24 @@
                 
               
 
-              <time title="创建时间：2019-07-04 22:49:54 / 修改时间：22:59:06" itemprop="dateCreated datePublished" datetime="2019-07-04T22:49:54+08:00">2019-07-04</time>
+              <time title="创建时间：2019-07-04 22:49:54" itemprop="dateCreated datePublished" datetime="2019-07-04T22:49:54+08:00">2019-07-04</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-30 08:31:39" itemprop="dateModified" datetime="2019-09-30T08:31:39+08:00">2019-09-30</time>
               
             
           </span>
@@ -453,7 +465,7 @@
 </li>
 <li><p>分布式系统 ? 中间件(总会提到各种中间件的名字)</p>
 <blockquote>
-<p>中间件的本质是”标准化”.中间件是为了解决一类问题(或者解决差异化)的工具.比如MQ解决异步通信,RPC解决实时通信,DAL统一数据访问.</p>
+<p>中间件的本质是”标准化”.中间件是为了解决一类问题(或者解决差异化)的工具.比如MQ解决异步通信,RPC解决实时通信,DAL统一数据访问.分布式系统会用到各种中间件.</p>
 </blockquote>
 </li>
 <li><p>单系统 + 单数据库 != 分布式系统</p>
@@ -471,11 +483,11 @@
 <p>内聚度: 模块内的元素之间的联系紧密程度.</p>
 </blockquote>
 </li>
-<li><p>冗余: 一定范围内的故障,不影响整个系统的运作.包含软件,硬件.</p>
+<li><p>冗余: 冗余使得一定范围内的故障不会影响整个系统的运作.包含软件,硬件.</p>
 </li>
-<li>再连接: 注意可能存在单点(中心化),也可能是去中心化.技术上注意通信协议与序列化机制(比如高性能使用TCP代替HTTP,高吞吐使用UDP代替TCP).</li>
+<li>再连接: 分治的系统最终还要在一起协同工作,这就是再连接.注意可能存在单点(中心化),也可能是去中心化.技术上注意通信协议与序列化机制(比如高性能使用TCP代替HTTP,高吞吐使用UDP代替TCP).</li>
 </ul>
-<h5 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h5><p>1998 分布式3个指标: Consistency, Availability, Partition Tolerance. 这三个指标不可能同时满足.</p>
+<h5 id="CAP定理"><a href="#CAP定理" class="headerlink" title="CAP定理"></a>CAP定理</h5><p>1998年提出分布式3个指标: Consistency, Availability, Partition Tolerance. 这三个指标不可能同时满足.</p>
 <ul>
 <li>Partition Tolerance(分区容错): 无法避免.系统设计必须考虑这种情况.</li>
 <li>Consistency(一致性): 分区之间数据要保持一致.</li>
@@ -490,9 +502,98 @@
 <p>RocketMQ 4.3+实现了上述可靠消息系统的所有功能,并且在高并发,高可用,高性能方面做了更好的实现.</p>
 <p><img src="https://github.com/wsabc/images/raw/master/rocketmq.jpg" alt="RocketMQ事务消息"></p>
 <p><strong>支付系统是一个复杂的系统，要完全实现数据的一致性单靠某一种手段是无法实现的</strong>,大部分情况下我们可以通过额外的业务补偿逻辑(如二次支付订单状态轮询, T+1对账等)来实现数据最终一致性,只是这样补偿逻辑需要以更多的业务开发逻辑为代价,并且在时效性上会存在延迟的问题.</p>
-<h5 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h5><ol>
-<li>分布式ID - snowflake(64bit, 0-41bittime-10bitmachineid-12bitseq),可以具体调节machineid.</li>
-<li>先写DB还是先写缓存 - 先DB再缓存.带事务操作,一旦写缓存失败,回滚事务.极端情况下回滚失败,此时需要写缓存变成删缓存–通过reload重建来解决不一致性.DB高可用的情况下(reload可能集中从库),需要订阅binlog变化主动清理缓存.</li>
+<h5 id="细节-分布式-ID"><a href="#细节-分布式-ID" class="headerlink" title="细节-分布式 ID"></a>细节-分布式 ID</h5><p>分布式系统中一个重要的业务属性就是分布式 ID,比如订单 ID,消息 ID 等.都要求<strong>唯一性,自增性</strong>.</p>
+<p>唯一性用来全局定位业务数据.自增性保证新入数据 ID 总是比老的大,易于索引维护(可以直接追加,而不是中间插入导致索引树裂变)提高性能,也能用于分页优化.</p>
+<p>常见的分布式 ID 生成策略:</p>
+<ol>
+<li>基于数据库<code>auto_increment</code>生成自增的,唯一的 ID.</li>
+</ol>
+<blockquote>
+<p>优点: 简单直接</p>
+<p>缺点: 严重依赖数据库(单点);也不利于水平扩展(ID 重复冲突).</p>
+<p>改进: 利用水平扩展保证可用性,同时利用不同的自增步长解决重复冲突(一旦固定了步长就不好再水平扩展了).适用于简单系统.</p>
+</blockquote>
+<ol start="2">
+<li>采用UUID生成唯一 ID.</li>
+</ol>
+<blockquote>
+<p>优点: 本地代码生成,快速,唯一.</p>
+<p>缺点: 没有自增性,是个无序的字符串序列,不适合作为主键.</p>
+</blockquote>
+<ol start="3">
+<li>组合 ID(业务 ID+本地时间)</li>
+</ol>
+<blockquote>
+<p>优点: 生成快速,通过时间能做到自增趋势.</p>
+<p>缺点: 无法应用于高并发的场合(本地时间不能保证唯一性了)</p>
+</blockquote>
+<ol start="4">
+<li>Twitter 雪花算法snowflake</li>
+</ol>
+<blockquote>
+<p> 优点: 唯一,自增.一共有 64 bit. 0 保留, 41bit 时间(69 年), 10bit 机器 ID(分为数据中心 id 和工作机器 id), 12bit 业务 ID.能适应高并发场景.</p>
+<p>缺点: 复杂</p>
+</blockquote>
+<h5 id="细节-分布式缓存"><a href="#细节-分布式缓存" class="headerlink" title="细节-分布式缓存"></a>细节-分布式缓存</h5><p>现在多采用分层缓存设计.从用户到服务器端,可能经历客户端缓存 — CDN 缓存 — 负载均衡缓存 — 进程内缓存 — 分布式缓存 — DB 这一复杂路径.需要后端负责的大多在进程内缓存和分布式缓存两个节点.</p>
+<p>请求会先查找本地缓存,没有就进入分布式缓存查找,还没有则进入 DB查找.命中之后写回到缓存中.</p>
+<p>缓存设计注意的几个点:</p>
+<ol>
+<li>缓存写入顺序</li>
+</ol>
+<blockquote>
+<p>一般是先写 DB 再写缓存.而且一般也不建议将缓存写入放到事务中以免导致长事务.缓存和数据源的一致性问题很难做到精确控制.一般有几个策略:</p>
+<ul>
+<li>1缓存设置过期时间,过期自动删除,从数据源重建.代码简单,但是不一致的时间取决于过期时间.</li>
+<li>2发生数据写入时<strong>删除</strong>缓存.等待下一次访问重建.一致性有很大提高,大多数场景都可以适应.</li>
+<li>3使用定时任务更新缓存,不一致时间取决于定时任务的执行间隔;或者是队列的产生,消费的延迟.</li>
+</ul>
+<p>一般都是 1+2 结合使用.无论哪种方案,都难以保证一致性.只能接受最终一致性,或者使用单点(没有一致性问题).在数据源高可用的情况下就更复杂了.</p>
+<p>为什么数据源写入成功时要删缓存?而不是写缓存?</p>
+<ul>
+<li>在多线程环境下[先写 DB 再写 Redis 会导致脏数据],同样[先删 Redis 再写 DB]也会有脏数据.[先写 db 再删 redis]也不能完全保证没有脏数据,但是概率低了.</li>
+</ul>
+</blockquote>
+<ol start="2">
+<li>原子性写入</li>
+</ol>
+<blockquote>
+<p>在多个进程同时写入缓存的时候,有可能出现脏数据.比如各个节点累加统计数据的场景.此时需要做一些排他控制.常见思路有:</p>
+<ul>
+<li>通过消息队列缓存各个进程的消息,由消费者单线程更新缓存.</li>
+<li>使用分布式锁,只有获取到锁的进程才能更新缓存.</li>
+</ul>
+</blockquote>
+<ol start="3">
+<li>路径(负载)一致性</li>
+</ol>
+<blockquote>
+<p>在分布式环境中,一般都希望请求路径一致,即 a 节点上的数据始终路由到 a 节点上.这样利于本地缓存命中.一般的负载策略有: 轮询机制; 一致性哈希算法.</p>
+</blockquote>
+<ol start="4">
+<li>缓存击穿处理</li>
+</ol>
+<blockquote>
+<p>缓存击穿瞬间会导致大量请求同时访问数据源,导致 DB 负载过重.一般会通过设置一个互斥锁(如<code>SETNX</code>),抢到锁的请求可以访问 DB 重建缓存;抢不到锁的可以延迟若干时间,再从缓存获取(一般都有了).</p>
+</blockquote>
+<h5 id="细节-分布式限流"><a href="#细节-分布式限流" class="headerlink" title="细节-分布式限流"></a>细节-分布式限流</h5><p>要想做到分布式全局限流,一般需要一个第三方组件来记录请求次数.例如用 Redis 记录每秒的请求次数,方案如下:</p>
+<ol>
+<li><p>每次请求时将当前时间(精确到秒)作为 Key 写入到 Redis 中,超时时间设置为 2 秒,Redis 将该 Key 的值进行自增.</p>
+</li>
+<li><p>当达到阈值时返回错误.</p>
+</li>
+<li><p>写入 Redis 的操作用 Lua 脚本来完成,利用 Redis 的单线程机制可以保证每个 Redis 请求的原子性.</p>
+</li>
+</ol>
+<h5 id="细节-分布式锁"><a href="#细节-分布式锁" class="headerlink" title="细节-分布式锁"></a>细节-分布式锁</h5><p>分布式由于是多进程协作,原来的多线程同步机制就不适用了.需要利用第三方组件的特性来达到排他性,如数据库唯一索引机制; Zookeeper 的临时有序节点; Redis 的 SETNX EX 命令.</p>
+<ol>
+<li>SETNX EX原子操作,不存在key 的情况下才能写入成功.超时自动释放锁.</li>
+<li>阻塞可以使用无限循环+Sleep(防止过度使用 CPU)来实现.</li>
+<li>解锁时为了防止某个进程执行时间超长,释放锁的时候可能会释放掉其他线程拥有的锁,需要加入值的判断,只有自己的加的锁才能释放.</li>
+</ol>
+<p>需要考虑的细节:</p>
+<ol>
+<li>执行时间过长锁自动释放,会导致并发问题(后续进程很快获得锁,导致不一致性).</li>
+<li>Redis 宕机相当于自动释放了所有锁,也会导致并发问题.即使有主从结构,也会因为主从切换引入并发问题.</li>
 </ol>
 
       
@@ -540,8 +641,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/25/online-issues/" rel="prev" title="线上问题经验总结">
-                线上问题经验总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/25/3rd-payment/" rel="prev" title="第三方支付">
+                第三方支付 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -601,7 +702,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+              <img class="site-author-image" itemprop="image" src="/images/young-leslie-cartoon.png" alt="wsabc">
             
               <p class="site-author-name" itemprop="name">wsabc</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -614,7 +715,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -683,7 +784,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">28</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -762,7 +885,67 @@
                     
                       
                     
-                    <span class="site-state-item-count">33</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -813,7 +996,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式系统开发"><span class="nav-number">1.</span> <span class="nav-text">分布式系统开发</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#什么是分布式系统"><span class="nav-number">1.1.</span> <span class="nav-text">什么是分布式系统?</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常见误区"><span class="nav-number">1.2.</span> <span class="nav-text">常见误区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本质"><span class="nav-number">1.3.</span> <span class="nav-text">本质</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CAP"><span class="nav-number">1.4.</span> <span class="nav-text">CAP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最终一致性"><span class="nav-number">1.5.</span> <span class="nav-text">最终一致性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#细节"><span class="nav-number">1.6.</span> <span class="nav-text">细节</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式系统开发"><span class="nav-number">1.</span> <span class="nav-text">分布式系统开发</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#什么是分布式系统"><span class="nav-number">1.1.</span> <span class="nav-text">什么是分布式系统?</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常见误区"><span class="nav-number">1.2.</span> <span class="nav-text">常见误区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本质"><span class="nav-number">1.3.</span> <span class="nav-text">本质</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CAP定理"><span class="nav-number">1.4.</span> <span class="nav-text">CAP定理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最终一致性"><span class="nav-number">1.5.</span> <span class="nav-text">最终一致性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#细节-分布式-ID"><span class="nav-number">1.6.</span> <span class="nav-text">细节-分布式 ID</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#细节-分布式缓存"><span class="nav-number">1.7.</span> <span class="nav-text">细节-分布式缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#细节-分布式限流"><span class="nav-number">1.8.</span> <span class="nav-text">细节-分布式限流</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#细节-分布式锁"><span class="nav-number">1.9.</span> <span class="nav-text">细节-分布式锁</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -237,7 +237,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">63</span></a>
 
   </li>
         
@@ -256,7 +256,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">39</span></a>
 
   </li>
         
@@ -275,7 +275,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">47</span></a>
 
   </li>
 
@@ -327,12 +327,766 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/09/30/java-thread-2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/09/30/java-thread-2/" class="post-title-link" itemprop="url">多线程2</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-30 12:07:35" itemprop="dateCreated datePublished" datetime="2019-09-30T12:07:35+08:00">2019-09-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-01 18:33:55" itemprop="dateModified" datetime="2019-10-01T18:33:55+08:00">2019-10-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/thread/" itemprop="url" rel="index"><span itemprop="name">thread</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="现代CPU"><a href="#现代CPU" class="headerlink" title="现代CPU"></a>现代CPU</h3><p>现代 CPU 都是从晶圆(wafer)加工成晶粒(die),再做成 CPU 的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:</p>
+<ol>
+<li>单块 CPU 单核心: 无论晶粒大小,一个晶粒一个 CPU 核心一个物理块.这种性能有限.可以多线程<strong>并发</strong>执行,使用时间片轮换或者优先级策略.有上下文切换的开销.</li>
+<li>单块 CPU 多核心: 根据晶粒的大小还可以分为: 一个大晶粒上多个 CPU 核心;多个小晶粒,每个晶粒一个 CPU 核心.共享一个大晶粒的性能要好,但是成本高.物理上还是一个模块.可以多线程<strong>并行</strong>执行.每个核心上还是并发执行.</li>
+<li>多个CPU (单/多)核心: 物理上多块 CPU,每个 CPU 都可以是单核,或者多核.</li>
+</ol>
+<p>现在主流的 Intel 就是大晶粒多核; AMD有多个小晶粒多核.举个例子形象地解释它们的区别:</p>
+<p>大地产商建造房子都是通透大平层(大晶粒),平层上各个商家(CPU 核心)很方便沟通,也不太堵塞.小地产商没有能力建大平层,建几个小高楼(多个小晶粒),通过地下通道互联,容易堵死.再小的地产商连地下通道也开发不了,只能远远的建立几个小楼,通过公交等串门互联.性能最差.<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/30/java-thread-2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/09/30/software-arch-design/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/09/30/software-arch-design/" class="post-title-link" itemprop="url">软件架构设计</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-30 12:07:35" itemprop="dateCreated datePublished" datetime="2019-09-30T12:07:35+08:00">2019-09-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-01 18:34:39" itemprop="dateModified" datetime="2019-10-01T18:34:39+08:00">2019-10-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/arch-design/" itemprop="url" rel="index"><span itemprop="name">arch-design</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="软件架构是什么"><a href="#软件架构是什么" class="headerlink" title="软件架构是什么"></a>软件架构是什么</h4><p>软件架构就是软件的基本结构,就好比房子的骨架,对软件的基本形态,功能划分,内部联通,预期扩展都做了详细的定义.常见的5 种软件架构有:</p>
+<h5 id="1-分层架构"><a href="#1-分层架构" class="headerlink" title="1 分层架构"></a>1 分层架构</h5><p>最常见的结构,将软件分成若干层,每一层都有明确的分工,不需要知道其他层的细节,相互之间通过接口通信.</p>
+<p>具体分层因人而异,主要是<code>表示层,应用层,数据层</code>三大层.应用层还可以细化(如<code>业务层,服务层,持久层</code>等).</p>
+<p>优点: 结构简单,容易理解;可以多层协同工作;层独立性好,易于测试.</p>
+<p>缺点: 层层传递,不易于扩展和维护,牵一发而动全身.<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/30/software-arch-design/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/09/25/basic-data-structure/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/09/25/basic-data-structure/" class="post-title-link" itemprop="url">基础数据结构</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-25 22:00:35" itemprop="dateCreated datePublished" datetime="2019-09-25T22:00:35+08:00">2019-09-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-01 18:43:13" itemprop="dateModified" datetime="2019-10-01T18:43:13+08:00">2019-10-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/data-structure/" itemprop="url" rel="index"><span itemprop="name">data-structure</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>学习数据结构,是解决业务问题和学习算法必不可少的环节.</p>
+<h4 id="数组和字符串"><a href="#数组和字符串" class="headerlink" title="数组和字符串"></a>数组和字符串</h4><p>数组和字符串是最基本的数据结构,这部分的算法面试题也是最多的.</p>
+<p><strong>数组的优缺点</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">优点</th>
+<th style="text-align:left">缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">构建一个数组非常简单</td>
+<td style="text-align:left">构建时必须分配一段连续的空间</td>
+</tr>
+<tr>
+<td style="text-align:left">可以根据数组的下标(index)查询某个元素,时间O(1)</td>
+<td style="text-align:left">查询某个元素是否存在时要遍历整个数组,时间O(n)</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">删除/添加某个元素时需要移动剩余元素,时间O(n)</td>
+</tr>
+</tbody>
+</table>
+<p>在考虑是否采用数组解决问题时,必须要考虑它的优缺点,看看它的缺点是否会阻碍所用算法的时间复杂度以及空间复杂度.比如很多时候字符串问题就要先把给定的字符串转换成字符数组之后再进行分析和处理.</p>
+<p>例子: 翻转一个字符串.<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/25/basic-data-structure/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/09/23/java-frameworks/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/09/23/java-frameworks/" class="post-title-link" itemprop="url">Java基础框架</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-23 12:07:35" itemprop="dateCreated datePublished" datetime="2019-09-23T12:07:35+08:00">2019-09-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-01 18:43:51" itemprop="dateModified" datetime="2019-10-01T18:43:51+08:00">2019-10-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/frameworks/" itemprop="url" rel="index"><span itemprop="name">frameworks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h4><p>Spring框架是目前使用最广泛的框架之一,其核心组件有core,context,beans等,它们3个组成了Spring的骨骼结构.Bean是Spring里的主角,一切都是面向Bean编程.Spring通过依赖注入来管理bean之间的关系,也就是context(Ioc容器).那如何做到发现并管理这些关系呢?就是通过core组件(也就是工具).</p>
+<p>Ioc具体代码参见<code>AbstractApplicationContext #refresh()</code>方法.<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/23/java-frameworks/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/09/12/how-to-learn/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wsabc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -372,12 +1126,24 @@
                 
               
 
-              <time title="创建时间：2019-09-12 22:00:35 / 修改时间：22:05:55" itemprop="dateCreated datePublished" datetime="2019-09-12T22:00:35+08:00">2019-09-12</time>
+              <time title="创建时间：2019-09-12 22:00:35" itemprop="dateCreated datePublished" datetime="2019-09-12T22:00:35+08:00">2019-09-12</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-30 08:25:54" itemprop="dateModified" datetime="2019-09-30T08:25:54+08:00">2019-09-30</time>
               
             
           </span>
@@ -496,12 +1262,253 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/30/basic-algo/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/30/basic-algo/" class="post-title-link" itemprop="url">基础算法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-30 12:07:35" itemprop="dateCreated datePublished" datetime="2019-08-30T12:07:35+08:00">2019-08-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-01 18:45:15" itemprop="dateModified" datetime="2019-10-01T18:45:15+08:00">2019-10-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="算法扫盲"><a href="#算法扫盲" class="headerlink" title="算法扫盲"></a>算法扫盲</h3><p>算法其实就是个思考过程.解决问题的路径有很多,找到一条相对省时省力的路径.一般使用大O表示法进行衡量.</p>
+<blockquote>
+<p> 大O符号表示的是算法的最坏情况.通常是在比较算法好坏的时候才有用.但是数据量的大小对算法的实际结果有很大影响,有可能算法比较慢,但是实际影响并不大.</p>
+</blockquote>
+<p><strong>常见名词</strong></p>
+<ul>
+<li>时间复杂度: 指算法需要消耗的时间资源.一般量化为操作次数.</li>
+<li>空间复杂度: 指算法需要消耗的空间资源.一般量化为需要的交换空间等.</li>
+<li>稳定性: 如果a原本在b前面,而a=b,排序之后a仍然在b的前面就是稳定的;反之是不稳定的.</li>
+<li>内部排序: 所有操作都在内存中完成.如果需要结合外部存储配合就称为外部排序(比如数据量太大).</li>
+</ul>
+<p><strong>常见时间复杂度说明</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Big-O</th>
+<th style="text-align:center">名字</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>O(1)</strong></td>
+<td style="text-align:center">常数级</td>
+<td style="text-align:left"><strong>最好的</strong>。不论输入数据量有多大，这个算法的运行时间总是一样的。<br>例子: 基于索引取出数组中对应的元素。</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>O(log2n)</strong></td>
+<td style="text-align:center">对数级</td>
+<td style="text-align:left"><strong>相当好</strong>。这种算法每次循环时会把需要处理的数据量减半。<br>即便数据量很大这种算法也非常快。<br>例子：二分查找。如果你有 100 个元素，则只需要七步就可以找到答案。</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>O(n)</strong></td>
+<td style="text-align:center">线性级</td>
+<td style="text-align:left"><strong>还不错</strong>。如果你有 100 个元素，这种算法就要做 100 次工作。<br>数据量翻倍那么运行时间也翻倍。<br>例子：线性查找。</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>O(n logn)</strong></td>
+<td style="text-align:center">线性对数级</td>
+<td style="text-align:left"><strong>还可以</strong>。比线性级差了一些，不过也没那么差劲。<br>例子：最快的通用排序算法。</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>O(n^2)</strong></td>
+<td style="text-align:center">二次方级</td>
+<td style="text-align:left"><strong>有点慢</strong>。如果你有 100 个元素，这种算法需要做 100^2 = 10000 次工作。<br>数据量 x 2 会导致运行时间 x 4 (因为 2 的 2 次方等于 4)。<br>例子：循环套循环的算法，比如插入排序。</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>O(n^3)</strong></td>
+<td style="text-align:center">三次方级</td>
+<td style="text-align:left"><strong>特别慢</strong>。如果你有 100 个元素，那么这种算法就要做 100^3 = 100,0000 次工作。<br>数据量 x 2 会导致运行时间 x 8。<br>例子：矩阵乘法。</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>O(2^n)</strong></td>
+<td style="text-align:center">指数级</td>
+<td style="text-align:left"><strong>超级慢</strong>。这种算法你要想方设法避免，但有时候你就是没得选。<br>加一点点数据就会把运行时间成倍的加长。<br>例子：旅行商问题。</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>O(n!)</strong></td>
+<td style="text-align:center">阶乘级</td>
+<td style="text-align:left"><strong>比蜗牛还慢</strong>！不管干什么都要跑个 N 年才能得到结果。</td>
+</tr>
+</tbody>
+</table>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/08/30/basic-algo/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/26/http-protocol/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wsabc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -558,7 +1565,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-12 22:00:06" itemprop="dateModified" datetime="2019-09-12T22:00:06+08:00">2019-09-12</time>
+                <time title="修改时间：2019-09-30 08:39:59" itemprop="dateModified" datetime="2019-09-30T08:39:59+08:00">2019-09-30</time>
               
             
           </span>
@@ -685,7 +1692,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wsabc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -742,7 +1749,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-12 21:59:07" itemprop="dateModified" datetime="2019-09-12T21:59:07+08:00">2019-09-12</time>
+                <time title="修改时间：2019-09-30 08:39:41" itemprop="dateModified" datetime="2019-09-30T08:39:41+08:00">2019-09-30</time>
               
             
           </span>
@@ -872,7 +1879,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wsabc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -929,7 +1936,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-12 22:32:57" itemprop="dateModified" datetime="2019-09-12T22:32:57+08:00">2019-09-12</time>
+                <time title="修改时间：2019-09-30 08:34:23" itemprop="dateModified" datetime="2019-09-30T08:34:23+08:00">2019-09-30</time>
               
             
           </span>
@@ -1061,7 +2068,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wsabc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1118,7 +2125,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-12 22:08:15" itemprop="dateModified" datetime="2019-09-12T22:08:15+08:00">2019-09-12</time>
+                <time title="修改时间：2019-09-30 08:37:07" itemprop="dateModified" datetime="2019-09-30T08:37:07+08:00">2019-09-30</time>
               
             
           </span>
@@ -1223,937 +2230,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/14/java-objects/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wsabc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔向自由之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/08/14/java-objects/" class="post-title-link" itemprop="url">Java对象</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-14 22:00:35" itemprop="dateCreated datePublished" datetime="2019-08-14T22:00:35+08:00">2019-08-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-12 22:09:27" itemprop="dateModified" datetime="2019-09-12T22:09:27+08:00">2019-09-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>New是Java里面最核心的关键字了.New背后都涉及哪些东西呢?</p>
-<h3 id="New干了什么"><a href="#New干了什么" class="headerlink" title="New干了什么"></a>New干了什么</h3><ol>
-<li>根据new的类定位常量池里该类的符号引用.</li>
-<li>如果没有找到,说明该类还没有被加载,则进行类的加载,解析和初始化(会有多线程锁).</li>
-<li>JVM分配堆内存,初始化零值(不包含对象头).</li>
-<li>调用对象的init方法.
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/14/java-objects/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ol></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/12/oom-analysis/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wsabc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔向自由之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/08/12/oom-analysis/" class="post-title-link" itemprop="url">OOM分析</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-12 22:00:35" itemprop="dateCreated datePublished" datetime="2019-08-12T22:00:35+08:00">2019-08-12</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-12 22:07:09" itemprop="dateModified" datetime="2019-09-12T22:07:09+08:00">2019-09-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/production/" itemprop="url" rel="index"><span itemprop="name">production</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="OOM-OutOfMemoryError-分析"><a href="#OOM-OutOfMemoryError-分析" class="headerlink" title="OOM(OutOfMemoryError)分析"></a>OOM(OutOfMemoryError)分析</h3><p>OOM是JVM常见的严重错误之一.这里记录分析OOM的思路.首先应该能看到类似下面的日志:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread <span class="string">"biz-worker"</span> java.lang.OutOfMemoryError: Java heap space</span><br></pre></td></tr></table></figure>
-<ol>
-<li>查看堆内存设置</li>
-</ol>
-<p>检查下列参数的设置值.观察是否设置合理(偏小).</p>
-<ul>
-<li><code>-Xms</code> (或者<code>-XX:InitialHeapSize</code>)</li>
-<li><code>-Xmx</code> (或者<code>-XX:MaxHeapSize</code>)</li>
-<li><code>-Xmn</code> (或者<code>-XX:NewSize</code>, <code>-XX:MaxNewSize</code>)</li>
-</ul>
-<p>注意:永久代大小(<code>-XX:MaxPermSize</code>)并不会被包括在使用参数<code>-XX:MaxHeapSize</code>设置的堆内存大小中.<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/12/oom-analysis/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/08/04/java-volatile/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wsabc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔向自由之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/08/04/java-volatile/" class="post-title-link" itemprop="url">Volatile总结</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-04 22:00:35" itemprop="dateCreated datePublished" datetime="2019-08-04T22:00:35+08:00">2019-08-04</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-12 22:10:07" itemprop="dateModified" datetime="2019-09-12T22:10:07+08:00">2019-09-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Java <strong>volatile</strong> 总结</p>
-<h3 id="volatile能干什么"><a href="#volatile能干什么" class="headerlink" title="volatile能干什么"></a>volatile能干什么</h3><ol>
-<li><p>保证内存可见性</p>
-<blockquote>
-<p>从主存读取(不是从缓存);不仅写入缓存,同时写入到主存.</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/04/java-volatile/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </blockquote></li></ol></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/07/25/3rd-payment/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wsabc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔向自由之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/25/3rd-payment/" class="post-title-link" itemprop="url">第三方支付</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-25 22:00:35" itemprop="dateCreated datePublished" datetime="2019-07-25T22:00:35+08:00">2019-07-25</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-12 22:25:57" itemprop="dateModified" datetime="2019-09-12T22:25:57+08:00">2019-09-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/payment/" itemprop="url" rel="index"><span itemprop="name">payment</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="第三方支付"><a href="#第三方支付" class="headerlink" title="第三方支付"></a>第三方支付</h4><p>第三方(没有资金所有权,只中转)支付(需要申请支付业务许可证): 完成货币支付, 资金清算, 查询统计等系列过程.</p>
-<h5 id="为什么需要第三方支付"><a href="#为什么需要第三方支付" class="headerlink" title="为什么需要第三方支付?"></a>为什么需要第三方支付?</h5><ul>
-<li>屏蔽银行支付接口的差异,对外提供统一接入平台,类似中间件.</li>
-<li>安全等级和易用性之间平衡,方便用户,提高体验.</li>
-<li>大型企业(阿里,腾讯)信用背书.
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/07/25/3rd-payment/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ul></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/07/25/online-issues/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wsabc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔向自由之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/25/online-issues/" class="post-title-link" itemprop="url">线上问题经验总结</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-25 22:00:35" itemprop="dateCreated datePublished" datetime="2019-07-25T22:00:35+08:00">2019-07-25</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-12 22:03:33" itemprop="dateModified" datetime="2019-09-12T22:03:33+08:00">2019-09-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/production/" itemprop="url" rel="index"><span itemprop="name">production</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>线上问题经验总结</p>
-<h3 id="总体思路"><a href="#总体思路" class="headerlink" title="总体思路"></a>总体思路</h3><p>总结问题现象 -&gt; 保留证据 -&gt; 相关业务排查 + 证据分析 -&gt; 精准定位(复现) -&gt; 解决验证</p>
-<h3 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h3><ol>
-<li>墨菲定律: 如果有两种或两种以上的方式去做某件事情,而其中一种选择方式将导致灾难,则必定有人会做出这种选择.</li>
-<li>一定要设置有意义的名字,如线程的名字.</li>
-<li>一定要设置线程池队列大小以及饱和策略.</li>
-<li>使用主流 JDK 如 1.8.</li>
-<li>待续
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/07/25/online-issues/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ol></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2185,7 +2266,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+              <img class="site-author-image" itemprop="image" src="/images/young-leslie-cartoon.png" alt="wsabc">
             
               <p class="site-author-name" itemprop="name">wsabc</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -2198,7 +2279,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2267,7 +2348,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">28</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2346,7 +2449,67 @@
                     
                       
                     
-                    <span class="site-state-item-count">33</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

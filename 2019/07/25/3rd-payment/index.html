@@ -105,7 +105,7 @@
 <meta property="og:description" content="第三方支付第三方(没有资金所有权,只中转)支付(需要申请支付业务许可证): 完成货币支付, 资金清算, 查询统计等系列过程. 为什么需要第三方支付? 屏蔽银行支付接口的差异,对外提供统一接入平台,类似中间件. 安全等级和易用性之间平衡,方便用户,提高体验. 大型企业(阿里,腾讯)信用背书.">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/wsabc/images/raw/master/wechat-pay-sequence.jpg">
-<meta property="og:updated_time" content="2019-09-12T14:25:57.643Z">
+<meta property="og:updated_time" content="2019-09-30T00:32:30.036Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="第三方支付">
 <meta name="twitter:description" content="第三方支付第三方(没有资金所有权,只中转)支付(需要申请支付业务许可证): 完成货币支付, 资金清算, 查询统计等系列过程. 为什么需要第三方支付? 屏蔽银行支付接口的差异,对外提供统一接入平台,类似中间件. 安全等级和易用性之间平衡,方便用户,提高体验. 大型企业(阿里,腾讯)信用背书.">
@@ -243,7 +243,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">33</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">63</span></a>
 
   </li>
         
@@ -262,7 +262,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">28</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">39</span></a>
 
   </li>
         
@@ -281,7 +281,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">36</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">47</span></a>
 
   </li>
 
@@ -338,7 +338,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wsabc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/wsabc.png">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -393,7 +393,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-12 22:25:57" itemprop="dateModified" datetime="2019-09-12T22:25:57+08:00">2019-09-12</time>
+                <time title="修改时间：2019-09-30 08:32:30" itemprop="dateModified" datetime="2019-09-30T08:32:30+08:00">2019-09-30</time>
               
             
           </span>
@@ -481,10 +481,14 @@
 </li>
 <li>721分成模式: 手续费的7成归发卡行, 1成归卡组织, 2成归收单行(第三方支付),代理商的由收单行分润.业内一般商户收费都在千6左右.</li>
 </ul>
-<h5 id="监管"><a href="#监管" class="headerlink" title="监管"></a>监管</h5><p>备付金管理, 统一清算, 直连, 间联, 创新业务(二维码支付等).</p>
+<h5 id="监管"><a href="#监管" class="headerlink" title="监管"></a>监管</h5><p>备付金管理, 统一清算, 直连, 间连, 创新业务(二维码支付等).</p>
+<blockquote>
+<p>直连: 指第三方支付直接与商业银行做对接,如果是本行交易直接完成,如果是跨行交易由商业银行在上送到银联进行交易(支付机构通过在多家银行开设备付金账户实现资金的跨行清算,绕开了银联.其初衷是为了省去银联分润,节约支付成本.但是在监管层面来看资金流,信息流不透明,容易出现问题).</p>
+<p>间连: 指第三方支付与银联系统相连接,当发生消费时,此交易信息先送至银联主机系统,由银联系统自动判断后直接送相关的发卡银行,然后信息再沿路返回.</p>
+</blockquote>
 <h5 id="盈利模式"><a href="#盈利模式" class="headerlink" title="盈利模式"></a>盈利模式</h5><ul>
 <li>卡组织, 发卡方: 手续费</li>
-<li>第三方支付企业: 电商交易佣金, 电商平台支付解决方案, 沉淀资金利息收入等.</li>
+<li>第三方支付企业: 手续费, 电商交易佣金, 电商平台支付解决方案, 沉淀资金利息收入等.</li>
 </ul>
 <hr>
 <h4 id="支付系统演化"><a href="#支付系统演化" class="headerlink" title="支付系统演化"></a>支付系统演化</h4><ol>
@@ -495,10 +499,8 @@
 <p>至此,财务混乱不可避免,需要一个职责明确的支付系统有自动处理机制.</p>
 <h5 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h5><ul>
 <li>交易和支付分开.交易映射业务操作,同时将业务的不确定性屏蔽到支付系统之外.交易和支付是1对多的关系.1笔交易允许拆单支付.</li>
-<li><p>退款路径:原路和非原路, 全额和部分.支付和退款也是1对多的关系.</p>
-</li>
-<li><p>订单防重: 比如订餐支付成功了,但是APP内没有显示成功,也不允许重复支付;又或者重复支付成功了,但是APP内只显示一次成功,之前支付的钱不见了.</p>
-</li>
+<li>退款路径:原路和非原路, 全额和部分.支付和退款也是1对多的关系.</li>
+<li>订单防重: 比如订餐支付成功了,但是APP内没有显示成功,也不允许重复支付;又或者重复支付成功了,但是APP内只显示一次成功,之前支付的钱不见了.</li>
 </ul>
 <h5 id="常规支付流程"><a href="#常规支付流程" class="headerlink" title="常规支付流程"></a>常规支付流程</h5><p><img src="https://github.com/wsabc/images/raw/master/wechat-pay-sequence.jpg" alt="wechat-pay-sequence"></p>
 <ul>
@@ -557,8 +559,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/25/online-issues/" rel="next" title="线上问题经验总结">
-                <i class="fa fa-chevron-left"></i> 线上问题经验总结
+              <a href="/2019/07/04/distribution-system-development/" rel="next" title="分布式系统开发">
+                <i class="fa fa-chevron-left"></i> 分布式系统开发
               </a>
             
           </div>
@@ -567,8 +569,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/04/java-volatile/" rel="prev" title="Volatile总结">
-                Volatile总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/25/online-issues/" rel="prev" title="线上问题经验总结">
+                线上问题经验总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -628,7 +630,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/wsabc.png" alt="wsabc">
+              <img class="site-author-image" itemprop="image" src="/images/young-leslie-cartoon.png" alt="wsabc">
             
               <p class="site-author-name" itemprop="name">wsabc</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -641,7 +643,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -710,7 +712,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">28</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -789,7 +813,67 @@
                     
                       
                     
-                    <span class="site-state-item-count">33</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
