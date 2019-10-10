@@ -97,14 +97,14 @@
 
 
   <meta name="description" content="算法扫盲算法其实就是个思考过程.解决问题的路径有很多,找到一条相对省时省力的路径.一般使用大O表示法进行衡量.   大O符号表示的是算法的最坏情况.通常是在比较算法好坏的时候才有用.但是数据量的大小对算法的实际结果有很大影响,有可能算法比较慢,但是实际影响并不大.  常见名词  时间复杂度: 指算法需要消耗的时间资源.一般量化为操作次数. 空间复杂度: 指算法需要消耗的空间资源.一般量化为需要的交">
-<meta name="keywords" content="algo">
+<meta name="keywords" content="algo,sort">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基础算法">
 <meta property="og:url" content="http://wsabc.top/2019/08/30/basic-algo/index.html">
 <meta property="og:site_name" content="奔向自由之路">
 <meta property="og:description" content="算法扫盲算法其实就是个思考过程.解决问题的路径有很多,找到一条相对省时省力的路径.一般使用大O表示法进行衡量.   大O符号表示的是算法的最坏情况.通常是在比较算法好坏的时候才有用.但是数据量的大小对算法的实际结果有很大影响,有可能算法比较慢,但是实际影响并不大.  常见名词  时间复杂度: 指算法需要消耗的时间资源.一般量化为操作次数. 空间复杂度: 指算法需要消耗的空间资源.一般量化为需要的交">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-01T10:45:15.299Z">
+<meta property="og:updated_time" content="2019-10-10T15:42:01.333Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基础算法">
 <meta name="twitter:description" content="算法扫盲算法其实就是个思考过程.解决问题的路径有很多,找到一条相对省时省力的路径.一般使用大O表示法进行衡量.   大O符号表示的是算法的最坏情况.通常是在比较算法好坏的时候才有用.但是数据量的大小对算法的实际结果有很大影响,有可能算法比较慢,但是实际影响并不大.  常见名词  时间复杂度: 指算法需要消耗的时间资源.一般量化为操作次数. 空间复杂度: 指算法需要消耗的空间资源.一般量化为需要的交">
@@ -241,7 +241,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">60</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">61</span></a>
 
   </li>
         
@@ -391,7 +391,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-01 18:45:15" itemprop="dateModified" datetime="2019-10-01T18:45:15+08:00">2019-10-01</time>
+                <time title="修改时间：2019-10-10 23:42:01" itemprop="dateModified" datetime="2019-10-10T23:42:01+08:00">2019-10-10</time>
               
             
           </span>
@@ -622,13 +622,22 @@
 <h3 id="基础算法"><a href="#基础算法" class="headerlink" title="基础算法"></a>基础算法</h3><p>排序算法是最基础的算法之一.常见的区分有比较排序和非比较排序.</p>
 <p>常见的<strong>快速排序,归并排序,堆排序,冒泡排序</strong>等属于<strong>比较排序</strong>.<strong>在排序的最终结果里,元素之间的次序依赖于它们之间的比较.每个数都必须和其他数进行比较,才能确定自己的位置.</strong>比较排序适用于一切需要排序的情况,不在乎数据的规模和分布.</p>
 <p><strong>计数排序,基数排序,桶排序</strong>则属于<strong>非比较排序</strong>.非比较排序是通过确定每个元素位置之前,应该有多少个元素来排序.比如针对数组a,计算a[i]之前有多少个元素,则唯一确定了a[i]在排序后数组中的位置,因此一次遍历即可解决,算法时间复杂度<strong>O(n)</strong>.<br><strong>非比较排序时间复杂度底,但由于非比较排序需要占用空间来确定唯一位置.</strong>所以对数据规模和数据分布有一定的要求.</p>
-<h4 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h4><h4 id="快速排序算法"><a href="#快速排序算法" class="headerlink" title="快速排序算法"></a>快速排序算法</h4><p>快速排序是由东尼-霍尔所发展的一种排序算法.在平均状况下,排序n个项目要Ο(nlogn)次比较;在最坏状况下则需要Ο(n2)次比较,但这种状况并不常见.事实上,快速排序通常明显比其他Ο(nlogn)算法更快,因为它的内部循环可以在大部分的架构上很有效率地被实现出来.</p>
+<h4 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h4><p>让数组当中相邻的两个数进行比较,数组当中比较小的数值向下沉,数值比较大的向上浮.外层for循环控制循环次数,内层for循环控制相邻的两个元素进行比较.具体步骤:</p>
+<ol>
+<li>比较相邻的元素,如果第一个比第二个大,就交换他们两个;</li>
+<li>对每一对相邻元素做同样的工作,从开始第一对到结尾的最后一对,在这一点,最后的元素应该会是最大的数;</li>
+<li>针对所有的元素重复以上的步骤,除了最后一个;</li>
+<li>持续每次对越来越少的元素重复上面的步骤;直到没有任何一对数字需要比较.</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> k;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; a.length; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; a.length - i; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (a[j] &gt; a[j+<span class="number">1</span>]) &#123;</span><br><span class="line">            k = a[j];</span><br><span class="line">            a[j] = a[j+<span class="number">1</span>];</span><br><span class="line">            a[j+<span class="number">1</span>] = k;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="快速排序算法"><a href="#快速排序算法" class="headerlink" title="快速排序算法"></a>快速排序算法</h4><p>快速排序是由东尼-霍尔所发展的一种排序算法.在平均状况下,排序n个项目要Ο(nlogn)次比较;在最坏状况下则需要Ο(n2)次比较,但这种状况并不常见.事实上,快速排序通常明显比其他Ο(nlogn)算法更快,因为它的内部循环可以在大部分的架构上很有效率地被实现出来.</p>
 <p>快速排序使用分治法(Divide and conquer)策略来把一个串行(list)分为两个子串行(sub-lists).具体步骤:</p>
 <ol>
-<li>从数列中挑出一个元素,称为基准 Pivot.</li>
-<li>所有元素比基准小的放到基准前面,大的放到后面,相同的任一边都可以.这个过程称为分区操作 partition.</li>
+<li>从数列中挑出一个元素,称为基准pivot.</li>
+<li>所有元素比基准小的放到基准前面,大的放到后面,相同的任一边都可以.这个过程称为分区操作partition.</li>
 <li>递归地把小于基准的子数列和大于基准的子数列排序.</li>
 </ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">qs</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (start &lt; end) &#123;</span><br><span class="line">        <span class="keyword">int</span> middle = sort(a, start, end);</span><br><span class="line">        qs(a, start, middle - <span class="number">1</span>);</span><br><span class="line">        qs(a, middle + <span class="number">1</span>, end);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> k = a[start];</span><br><span class="line">    <span class="keyword">while</span> (start &lt; end) &#123;</span><br><span class="line">        <span class="keyword">while</span> (start &lt; end &amp;&amp; k &lt;= a[end]) &#123;</span><br><span class="line">            end--;</span><br><span class="line">        &#125;</span><br><span class="line">        a[start] = a[end];</span><br><span class="line">        <span class="keyword">while</span> (start &lt; end &amp;&amp; k &gt;= a[start]) &#123;</span><br><span class="line">            start++;</span><br><span class="line">        &#125;</span><br><span class="line">        a[end] = a[start];</span><br><span class="line">    &#125;</span><br><span class="line">    a[start] = k;</span><br><span class="line">    <span class="keyword">return</span> start;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="堆排序算法"><a href="#堆排序算法" class="headerlink" title="堆排序算法"></a>堆排序算法</h4><p>堆排序(Heap sort)是指利用堆这种数据结构所设计的一种排序算法.堆是一个近似完全二叉树的结构,并同时满足堆的性质:即子结点的键值或索引总是小于(或者大于)它的父节点.堆排序的平均时间复杂度为Ο(nlogn).具体步骤:</p>
 <ol>
 <li><p>创建一个堆H[0..n-1]</p>
@@ -739,6 +748,8 @@
         <div class="post-tags">
           
             <a href="/tags/algo/" rel="tag"># algo</a>
+          
+            <a href="/tags/sort/" rel="tag"># sort</a>
           
         </div>
       
@@ -1053,7 +1064,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">60</span>
+                      
+                    
+                    <span class="site-state-item-count">61</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
