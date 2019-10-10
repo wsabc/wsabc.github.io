@@ -96,19 +96,19 @@
 
 
 
-  <meta name="description" content="现代CPU现代 CPU 都是从晶圆(wafer)加工成晶粒(die),再做成 CPU 的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:  单块 CPU 单核心: 无论晶粒大小,一个晶粒一个 CPU 核心一个物理块.这种性能有限.可以多线程并发执行,使用时间片轮换或者优先级策略.有上下文切换的开销. 单块 CPU 多核心: 根据晶粒的大小还">
+  <meta name="description" content="现代CPU现代CPU都是从晶圆(wafer)加工成晶粒(die),再做成CPU的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:  单块CPU单核心:一个物理块,包含一个晶粒,无论晶粒大小,其上面只有一个CPU核心.这种性能有限.可以多线程并发执行,使用时间片轮换或者优先级策略.有上下文切换的开销. 单块CPU多核心:一个物理块,但是根据晶">
 <meta name="keywords" content="thread">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多线程2">
+<meta property="og:title" content="Java多线程2">
 <meta property="og:url" content="http://wsabc.top/2019/09/30/java-thread-2/index.html">
 <meta property="og:site_name" content="奔向自由之路">
-<meta property="og:description" content="现代CPU现代 CPU 都是从晶圆(wafer)加工成晶粒(die),再做成 CPU 的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:  单块 CPU 单核心: 无论晶粒大小,一个晶粒一个 CPU 核心一个物理块.这种性能有限.可以多线程并发执行,使用时间片轮换或者优先级策略.有上下文切换的开销. 单块 CPU 多核心: 根据晶粒的大小还">
+<meta property="og:description" content="现代CPU现代CPU都是从晶圆(wafer)加工成晶粒(die),再做成CPU的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:  单块CPU单核心:一个物理块,包含一个晶粒,无论晶粒大小,其上面只有一个CPU核心.这种性能有限.可以多线程并发执行,使用时间片轮换或者优先级策略.有上下文切换的开销. 单块CPU多核心:一个物理块,但是根据晶">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/wsabc/images/raw/master/java-locks.png">
-<meta property="og:updated_time" content="2019-10-01T10:33:55.254Z">
+<meta property="og:updated_time" content="2019-10-10T14:14:02.418Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="多线程2">
-<meta name="twitter:description" content="现代CPU现代 CPU 都是从晶圆(wafer)加工成晶粒(die),再做成 CPU 的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:  单块 CPU 单核心: 无论晶粒大小,一个晶粒一个 CPU 核心一个物理块.这种性能有限.可以多线程并发执行,使用时间片轮换或者优先级策略.有上下文切换的开销. 单块 CPU 多核心: 根据晶粒的大小还">
+<meta name="twitter:title" content="Java多线程2">
+<meta name="twitter:description" content="现代CPU现代CPU都是从晶圆(wafer)加工成晶粒(die),再做成CPU的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:  单块CPU单核心:一个物理块,包含一个晶粒,无论晶粒大小,其上面只有一个CPU核心.这种性能有限.可以多线程并发执行,使用时间片轮换或者优先级策略.有上下文切换的开销. 单块CPU多核心:一个物理块,但是根据晶">
 <meta name="twitter:image" content="https://github.com/wsabc/images/raw/master/java-locks.png">
 
 
@@ -126,7 +126,7 @@
   };
 </script>
 
-  <title>多线程2 | 奔向自由之路</title>
+  <title>Java多线程2 | 奔向自由之路</title>
   
 
 
@@ -243,7 +243,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">63</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">60</span></a>
 
   </li>
         
@@ -262,7 +262,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">39</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">36</span></a>
 
   </li>
         
@@ -350,7 +350,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">多线程2
+          <h1 class="post-title" itemprop="name headline">Java多线程2
 
               
             
@@ -393,7 +393,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-01 18:33:55" itemprop="dateModified" datetime="2019-10-01T18:33:55+08:00">2019-10-01</time>
+                <time title="修改时间：2019-10-10 22:14:02" itemprop="dateModified" datetime="2019-10-10T22:14:02+08:00">2019-10-10</time>
               
             
           </span>
@@ -452,81 +452,101 @@
       
 
       
-        <h3 id="现代CPU"><a href="#现代CPU" class="headerlink" title="现代CPU"></a>现代CPU</h3><p>现代 CPU 都是从晶圆(wafer)加工成晶粒(die),再做成 CPU 的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:</p>
+        <h3 id="现代CPU"><a href="#现代CPU" class="headerlink" title="现代CPU"></a>现代CPU</h3><p>现代CPU都是从晶圆(wafer)加工成晶粒(die),再做成CPU的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:</p>
 <ol>
-<li>单块 CPU 单核心: 无论晶粒大小,一个晶粒一个 CPU 核心一个物理块.这种性能有限.可以多线程<strong>并发</strong>执行,使用时间片轮换或者优先级策略.有上下文切换的开销.</li>
-<li>单块 CPU 多核心: 根据晶粒的大小还可以分为: 一个大晶粒上多个 CPU 核心;多个小晶粒,每个晶粒一个 CPU 核心.共享一个大晶粒的性能要好,但是成本高.物理上还是一个模块.可以多线程<strong>并行</strong>执行.每个核心上还是并发执行.</li>
-<li>多个CPU (单/多)核心: 物理上多块 CPU,每个 CPU 都可以是单核,或者多核.</li>
+<li>单块CPU单核心:一个物理块,包含一个晶粒,无论晶粒大小,其上面只有一个CPU核心.这种性能有限.可以多线程<strong>并发</strong>执行,使用时间片轮换或者优先级策略.有上下文切换的开销.</li>
+<li>单块CPU多核心:一个物理块,但是根据晶粒的大小可以分为: 一个大晶粒上有多个CPU核心;多个小晶粒,每个晶粒上一个CPU核心.共享一个大晶粒的性能要好,但是成本高(因为良品率低).可以多线程<strong>并行</strong>执行.每个核心上还是并发执行.</li>
+<li>多个CPU(单/多)核心:多个物理上(多块CPU),每个CPU都可以是单核,或者多核.</li>
 </ol>
-<p>现在主流的 Intel 就是大晶粒多核; AMD有多个小晶粒多核.举个例子形象地解释它们的区别:</p>
-<p>大地产商建造房子都是通透大平层(大晶粒),平层上各个商家(CPU 核心)很方便沟通,也不太堵塞.小地产商没有能力建大平层,建几个小高楼(多个小晶粒),通过地下通道互联,容易堵死.再小的地产商连地下通道也开发不了,只能远远的建立几个小楼,通过公交等串门互联.性能最差.<br><a id="more"></a></p>
+<p>现在主流的Intel就是大晶粒多核;AMD有多个小晶粒多核.举个例子形象地解释它们的区别:</p>
+<blockquote>
+<p>大地产商建造房子都是通透大平层(大晶粒),平层上各个商家(CPU 核心)很方便沟通,也不太堵塞.</p>
+<p>小地产商没有能力建大平层,建几个小高楼(多个小晶粒),通过地下通道互联,容易堵死.</p>
+<p>再小的地产商连地下通道也开发不了,只能远远的建立几个小楼,通过公交等串门互联.性能最差.</p>
+</blockquote>
+<a id="more"></a>
 <h3 id="多线程核心问题"><a href="#多线程核心问题" class="headerlink" title="多线程核心问题"></a>多线程核心问题</h3><ol>
-<li>上下文切换. 在具体的 CPU 上多个线程轮换时间片,需要中断时保存现场(程序计数器),继续时恢复现场,这就是上下文切换.这是一个耗时操作.可以通过<code>vmstat</code>命令查看上下文切换次数.</li>
-<li>资源限制. 线程不是越多越好.应该根据任务的特性决定线程的数量.性能和线程数量不是正比关系(切换有开销).</li>
-<li>资源冲突: 多个线程访问同一个资源时就有竞争问题.比如死锁问题.通常一个线程一个锁,访问一个资源.要保证锁的释放.</li>
+<li><p>上下文切换.在具体的CPU上多个线程轮换时间片,中断时需要保存现场(程序计数器),继续时恢复现场,这就是上下文切换.这是一个耗时操作.可以通过<code>vmstat</code>命令查看上下文切换次数.</p>
+<blockquote>
+<p><code>vmstat</code>是linux命令.常见用法<code>vmstat 2 1</code>2表示采样频率2秒一次,1表示采样次数.不过一般都是一直采样.重点关注<code>r b si so cs</code>即运行队列,阻塞队列,读入内存大小,写入内存大小,每秒上下文切换次数.</p>
+</blockquote>
+</li>
+<li><p>资源限制.线程不是越多越好.应该根据任务的特性决定线程的数量.性能和线程数量不是正比关系(切换有开销).</p>
+</li>
+<li><p>资源冲突:多个线程访问同一个资源时就有竞争问题.比如死锁.通常一个线程持有一个锁访问一个资源.要保证锁的释放.</p>
+</li>
 </ol>
-<p><strong>影响多线程正确性的几个因素:</strong></p>
-<ol>
-<li>原子性操作: 识别非原子性操作.保证原子性的几个常见手段: <code>synchronized</code>, <code>lock</code>和<code>cas</code>.</li>
-<li>内存可见性: 因为工作内存和主内存的设计,多线程之间内存有一致性问题.<code>volatile</code>用于保证可见性.</li>
-<li>指令顺序性: 防止 JVM 优化指令导致可见性不一致.具体参照各种<code>happens-before</code>规则.</li>
+<h4 id="影响多线程正确性的几个因素"><a href="#影响多线程正确性的几个因素" class="headerlink" title="影响多线程正确性的几个因素"></a>影响多线程正确性的几个因素</h4><ol>
+<li>非原子性操作:识别非原子性操作.保证原子性的几个常见手段:<code>synchronized</code>,<code>lock</code>和<code>cas</code>.</li>
+<li>内存可见性:因为工作内存和主内存的设计,多线程访问共享变量存在内存一致性问题(操作可能是原子的,但是访问有先后,线程可能会操作过时数据).<code>volatile</code>用于保证可见性.</li>
+<li>指令顺序性:防止JVM优化指令导致可见性不一致.具体参照各种<code>happens-before</code>规则.</li>
 </ol>
-<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><p>锁的特性: 重入性; 排他性; 阻塞性.</p>
+<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><p>锁的特性:重入性;排他性;阻塞性.</p>
 <ul>
-<li>重入性: 同一个线程可以反复进入,通过计数器来记录,知道计数器为 0 时锁释放.如<code>ReentrantLock</code>.</li>
-<li>排他性: 一个线程拿到了锁,其他线程就需要等待,直到收到锁释放通知,重新竞争.比如<code>synchronized</code>.</li>
-<li>阻塞性: 一旦线程竞争不到锁,就会放到阻塞队列里等待,而不是失败返回.由竞争者决定.</li>
+<li>重入性:同一个线程可以反复进入,通过计数器来记录,直到计数器为0时释放锁.如<code>ReentrantLock</code>.</li>
+<li>排他性:一个线程拿到了锁,其他线程就需要等待,直到收到锁释放通知,重新竞争.比如<code>synchronized</code>.</li>
+<li>阻塞性:具体实现可能表现不同.一般来说一旦线程竞争不到锁,就会放到阻塞队列里等待,而不是失败返回.<code>synchronized</code>就是阻塞;而<code>ReentrantLock</code>可以由调用者决定是否放弃等待(<code>lock,tryLock等</code>).</li>
 </ul>
-<p>针对于锁和当前进程的关系,可以分为:</p>
+<p>根据锁和当前进程的关系,可以分为:</p>
 <ul>
-<li>同一进程内: 比如一个 Java 程序里的 N 个线程,他们可能竞争一个锁.</li>
-<li>不同进程间: 也就是分布式锁.不同的进程或者线程去竞争同一个分布式锁.如 Redis 分布式锁,数据库记录等.</li>
+<li>同一进程内:比如一个Java程序里的N个线程,他们可能竞争一个锁.</li>
+<li>不同进程间:也就是分布式锁.不同的进程或者线程去竞争同一个分布式锁.如Redis分布式锁,数据库记录等.</li>
 </ul>
-<p><strong>数据库锁的弊端</strong></p>
-<p>利用唯一索引,可以通过判断往数据库插入记录是否成功来判定谁获得分布式锁.使用完毕删除记录即释放锁.缺点如下:</p>
+<h4 id="数据库锁"><a href="#数据库锁" class="headerlink" title="数据库锁"></a>数据库锁</h4><p>利用唯一索引,可以通过判断往数据库插入记录是否成功来判定谁获得分布式锁.使用完毕删除记录即释放锁.缺点及改造方案如下:</p>
 <ol>
-<li>数据库可能是单点 -&gt; 主从结构</li>
+<li>数据库可能是单点(可能获取不到锁) -&gt; 主从结构</li>
 <li>没有重入性,释放锁之前无法再次进入了(数据库记录已经有了) -&gt; 仿照重入锁增加计数字段</li>
 <li>没有阻塞性,获取不到锁的线程直接失败退出了,无法阻塞等待,只能下次重新获取 -&gt; 可以循环等待,超时退出</li>
 <li>容易死锁,如果解锁失败以后就没有其他线程能获取到锁了 -&gt; 旁挂线程定期删除未解锁的记录</li>
 </ol>
-<p><strong>常见锁</strong></p>
-<ol>
-<li>乐观锁: 广义锁.数据库和 Java 里都有这个概念.Java 常见的是 CAS 实现.参考 AtomicInteger.数据库通常是 version 字段比较.</li>
-<li>悲观锁: 广义锁.数据库里<code>select...for update</code>.Java 里<code>synchronized</code>和 lock 都是.</li>
-<li>公平锁: 指多个线程按照申请锁的顺序来获取锁,线程直接进入队列中排队,队列中的第一个线程才能获得锁.公平锁的优点是等待锁的线程不会饿死,缺点是整体吞吐效率相对非公平锁要低,等待队列中除第一个线程以外的所有线程都会阻塞,CPU唤醒阻塞线程的开销比非公平锁大.</li>
-<li>非公平锁: 多个线程加锁时直接尝试获取锁,获取不到才会到等待队列的队尾等待.但如果此时锁刚好可用,那么这个线程可以无需阻塞直接获取到锁,所以非公平锁有可能出现后申请锁的线程先获取锁的场景.非公平锁的优点是可以减少唤起线程的开销,整体的吞吐效率高,因为线程有几率不阻塞直接获得锁,CPU不必唤醒所有线程.缺点是处于等待队列中的线程可能会饿死,或者等很久才会获得锁.</li>
-<li>无锁 - 偏向锁 - 轻量锁 - 重量锁: 这 4 个是指锁的状态,专门针对<code>synchronized</code>的.锁状态从低到高,只能升级不能降级.无锁没有对资源进行锁定,所有的线程都能访问并修改同一个资源,但同时只有一个线程能修改成功.偏向锁是指一段同步代码一直被一个线程所访问,那么该线程会自动获取锁,降低获取锁的代价.偏向锁只有遇到其他线程尝试竞争偏向锁时,持有偏向锁的线程才会释放锁,线程不会主动释放偏向锁.偏向锁的撤销,需要等待全局安全点,它会首先暂停拥有偏向锁的线程,判断锁对象是否处于被锁定状态,撤销偏向锁后恢复到无锁或轻量级锁的状态.当锁是偏向锁的时候,被另外的线程所访问,偏向锁就会升级为轻量级锁,其他线程会通过自旋的形式尝试获取锁,不会阻塞,从而提高性能.若当前只有一个等待线程,则该线程通过自旋进行等待.但是当自旋超过一定的次数,或者一个线程在持有锁,一个在自旋,又有第三个来访时,轻量级锁升级为重量级锁.重量级锁依赖于操作系统互斥锁实现(“重量”的原因).</li>
-<li>适应性自旋: 阻塞或唤醒一个Java线程需要操作系统切换CPU状态来完成,这种状态转换需要耗费的处理器时间有可能比用户代码执行的时间还要长(如果同步代码块中的内容过于简单的话).而实际上在许多场景中,同步资源的锁定时间都很短,为了这一小段时间去切换线程会让系统得不偿失.如果物理机器有多个处理器,能够让两个或以上的线程同时并行执行,我们就可以让后面那个请求锁的线程不放弃CPU的执行时间,看看持有锁的线程是否很快就会释放锁.这样做的好处就是当前线程可能可以不必阻塞而是直接获取同步资源,从而避免切换线程的开销.自旋锁不能代替阻塞,会消耗 CPU 时间.适合锁占用时间短的场合.使用<code>-XX:PreBlockSpin</code>可以限定自旋的次数.超过次数没有获取锁就挂起线程.自旋锁在JDK1.4.2中引入,使用<code>-XX:+UseSpinning</code>来开启,JDK 6中变为默认开启,并且引入了自适应的自旋锁.在自旋锁中另有三种常见的锁形式:<code>TicketLock</code>, <code>CLHlock</code>和<code>MCSlock</code>.</li>
-<li>重入锁: 重入锁又名递归锁,是指在同一个线程在外层方法获取锁的时候,再进入该线程的内层方法会自动获取锁(前提锁对象得是同一个),不会因为之前已经获取过还没释放而阻塞.<code>ReentrantLock</code>和<code>ynchronized</code>都是可重入锁,可重入锁的一个优点是可一定程度避免死锁(否则递归调用就死锁了).</li>
-<li>读写锁(共享锁和独占锁): 独享锁也叫排他锁,是指该锁一次只能被一个线程所持有.如果线程T对数据A加上排它锁后,则其他线程不能再对A加任何类型的锁.获得排它锁的线程即能读数据又能修改数据.<code>synchronized</code>和<code>Lock</code>的实现类就是互斥锁.共享锁是指该锁可被多个线程所持有,如果线程T对数据A加上共享锁后,则其他线程只能对A再加共享锁,不能加排它锁.获得共享锁的线程只能读数据,不能修改数据.读写锁实现读读的过程共享,而读写,写读,写写的过程互斥.</li>
-<li>分布式锁: 分布式场景中由其他进程提供一个锁,通常是互斥锁,重入锁.</li>
+<p>综上,数据库锁实现起来很不友好,不推荐采用.可以作为一个理论验证.</p>
+<h4 id="常见锁"><a href="#常见锁" class="headerlink" title="常见锁"></a>常见锁</h4><ol>
+<li>乐观锁:广义锁.数据库和 Java 里都有这个概念.Java常见的是CAS实现.参考AtomicInteger.数据库通常是 通过<code>version</code>字段进行比较.Hibernate提供了内置乐观锁支持.</li>
+<li>悲观锁:广义锁.数据库里<code>select...for update</code>;Java里<code>synchronized</code>和lock都是.</li>
+<li>公平锁:指多个线程按照申请锁的顺序来获取锁,线程直接进入队列中排队,队列中的第一个线程才能获得锁.公平锁的优点是等待锁的线程不会饿死,缺点是整体吞吐效率相对非公平锁要低,等待队列中除第一个线程以外的所有线程都会阻塞,CPU唤醒阻塞线程的开销比非公平锁大.</li>
+<li>非公平锁:多个线程加锁时直接尝试获取锁,获取不到才会到等待队列的队尾等待.但如果此时锁刚好可用,那么这个线程可以无需阻塞直接获取到锁,所以非公平锁有可能出现后申请锁的线程先获取锁的场景.非公平锁的优点是可以减少唤起线程的开销,整体的吞吐效率高,因为线程有几率不阻塞直接获得锁,CPU不必唤醒所有线程.缺点是处于等待队列中的线程可能会饿死,或者等很久才会获得锁.</li>
+<li>无锁 - 偏向锁 - 轻量锁 - 重量锁:这4个是指锁的状态,专门针对<code>synchronized</code>的.锁状态从低到高,只能升级不能降级.<strong>无锁</strong>不锁定资源,所有的线程都能访问并修改同一个资源,但同时只有一个线程能修改成功.<strong>偏向锁</strong>是指一段同步代码一直被一个线程所访问,那么该线程会自动获取锁,降低获取锁的代价.偏向锁只有遇到其他线程尝试竞争偏向锁时,持有偏向锁的线程才会释放锁,线程不会主动释放偏向锁.偏向锁的撤销,需要等待全局安全点,它会首先暂停拥有偏向锁的线程,判断锁对象是否处于被锁定状态,撤销偏向锁后恢复到无锁或轻量级锁的状态.当锁是偏向锁的时候,被另外的线程所访问,偏向锁就会升级为<strong>轻量锁</strong>,其他线程会通过自旋的形式尝试获取锁,不会阻塞,从而提高性能.若当前只有一个等待线程,则该线程通过自旋进行等待.但是当自旋超过一定的次数,或者一个线程在持有锁,一个在自旋,又有第三个来访时,轻量级锁升级为<strong>重量锁</strong>.重量级锁依赖于操作系统互斥锁实现(“重量”的原因).</li>
+<li>适应性自旋:阻塞或唤醒一个Java线程需要操作系统切换CPU状态来完成,这种状态转换需要耗费的处理器时间有可能比用户代码执行的时间还要长(如果同步代码块中的内容过于简单的话).而实际上在许多场景中,同步资源的锁定时间都很短,为了这一小段时间去切换线程会让系统得不偿失.如果物理机器有多个处理器,能够让两个或以上的线程同时并行执行,我们就可以让后面那个请求锁的线程不放弃CPU的执行时间,看看持有锁的线程是否很快就会释放锁.这样做的好处就是当前线程可能可以不必阻塞而是直接获取同步资源,从而避免切换线程的开销.自旋锁不能代替阻塞,会消耗CPU时间.适合锁占用时间短的场合.使用<code>-XX:PreBlockSpin</code>可以限定自旋的次数.超过次数没有获取锁就挂起线程.自旋锁在JDK1.4.2中引入,使用<code>-XX:+UseSpinning</code>来开启,JDK6中变为默认开启,并且引入了自适应的自旋锁.在自旋锁中另有三种常见的锁形式:<code>TicketLock</code>, <code>CLHlock</code>和<code>MCSlock</code>.</li>
+<li>重入锁:重入锁又名递归锁,是指在同一个线程在外层方法获取锁的时候,再进入该线程的内层方法会自动获取锁(前提锁对象得是同一个),不会因为之前已经获取过还没释放而阻塞.<code>ReentrantLock</code>和<code>synchronized</code>都是可重入锁,可重入锁的一个优点是可一定程度避免死锁(否则递归调用就死锁了).</li>
+<li>读写锁(共享锁和独占锁):独享锁也叫排他锁,是指该锁一次只能被一个线程所持有.如果线程T对数据A加上排它锁后,则其他线程不能再对A加任何类型的锁.获得排它锁的线程即能读数据又能修改数据.<code>synchronized</code>和<code>Lock</code>的实现类就是互斥锁.共享锁是指该锁可被多个线程所持有,如果线程T对数据A加上共享锁后,则其他线程只能对A再加共享锁,不能加排它锁.获得共享锁的线程只能读数据,不能修改数据.读写锁实现读读共享,而读写,写读,写写的过程互斥.</li>
+<li>分布式锁:分布式场景中由其他进程提供一个锁,通常是互斥锁,重入锁.</li>
 </ol>
 <p>参考<a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">美团技术文章</a>.</p>
 <p><img src="https://github.com/wsabc/images/raw/master/java-locks.png" alt="Java-Locks"></p>
 <h3 id="无锁编程"><a href="#无锁编程" class="headerlink" title="无锁编程"></a>无锁编程</h3><ol>
-<li>无锁编程: 将数据分片(如 hash 取模),每个线程负责自己的片,没有竞争.</li>
-<li>CAS(compare and swap): 如 Atomic 包.</li>
+<li>无锁编程:将数据分片(如hash取模),每个线程负责自己的片,没有竞争.</li>
+<li>CAS(compare and swap): 如Atomic包.</li>
 <li>合理创建线程,避免大量 waiting 状态的线程(避免上下文切换).</li>
 </ol>
-<h4 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h4><p>CAS是一条CPU的原子指令(cmpxchg),不会造成数据不一致问题.Unsafe提供的CAS方法(如compareAndSwapXXX）底层实现即为CPU指令cmpxchg.</p>
-<p>CAS原语有三个参数:内存地址,原值,新值.如果内存地址的值等于原值(没有发生更新),此时可以修改成新值;否则表示修改失败,由用户决定后续操作(报错还是重试).</p>
-<p><strong>ABA 问题</strong></p>
-<p>CAS需要在更新值的时候检查内存值是否发生变化,没有发生变化才会更新内存值.但是如果内存值原来是A,后来变成了B,然后又变成了A,那么CAS进行检查时会发现值没有发生变化,但是实际上是有变化的.ABA问题的解决思路就是在变量前面添加版本号,每次变量更新的时候都把版本号加1,这样变化过程就从<code>A－B－A</code>变成了<code>A1－B2－A3</code>了.</p>
+<h4 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h4><p>CAS是一条CPU的原子指令(cmpxchg),不会造成数据不一致问题.Unsafe提供的CAS方法(如compareAndSwapXXX)底层实现即为CPU指令cmpxchg.</p>
 <blockquote>
-<p>JDK从1.5开始提供了AtomicStampedReference类来解决ABA问题,具体操作封装在compareAndSet()中.首先检查当前引用和当前标志与预期引用和预期标志是否相等,如果都相等,则以原子方式将引用值和标志的值设置为给定的更新值.</p>
+<p>用户不能直接使用<code>Unsafe</code>类,会有<code>SecurityException</code>.但是也可以通过<code>-Xbootclasspath/a:</code>参数或者反射修改访问级别来访问.</p>
 </blockquote>
-<p><strong>循环时间长开销大</strong></p>
+<p>CAS原语有三个参数:内存地址,原值,新值.如果内存地址的值等于原值(没有发生更新),此时可以修改成新值;否则表示修改失败,由用户决定后续操作(报错还是重试).</p>
+<h5 id="ABA问题"><a href="#ABA问题" class="headerlink" title="ABA问题"></a>ABA问题</h5><p>CAS需要在更新值的时候检查内存值是否发生变化,没有发生变化才会更新内存值.但是如果内存值原来是A,后来变成了B,然后又变成了A,那么CAS进行检查时会发现值没有发生变化,但是实际上是有变化的.ABA问题的解决思路就是给变量添加版本号,每次变量更新的时候都把版本号加1,这样变化过程就从<code>A－B－A</code>变成了<code>A1－B2－A3</code>了.</p>
+<blockquote>
+<p>JDK从1.5开始提供了<code>AtomicStampedReference</code>类来解决ABA问题,具体操作封装在compareAndSet()中.首先检查当前引用和当前标志与预期引用和预期标志是否相等,如果都相等,则以原子方式将引用值和标志的值设置为给定的更新值.</p>
+</blockquote>
+<h5 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h5><ol>
+<li>循环时间长开销大</li>
+</ol>
 <p>CAS操作如果长时间不成功,会导致其一直自旋,给CPU带来非常大的开销.</p>
-<p><strong>只能保证一个共享变量的原子操作</strong></p>
+<ol start="2">
+<li>只保证一个共享变量的原子操作</li>
+</ol>
 <p>对一个共享变量执行操作时,CAS能够保证原子操作,但是对多个共享变量操作时,CAS是无法保证操作的原子性的.</p>
 <blockquote>
-<p>Java从1.5开始JDK提供了AtomicReference类来保证引用对象之间的原子性,可以把多个变量放在一个对象里来进行CAS操作.</p>
+<p>Java从1.5开始JDK提供了<code>AtomicReference</code>类来保证引用对象之间的原子性,可以把多个变量放在一个对象里来进行CAS操作.</p>
 </blockquote>
-<h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><p>问题: 在代码A处设置一个值,经过重重方法调用之后,在代码B处取出来使用.</p>
-<p>方案: 逐步修改方法签名 – 不可取,修改繁琐,而且有些代码不能修改(比如采用了第三方的库); 使用静态方法存取 – 不可取,在多线程的环境下容易产生干扰,值互相覆盖,不是线程安全的操作. 那有没有类似在<code>Thread</code>对象中设置一个属性的办法呢?</p>
+<h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><p>问题:在代码A处设置一个值,经过重重方法调用之后,在代码B处取出来使用.</p>
+<p>可能的修改方式有:</p>
+<ul>
+<li>逐步修改方法签名 – 不可取,修改繁琐,而且有些代码不能修改(比如采用了第三方的库);</li>
+<li>使用静态方法存取 – 不可取,在多线程的环境下容易产生干扰,值互相覆盖,不是线程安全的操作.</li>
+</ul>
+<p>那有没有类似在<code>Thread</code>对象中设置一个属性的办法呢?</p>
 <p>这个就是<code>ThreadLocal</code>类的初衷. <code>Thread</code>类中有一个<code>ThreadLocalMap</code>用于存放线程级别的变量,委托给<code>ThreadLocal</code>类操作.之所以是Map是因为可能会存在多个变量(变量就是key,值就是value).</p>
-<p>原理: 每个线程中都有一个<code>ThreadLocalMap</code>数据结构,当执行set方法时,其值是保存在当前线程的<code>threadLocals</code>变量中,当执行get方法中,也是从当前线程的<code>threadLocals</code>变量获取的,保证线程之间不会干扰.<code>ThreadLocalMap</code>是个普通类,跟<code>HashMap</code>无关,底层也是一个<code>Entry[]</code>,但是没有链表.发生hash冲突的时候就寻找下一个空位.</p>
+<p>原理: 每个线程中都有一个<code>ThreadLocalMap</code>数据结构,当执行set方法时,其值是保存在<strong>当前线程</strong>的<code>threadLocals</code>变量中,当执行get方法中,也是从当前线程的<code>threadLocals</code>变量获取的,保证线程之间不会干扰.<code>ThreadLocalMap</code>是个普通类,跟<code>HashMap</code>无关,底层也是一个<code>Entry[]</code>,但是没有链表.发生hash冲突的时候就寻找下一个空位.</p>
 <p>好处:</p>
 <ol>
 <li>在多线程环境下,可以防止自己的变量被其它线程篡改.</li>
@@ -534,8 +554,8 @@
 </ol>
 <p>坏处:</p>
 <ol>
-<li>发生线程切换的时候,需要手动传递变量.比如业务代码中新开一个线程.</li>
-<li>可能发生内存泄漏.</li>
+<li>发生线程切换的时候,需要手动传递变量.比如业务代码中使用线程池.</li>
+<li>可能发生内存泄漏.使用了<code>WeakReference&lt;ThreadLocal&lt;?&gt;&gt;</code>key会被回收,但是value由于有currentThread引用,对于不会结束的线程(比如线程池线程),就有内存泄露的可能.使用<code>remove</code>方法清除value可以加快回收过程.</li>
 </ol>
 
       
@@ -573,8 +593,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/30/software-arch-design/" rel="next" title="软件架构设计">
-                <i class="fa fa-chevron-left"></i> 软件架构设计
+              <a href="/2019/09/25/basic-data-structure/" rel="next" title="基础数据结构">
+                <i class="fa fa-chevron-left"></i> 基础数据结构
               </a>
             
           </div>
@@ -582,6 +602,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/30/software-arch-design/" rel="prev" title="软件架构设计">
+                软件架构设计 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -665,12 +689,6 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
-                    
-                      
-                    
-                      
-                    
-                      
                     
                       
                     
@@ -877,12 +895,6 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
                     <span class="site-state-item-count">60</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
@@ -934,7 +946,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#现代CPU"><span class="nav-number">1.</span> <span class="nav-text">现代CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程核心问题"><span class="nav-number">2.</span> <span class="nav-text">多线程核心问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁"><span class="nav-number">3.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无锁编程"><span class="nav-number">4.</span> <span class="nav-text">无锁编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS"><span class="nav-number">4.1.</span> <span class="nav-text">CAS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">5.</span> <span class="nav-text">ThreadLocal</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#现代CPU"><span class="nav-number">1.</span> <span class="nav-text">现代CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程核心问题"><span class="nav-number">2.</span> <span class="nav-text">多线程核心问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#影响多线程正确性的几个因素"><span class="nav-number">2.1.</span> <span class="nav-text">影响多线程正确性的几个因素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁"><span class="nav-number">3.</span> <span class="nav-text">锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库锁"><span class="nav-number">3.1.</span> <span class="nav-text">数据库锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见锁"><span class="nav-number">3.2.</span> <span class="nav-text">常见锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无锁编程"><span class="nav-number">4.</span> <span class="nav-text">无锁编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS"><span class="nav-number">4.1.</span> <span class="nav-text">CAS</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ABA问题"><span class="nav-number">4.1.1.</span> <span class="nav-text">ABA问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#其他问题"><span class="nav-number">4.1.2.</span> <span class="nav-text">其他问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">5.</span> <span class="nav-text">ThreadLocal</span></a></li></ol></div>
             
 
           </div>

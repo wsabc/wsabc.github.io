@@ -237,7 +237,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">63</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">60</span></a>
 
   </li>
         
@@ -256,7 +256,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">39</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">36</span></a>
 
   </li>
         
@@ -311,192 +311,6 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/09/30/java-thread-2/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wsabc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔向自由之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/09/30/java-thread-2/" class="post-title-link" itemprop="url">多线程2</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-30 12:07:35" itemprop="dateCreated datePublished" datetime="2019-09-30T12:07:35+08:00">2019-09-30</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-10-01 18:33:55" itemprop="dateModified" datetime="2019-10-01T18:33:55+08:00">2019-10-01</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/thread/" itemprop="url" rel="index"><span itemprop="name">thread</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="现代CPU"><a href="#现代CPU" class="headerlink" title="现代CPU"></a>现代CPU</h3><p>现代 CPU 都是从晶圆(wafer)加工成晶粒(die),再做成 CPU 的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:</p>
-<ol>
-<li>单块 CPU 单核心: 无论晶粒大小,一个晶粒一个 CPU 核心一个物理块.这种性能有限.可以多线程<strong>并发</strong>执行,使用时间片轮换或者优先级策略.有上下文切换的开销.</li>
-<li>单块 CPU 多核心: 根据晶粒的大小还可以分为: 一个大晶粒上多个 CPU 核心;多个小晶粒,每个晶粒一个 CPU 核心.共享一个大晶粒的性能要好,但是成本高.物理上还是一个模块.可以多线程<strong>并行</strong>执行.每个核心上还是并发执行.</li>
-<li>多个CPU (单/多)核心: 物理上多块 CPU,每个 CPU 都可以是单核,或者多核.</li>
-</ol>
-<p>现在主流的 Intel 就是大晶粒多核; AMD有多个小晶粒多核.举个例子形象地解释它们的区别:</p>
-<p>大地产商建造房子都是通透大平层(大晶粒),平层上各个商家(CPU 核心)很方便沟通,也不太堵塞.小地产商没有能力建大平层,建几个小高楼(多个小晶粒),通过地下通道互联,容易堵死.再小的地产商连地下通道也开发不了,只能远远的建立几个小楼,通过公交等串门互联.性能最差.<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/09/30/java-thread-2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
     
       
 
@@ -575,7 +389,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-01 18:34:39" itemprop="dateModified" datetime="2019-10-01T18:34:39+08:00">2019-10-01</time>
+                <time title="修改时间：2019-10-10 22:14:54" itemprop="dateModified" datetime="2019-10-10T22:14:54+08:00">2019-10-10</time>
               
             
           </span>
@@ -628,11 +442,11 @@
 
       
         
-          <h4 id="软件架构是什么"><a href="#软件架构是什么" class="headerlink" title="软件架构是什么"></a>软件架构是什么</h4><p>软件架构就是软件的基本结构,就好比房子的骨架,对软件的基本形态,功能划分,内部联通,预期扩展都做了详细的定义.常见的5 种软件架构有:</p>
+          <h4 id="软件架构是什么"><a href="#软件架构是什么" class="headerlink" title="软件架构是什么"></a>软件架构是什么</h4><p>软件架构就是软件的基本结构,就好比房子的骨架,对软件的基本形态,功能划分,内部联通,预期扩展都做了详细的定义.常见的5种软件架构有:</p>
 <h5 id="1-分层架构"><a href="#1-分层架构" class="headerlink" title="1 分层架构"></a>1 分层架构</h5><p>最常见的结构,将软件分成若干层,每一层都有明确的分工,不需要知道其他层的细节,相互之间通过接口通信.</p>
 <p>具体分层因人而异,主要是<code>表示层,应用层,数据层</code>三大层.应用层还可以细化(如<code>业务层,服务层,持久层</code>等).</p>
-<p>优点: 结构简单,容易理解;可以多层协同工作;层独立性好,易于测试.</p>
-<p>缺点: 层层传递,不易于扩展和维护,牵一发而动全身.<br>
+<p>优点: 结构简单,容易理解;可以多层协同工作;每层独立性好,易于测试.</p>
+<p>缺点: 层层传递,不易于扩展和维护,牵一发而动全身.</p>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -644,7 +458,197 @@
           <!--/noindex-->
         
       
-    </p></div>
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/09/30/java-thread-2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/09/30/java-thread-2/" class="post-title-link" itemprop="url">Java多线程2</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-30 12:07:35" itemprop="dateCreated datePublished" datetime="2019-09-30T12:07:35+08:00">2019-09-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-10 22:14:02" itemprop="dateModified" datetime="2019-10-10T22:14:02+08:00">2019-10-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/thread/" itemprop="url" rel="index"><span itemprop="name">thread</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="现代CPU"><a href="#现代CPU" class="headerlink" title="现代CPU"></a>现代CPU</h3><p>现代CPU都是从晶圆(wafer)加工成晶粒(die),再做成CPU的.在晶圆到晶粒的制作过程中,良品率跟晶粒的大小有关系.晶粒越小良品率越高.根据晶粒的大小,有以下几种布局:</p>
+<ol>
+<li>单块CPU单核心:一个物理块,包含一个晶粒,无论晶粒大小,其上面只有一个CPU核心.这种性能有限.可以多线程<strong>并发</strong>执行,使用时间片轮换或者优先级策略.有上下文切换的开销.</li>
+<li>单块CPU多核心:一个物理块,但是根据晶粒的大小可以分为: 一个大晶粒上有多个CPU核心;多个小晶粒,每个晶粒上一个CPU核心.共享一个大晶粒的性能要好,但是成本高(因为良品率低).可以多线程<strong>并行</strong>执行.每个核心上还是并发执行.</li>
+<li>多个CPU(单/多)核心:多个物理上(多块CPU),每个CPU都可以是单核,或者多核.</li>
+</ol>
+<p>现在主流的Intel就是大晶粒多核;AMD有多个小晶粒多核.举个例子形象地解释它们的区别:</p>
+<blockquote>
+<p>大地产商建造房子都是通透大平层(大晶粒),平层上各个商家(CPU 核心)很方便沟通,也不太堵塞.</p>
+<p>小地产商没有能力建大平层,建几个小高楼(多个小晶粒),通过地下通道互联,容易堵死.</p>
+<p>再小的地产商连地下通道也开发不了,只能远远的建立几个小楼,通过公交等串门互联.性能最差.</p>
+</blockquote>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/30/java-thread-2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
 
     
 
@@ -2364,12 +2368,6 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
                     <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
@@ -2382,12 +2380,6 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
-                    
-                      
-                    
-                      
-                    
-                      
                     
                       
                     
