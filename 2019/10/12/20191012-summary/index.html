@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="总体感受: 离一个好的架构师还有很长的路,主要是技术视野和实践经验不足.   跟紧主流技术,关注一线大厂动态,多听多看相关分享. 付诸实践,避免细节上把控不好,眼高手低.">
+<meta name="keywords" content="interview,summary">
+<meta property="og:type" content="article">
+<meta property="og:title" content="20191012总结">
+<meta property="og:url" content="http://wsabc.top/2019/10/12/20191012-summary/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="总体感受: 离一个好的架构师还有很长的路,主要是技术视野和实践经验不足.   跟紧主流技术,关注一线大厂动态,多听多看相关分享. 付诸实践,避免细节上把控不好,眼高手低.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-28T13:44:29.752Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="20191012总结">
+<meta name="twitter:description" content="总体感受: 离一个好的架构师还有很长的路,主要是技术视野和实践经验不足.   跟紧主流技术,关注一线大厂动态,多听多看相关分享. 付诸实践,避免细节上把控不好,眼高手低.">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/10/12/20191012-summary/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>20191012总结 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">63</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">37</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">49</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/10/12/20191012-summary/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">20191012总结
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-12 20:07:35" itemprop="dateCreated datePublished" datetime="2019-10-12T20:07:35+08:00">2019-10-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-28 21:44:29" itemprop="dateModified" datetime="2019-10-28T21:44:29+08:00">2019-10-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/interview/" itemprop="url" rel="index"><span itemprop="name">interview</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>总体感受: 离一个好的架构师还有很长的路,主要是技术视野和实践经验不足.</p>
+<blockquote>
+<ul>
+<li>跟紧主流技术,关注一线大厂动态,多听多看相关分享.</li>
+<li>付诸实践,避免细节上把控不好,眼高手低.</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<p>技巧: 需要不断<code>dry run</code>, 反问自己.</p>
+<blockquote>
+<ol>
+<li>精选一个具有代表性的案例,需要不断演练,360无死角反复打破砂锅问到底—为什么要这样,还有没有其他的办法?(案例准备没做好)</li>
+<li>语速张弛有度,有时候需要观察面试官的反应.(整场下来,语速偏快,观察偏少,思考也少,很多答案都是脱口而出即纯经验)</li>
+<li>面试不是聊天,更不是交心,需要话术.回答问题不能随便,不经思考.(个别问题比如缺点,回答未经思考,也没有按照计划内容回答)</li>
+<li>需要换位思考,如果我主持面试,我希望这个位置的候选人有什么特质?(岗位匹配思考)</li>
+<li>表达要清楚,不能带有任何假设.(多说容易犯错,但是潜在假设更不好,还是力求全面,结合第2点)</li>
+<li>基本功要硬.</li>
+</ol>
+</blockquote>
+<p>问题复盘:</p>
+<ol>
+<li><p>中台</p>
+<blockquote>
+<p>中台可以简单理解成APaas(领域型Paas,或者说成应用型Paas).就是把业务通用的可共用平台抽出来,进行服务化改造,业务应用可以调用这些服务进行快速开发.字面理解也可以是架构中承上启下的组件,上层有具体应用,下面有iaas或者gpaas(通用性Paas).</p>
+<p>主要目的是业务复用,缩短开发周期.(可以节省成本,抓住时间窗口,多终端适应,技术输出,甚至业务编排即组合各种中台能力)</p>
+<p>典型案例: 用户管理服务(注册,登录,单点登录,管理,鉴权)就可以做成一个中台.</p>
+<p>和常见概念区别:</p>
+<ul>
+<li>定制.中台不是定制,会加速定制过程(通过业务编排).</li>
+<li>架构.中台是架构的一部分.</li>
+<li>中间件.中台除了具有通用平台的能力,还具有业务特征.中间件一般是提供通用能力,无差异支撑各种业务.如数据库中间件.</li>
+</ul>
+<p><code>SuperCell</code>: 不同的游戏,但是相同的用户系统,支付系统,游戏引擎,底层技术等.”小前台-大中台”.</p>
+<p>具体分类: 业务中台, 技术中台(类似中间件,具有一定业务个性), 数据中台(比如建模,分析,画像等),算法中台(图像识别,推荐算法等).</p>
+<p>适用阶段: 0-1创业公司不适合,最重要的是生存; 1-N复制阶段适合,快速试错.</p>
+<p>隐喻: 厨师(研发), 调料(数据), 糖醋排骨(产品), 糖醋酱汁池子(中台).</p>
+</blockquote>
+</li>
+<li><p>ServiceMesh</p>
+<blockquote>
+<p>微服务架构的核心问题: 服务发现和负载均衡.</p>
+<p>常见模式: 集中代理,客户端嵌入,独立嵌入代理.</p>
+<ul>
+<li>集中代理(F5/Nginx): 依赖运维,手工配置,明确规则.客户端通过请求域名,域名指向代理,代理根据根据规则均衡.微服务之前的主流模式.</li>
+<li>客户端嵌入(SpringCloud/Dubbo): 服务发现和负载均衡的逻辑都存在客户端的本地库里,比如通过<code>FeignClient</code>底层使用<code>Ribbon</code>方式.主要关注内部服务的治理,而且业务和底层通信耦合在一起了.对于需要互联网访问的服务,还是通过<code>DNS+Nginx</code>的方式来映射扩展.</li>
+<li>独立进程嵌入代理: 前两种方式的结合体.由单一进程负责服务发现,负载均衡,熔断限流,安全控制,监控等功能.</li>
+</ul>
+<p>ServiceMesh(服务网格)的几个概念(本质是独立进程代理),还是解决服务发现和通信问题.</p>
+<ul>
+<li>Side-Car: 业务逻辑和代理在一台主机上,业务是主驾驶,代理是边车.用于服务发现和调用.</li>
+<li>Control-Plane: 控制平面,是个独立组件,用来集中配置服务之间的关系以及流量挑拨等.</li>
+<li>Data-Plane: 数据平面,指配置了Sidecar的服务主机.</li>
+</ul>
+<p><code>Istio</code>实现: ServiceMesh的开源框架,逻辑上也是数据平面和控制平面2部分.具体组件有:</p>
+<ul>
+<li>Envoy: 就是Sidecar.C++实现.阿里有<strong>SOFAMosn</strong>用来替代原生的Envoy.</li>
+<li>Mixer: 负责收集代理采集的度量数据,进行集中监控.</li>
+<li>Pilot: 为Sidecar提供服务发现,智能路由,弹性(超时,重试,断路器等)流量管理.</li>
+<li>Citadel: 负责安全控制数据的管理和下发.</li>
+</ul>
+<p>ServiceMesh可能的问题:</p>
+<ol>
+<li>不是新东西,部署代理多,需要规模化部署,以及做好监控.</li>
+<li>落地的实践不多,大厂推广可能有自身的商业利益如Google推Kubernetes.</li>
+</ol>
+<p>其实代理模式1和模式2还可以结合成另一种形式,即在模式1的基础上,将代理和注册中心结合起来,实现代理的自发现功能.</p>
+</blockquote>
+</li>
+<li><p>Redis单线程</p>
+<blockquote>
+<p>Redis是单线程程序,操作的是内存数据库,一般来说程序处理内存数据的速度要远高于网卡接受数据的速度,因此Redis瓶颈在网络IO或者内存上.另一方面Redis使用了非阻塞IO多路复用机制(<code>epoll, kqueue</code>等).</p>
+</blockquote>
+</li>
+<li><p>SETNX 和 SET NX EX</p>
+<blockquote>
+<p>分布式锁的用法应该是<code>SET NX EX</code>, <code>SETNX</code>不能指定<code>EX</code>参数.返回值也不同.</p>
+</blockquote>
+</li>
+<li><p>Redis内存清除机制</p>
+<blockquote>
+<p>采用定期删除和惰性删除策略.Redis是单线程,所以时间长的任务都要特别注意,因此内部不会有遍历所有Key的操作,也不会有长期占用CPU的任务.因此不会定时删除过期key.</p>
+<p>定期删除默认每100ms随机抽查key并决定是否过期.惰性删除就是每次获取key的时候做一个排查.这两种策略会导致内存中过期key越来越多,因此还有内存淘汰策略.</p>
+<p>LRU: 固定长度的链表,默认先进先淘汰,对于高频key,先删除再入队列.Redis采用类似实现:随机取出若干个key,然后按照访问时间排序后,淘汰掉最不经常使用的.</p>
+</blockquote>
+</li>
+<li><p>ZK选主,锁,API交互</p>
+<blockquote>
+<p>ZK只知道理论部分,没有实际的编程经验.</p>
+<p>回来把ZK的api过了一遍,从安装,到命令行,到Java测试.</p>
+<p>再到选主,队列,锁,挨个用代码实现一遍.参考<a href="http://zookeeper.apache.org/doc/r3.5.5/recipes.html" target="_blank" rel="noopener">ZK_recipes</a>.</p>
+</blockquote>
+</li>
+<li><p>Kafka消费者正确用法</p>
+<blockquote>
+<p>Kafka的核心功能: 消息系统(队列,发布/订阅)和流处理.</p>
+<p>应用场景: <strong>注重实时消费</strong>,比如航班变化,价格变化,用户行为,GPS痕迹等.</p>
+<p>Kafka Consumer API: 直接读取流数据,并对其执行实时操作,例如推送商品促销活动,发送邮件等.</p>
+<p>Kafka Connect Sink API: 读取实时流并将其存储到目标介质中,例如存到HDFS,HBase等.</p>
+<p>ETL: 将数据从孤立的数据源中采集出来(日志,数据库等),进行处理后汇集到一个可以被计算平台高效访问的目的地,此过程被称为ETL,即数据的抽取Extract,转换Transform和加载Load.</p>
+<p>案例: 使用ELK+Kafka来搭建一个日志系统:主要使用spring aop进行日志收集,然后通过kafka将日志发送给logstash,logstash再将日志写入elasticsearch,这样elasticsearch就有了日志数据了,最后使用kibana将存放在elasticsearch中的日志数据显示出来,并且可以做实时的数据图表分析等等.</p>
+</blockquote>
+</li>
+<li><p>ELK</p>
+<blockquote>
+<p>ELK的核心是ElasticSearch.ES如何做到亿级数据查询毫秒级返回呢?</p>
+<p>主要还是用<code>Filesystem cache</code>.往ES里写数据,其实都是写到磁盘文件里了.查询的时候,OS会将文件里的数据自动缓存到cache里.如果cache有更多的内存,可以容纳更多的索引数据,就会有更高的性能.</p>
+<p>至少<code>cache</code>的内存要有数据总量的一半;或者将索引数据控制在一定范围内走内存搜索(例如只存储关键字,剩余信息存到db或者hbase,一般建议es+hbase结构).hbase适合存储海量数据的在线存储,但是不要做复杂查询,可以做简单的id查询或者范围查询,这样整体速度就很快.</p>
+<p>做好ES数据的预热(后台程序干预加载),冷热分离,避免复杂查询(数据做好冗余而不是在ES里关联),避免深度翻页(越深越慢).</p>
+<p>Index相当于库,Type相当于表,Document相当于行.</p>
+</blockquote>
+</li>
+<li><p>设计一个网关</p>
+<blockquote>
+<p>网关聚合内网多个服务,给前台(多端)提供一个统一入口,涉及功能有: 鉴权,限流,防重/防刷,降级,监控,灰度,协议转换等.</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/interview/" rel="tag"># interview</a>
+          
+            <a href="/tags/summary/" rel="tag"># summary</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/30/software-arch-design/" rel="next" title="软件架构设计">
+                <i class="fa fa-chevron-left"></i> 软件架构设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/22/design-principle/" rel="prev" title="设计原则">
+                设计原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/young-leslie-cartoon.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
