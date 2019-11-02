@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="性能优化的原则首先,根据需求确定清晰的目标和可度量的指标.示例:  RPS不能低于3万数据库负载不能超过50%; CPU负载不能超过70%最大请求响应时间不能超过100ms; 平均请求响应时间不能超过80ms错误率不能超过5%">
+<meta name="keywords" content="tcp,tuning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP连接数性能优化">
+<meta property="og:url" content="http://wsabc.top/2019/10/30/tcp-conn-tuning/index.html">
+<meta property="og:site_name" content="奔向自由之路">
+<meta property="og:description" content="性能优化的原则首先,根据需求确定清晰的目标和可度量的指标.示例:  RPS不能低于3万数据库负载不能超过50%; CPU负载不能超过70%最大请求响应时间不能超过100ms; 平均请求响应时间不能超过80ms错误率不能超过5%">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-02T03:13:27.145Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP连接数性能优化">
+<meta name="twitter:description" content="性能优化的原则首先,根据需求确定清晰的目标和可度量的指标.示例:  RPS不能低于3万数据库负载不能超过50%; CPU负载不能超过70%最大请求响应时间不能超过100ms; 平均请求响应时间不能超过80ms错误率不能超过5%">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wsabc.top/2019/10/30/tcp-conn-tuning/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>TCP连接数性能优化 | 奔向自由之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奔向自由之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">66</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">39</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">51</span></a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wsabc.top/2019/10/30/tcp-conn-tuning/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsabc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/young-leslie-cartoon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔向自由之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TCP连接数性能优化
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-30 12:07:35" itemprop="dateCreated datePublished" datetime="2019-10-30T12:07:35+08:00">2019-10-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-02 11:13:27" itemprop="dateModified" datetime="2019-11-02T11:13:27+08:00">2019-11-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/performance/" itemprop="url" rel="index"><span itemprop="name">performance</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="性能优化的原则"><a href="#性能优化的原则" class="headerlink" title="性能优化的原则"></a>性能优化的原则</h3><p>首先,根据需求确定清晰的目标和可度量的指标.示例:</p>
+<blockquote>
+<p>RPS不能低于3万<br>数据库负载不能超过50%; CPU负载不能超过70%<br>最大请求响应时间不能超过100ms; 平均请求响应时间不能超过80ms<br>错误率不能超过5%<br><a id="more"></a></p>
+</blockquote>
+<h3 id="标准化的测试环境"><a href="#标准化的测试环境" class="headerlink" title="标准化的测试环境"></a>标准化的测试环境</h3><p>确定一个测试基准(普通的的可操作性环境).示例:</p>
+<blockquote>
+<p>服务器主机: 4核CPU, 8G内存, SSD硬盘, Centos7系统<br>数据库: 2核CPU, 8G内存, 1TB硬盘, MySQL5, 最大连接数2000<br>缓存: Redis集群, 1G容量<br>带宽: 500M<br>测试工具: locust, jmeter</p>
+</blockquote>
+<h3 id="业务分析"><a href="#业务分析" class="headerlink" title="业务分析"></a>业务分析</h3><p>梳理业务路径,找出性能瓶颈.或者简单粗暴直接测试,找到瓶颈,逐个解决.</p>
+<blockquote>
+<p>业务类型: CPU密集型, IO密集型, 混合型<br>业务数据的平均大小, 是否压缩传输<br>资源限制等</p>
+</blockquote>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><h4 id="数据库连接占满"><a href="#数据库连接占满" class="headerlink" title="数据库连接占满"></a>数据库连接占满</h4><p>如果不做优化的话,数据库一般是最先出现瓶颈的地方.解决办法是使用缓存,尽量将数据库请求拦截在外.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">status</span> <span class="keyword">where</span> Variable_name = <span class="string">'Threads_connected'</span>; <span class="comment">-- mysql</span></span><br></pre></td></tr></table></figure>
+<p>数据库连接池调优(参考<a href="https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size" target="_blank" rel="noopener">PostgreSQL: Number Of Database Connections</a>):</p>
+<blockquote>
+<p>(<em>core_count</em> x 2) + <em>effective_spindle_count</em>. Core count should not include HT threads, even if hyperthreading is enabled. Effective spindle count is zero if the active data set is fully cached, and approaches the actual number of spindles as the cache hit rate falls. There hasn’t been any analysis so far regarding how well the formula works with SSDs.</p>
+</blockquote>
+<h4 id="使用缓存后-RPS一直稳定在一个阶段-无法突破"><a href="#使用缓存后-RPS一直稳定在一个阶段-无法突破" class="headerlink" title="使用缓存后,RPS一直稳定在一个阶段,无法突破"></a>使用缓存后,RPS一直稳定在一个阶段,无法突破</h4><h5 id="确定系统资源占用情况"><a href="#确定系统资源占用情况" class="headerlink" title="确定系统资源占用情况"></a>确定系统资源占用情况</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 方法1</span><br><span class="line"><span class="meta">$</span> ss -ant | awk 'NR&gt;1 &#123;a[$1]++&#125; END &#123;for (b in a) print b,a[b]&#125;'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 方法2</span><br><span class="line"><span class="meta">$</span> netstat -an | awk '/^tcp/ &#123;a[$NF]++&#125; END &#123;for (b in a) print b,a[b]&#125;'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 方法3(通过CurrEstab获取tcp连接数)</span><br><span class="line"><span class="meta">$</span> cat /proc/net/snmp</span><br><span class="line"><span class="meta">$</span> cat /proc/net/snmp | grep Tcp | tail -1 | awk '&#123;print $10&#125;'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 如何获取每秒新增的TCP连接呢</span><br><span class="line"><span class="meta">#</span> 通过cat /proc/net/snmp得到最近240秒内PassiveOpens的增量,除以240可以得到每秒的tcp连接增量</span><br></pre></td></tr></table></figure>
+<p>常见的查看linux系统资源的命令还有<code>uptime, w, dmesg|tail, vmstat, mpstat, pidstat, iostat, free, sar(查看TCP连接状态), top</code>等.</p>
+<h5 id="确定系统资源限制"><a href="#确定系统资源限制" class="headerlink" title="确定系统资源限制"></a>确定系统资源限制</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> ulimit -n</span><br><span class="line"><span class="meta">#</span> cat /proc/pid/limits</span><br><span class="line"><span class="meta">#</span> cat /proc/sys/fs/nr_open</span><br><span class="line"><span class="meta">#</span> cat /proc/sys/fs/file-nr</span><br><span class="line"><span class="meta">#</span> cat /etc/security/limits.conf |tail</span><br></pre></td></tr></table></figure>
+<p>具体参数解释如下:</p>
+<h6 id="ulimit"><a href="#ulimit" class="headerlink" title="ulimit"></a>ulimit</h6><p><code>ulimit</code>用于限制shell启动的进程所占的资源,使用<code>ulimit -a</code>可以查看各种限制.<code>ulimit</code>有软限制和硬限制之分,任何进程都可以修改软限制,但是软限制不能超过硬限制;普通进程可以降低硬限制,但是只有<code>root</code>进程才可以提高硬限制.每个进程的<code>rlimit</code>都是互不影响的.</p>
+<p><code>ulimit -a</code>默认显示软限制; <code>ulimit -Ha</code>显示硬限制; <code>ulimit -n</code>显示当前可打开的文件描述符的数量,软限制; <code>ulimit -n xxxx</code>修改可打开的文件描述符数量为xxxx,包括软硬限制.</p>
+<h6 id="nofile"><a href="#nofile" class="headerlink" title="nofile"></a>nofile</h6><p>默认情况下,nofile的软限制为1024硬限制为4096,因为软限制是实际生效的值,所以默认情况下每个进程同一时间最多可以打开1024个fd,对于nginx等服务器当然是不够的(比较合理的值为65536,102400).</p>
+<blockquote>
+<p>可以通过<code>/proc/&lt;pid&gt;/limits</code>文件来查看指定进程的<code>rlimit</code>限制值.<br>对于nginx,可以通过<code>worker_rlimit_nofile</code>配置项来指定每个worker工作进程的nofile限制值,如<code>worker_rlimit_nofile 102400</code>. </p>
+</blockquote>
+<p>对于普通进程:</p>
+<ol>
+<li>如果是<code>service mysrv start</code>方式启动的服务,则修改对应的<code>mysrv</code>shell脚本,在脚本开头添加<code>ulimit -n 102400</code>命令即可.子进程默认会从父进程中继承<code>rlimit</code>限制值,改好之后执行<code>service mysrv restart</code>生效.</li>
+<li>如果是<code>systemctl start mysrv</code>方式启动的服务,则修改对应的<code>mysrv.service</code>服务文件,在配置段中添加<code>LimitNOFILE=102400</code>然后执行<code>systemctl daemon-reload, systemctl restart mysrv</code>生效.</li>
+<li>如果是自己开发的程序,最简单的方式就是提供一个选项/配置,类似nginx的<code>worker_rlimit_nofile</code>然后在程序中调用<code>setrlimit()</code>方法来修改限制值.</li>
+</ol>
+<p>nofile的最大值:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 注意 nofile 的限制值不能是无限大的,即使你是 root 权限执行也不行</span><br><span class="line">[root@local ~]# ulimit -n unlimited</span><br><span class="line">-bash: ulimit: open files: cannot modify limit: Operation not permitted</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 单个进程的 nofile 可设置的最大值</span><br><span class="line">[root@local ~]# cat /proc/sys/fs/nr_open</span><br><span class="line">2097152</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> linux 内核允许同时打开的最大 fd 数量, 如果这个参数设置的太小,即使你 nr_open 设置的再大,也无济于事</span><br><span class="line"><span class="meta">#</span> 三个值分别表示: 已分配的句柄数, 未使用的句柄数, file-max 值</span><br><span class="line">[root@local ~]# cat /proc/sys/fs/file-nr</span><br><span class="line">544	0	1048576</span><br></pre></td></tr></table></figure>
+<h6 id="etc-security-limits-conf"><a href="#etc-security-limits-conf" class="headerlink" title="/etc/security/limits.conf"></a>/etc/security/limits.conf</h6><p>limits.conf语法：<code>*  soft  nofile  65535</code>表示所有用户允许打开的文件数量软限制为65535.</p>
+<p>登录的用户可以通过这个设置对应的rlimit限制值(shell进程), 对于那些服务进程,守护进程(不是通过登录终端启动的进程),limits.conf实际上是不会生效的.</p>
+<h6 id="etc-systemd-system-conf"><a href="#etc-systemd-system-conf" class="headerlink" title="/etc/systemd/system.conf"></a>/etc/systemd/system.conf</h6><p><code>/etc/systemd/system.conf</code>或者<code>/etc/systemd/user.conf</code>,一般修改system.conf就可以.如果修改了system.conf那么以systemd方式启动的服务进程的rlimit都会自动继承system.conf 中配置,不需要在每个service文件中配置LimitNOFILE=102400了.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nofile：DefaultLimitNOFILE=102400:102400</span><br><span class="line">nproc：DefaultLimitNPROC=infinity:infinity</span><br></pre></td></tr></table></figure>
+<h6 id="路由器的最大并发连接数和每秒新建连接数"><a href="#路由器的最大并发连接数和每秒新建连接数" class="headerlink" title="路由器的最大并发连接数和每秒新建连接数"></a>路由器的最大并发连接数和每秒新建连接数</h6><p>这两个指标是针对带防火墙功能的路由器的,并发大小主要取决于防火墙的内存大小,每秒新建连接数主要看防火墙的CPU性能.</p>
+<h5 id="确定是否修改参数"><a href="#确定是否修改参数" class="headerlink" title="确定是否修改参数"></a>确定是否修改参数</h5><p>一个TCP连接有4个部分标记: localIp, localPort, remoteIp, remotePort.</p>
+<ul>
+<li>客户端最大连接数: client每次发起tcp连接请求时,除非绑定端口,否则会随机选取一个空闲的本地端口,该端口是独占的,不能和其他tcp连接共享.tcp端口的数据类型是unsigned short(16位),最大只有65536,端口0有特殊含义,不能用,这样可用最多只有65535,所以在全部作为client端的情况下,最大tcp连接数为65535,这些连接可以连到不同的server.</li>
+<li>服务器最大连接数: 服务器监听固定的本地端口,即使服务器有多个ip,本地端口也是独占的.因此最大连接数为clientIpxclientPort,在ipv4的情况下,是2^32 X 2^16 = 2^48个.</li>
+<li>实际连接数: 由于受到资源限制,如内存大小和文件句柄数,以及1024以下为保留端口等,最大连接数远远达不到理论值.一般单机能到10万.也有做到50万的.<strong>TCP连出受端口限制,连入仅受内存限制</strong>.</li>
+</ul>
+<h4 id="其他限制"><a href="#其他限制" class="headerlink" title="其他限制"></a>其他限制</h4><ol>
+<li><p>一个socket上最多128个连接.</p>
+<blockquote>
+<p>修改/etc/sysctl.conf, 将<code>net.core.somaxconn</code>值改大.</p>
+</blockquote>
+</li>
+<li><p>JVM线程数量限制<code>java.lang.OutOfMemoryError: unable to create new native thread</code></p>
+<blockquote>
+<p>增加线程数量限制,可以减少每个线程使用的栈大小<code>-Xss</code>也可以减少分配给堆的内存<code>-Xms,-Xmx</code></p>
+</blockquote>
+</li>
+<li><p>临时端口耗尽.</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tcp/" rel="tag"># tcp</a>
+          
+            <a href="/tags/tuning/" rel="tag"># tuning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/29/pragmatic-think-learn/" rel="next" title="思维修炼笔记">
+                <i class="fa fa-chevron-left"></i> 思维修炼笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/young-leslie-cartoon.png" alt="wsabc">
+            
+              <p class="site-author-name" itemprop="name">wsabc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">66</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsabc" title="GitHub &rarr; https://github.com/wsabc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#性能优化的原则"><span class="nav-number">1.</span> <span class="nav-text">性能优化的原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标准化的测试环境"><span class="nav-number">2.</span> <span class="nav-text">标准化的测试环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#业务分析"><span class="nav-number">3.</span> <span class="nav-text">业务分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">4.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库连接占满"><span class="nav-number">4.1.</span> <span class="nav-text">数据库连接占满</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用缓存后-RPS一直稳定在一个阶段-无法突破"><span class="nav-number">4.2.</span> <span class="nav-text">使用缓存后,RPS一直稳定在一个阶段,无法突破</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#确定系统资源占用情况"><span class="nav-number">4.2.1.</span> <span class="nav-text">确定系统资源占用情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#确定系统资源限制"><span class="nav-number">4.2.2.</span> <span class="nav-text">确定系统资源限制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ulimit"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">ulimit</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#nofile"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">nofile</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#etc-security-limits-conf"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">/etc/security/limits.conf</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#etc-systemd-system-conf"><span class="nav-number">4.2.2.4.</span> <span class="nav-text">/etc/systemd/system.conf</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#路由器的最大并发连接数和每秒新建连接数"><span class="nav-number">4.2.2.5.</span> <span class="nav-text">路由器的最大并发连接数和每秒新建连接数</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#确定是否修改参数"><span class="nav-number">4.2.3.</span> <span class="nav-text">确定是否修改参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他限制"><span class="nav-number">4.3.</span> <span class="nav-text">其他限制</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsabc</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
